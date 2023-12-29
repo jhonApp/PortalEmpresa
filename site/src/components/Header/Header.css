@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: var(--unnamed-color-242c48) 0% 0% no-repeat padding-box;
+    background: #242C48 0% 0% no-repeat padding-box;
+    /* border: 1px solid #FFEC6B; */
+    opacity: 1;
+    height: 100px;
+}
