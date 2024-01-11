@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { List, Box } from '@mui/material';
 import { styled } from '@mui/system';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import houseSolidSVG from '../../assets/images/icones/house-solid.svg';
-import calendarIconSVG from '../../assets/images/icones/calendar-days-solid.svg';
-import gearIconSVG from '../../assets/images/icones/gear-solid.svg';
-import fileIconSVG from '../../assets/images/icones/file-solid.svg';
-import portalIconSVG from '../../assets/images/icones/Portal Empresa II.svg';
+import { House, CalendarPlus, Nut, File, CaretLeft, CaretDown } from 'phosphor-react';
+import Menu from './Menu';
+import Logo from './Logo';
+
+const SidebarContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  backgroundColor: '#242C48',
+  height: '100%',
+});
 
 const CustomList = styled(List)({
   overflowY: 'auto',
@@ -24,63 +28,47 @@ const CustomList = styled(List)({
   },
 });
 
+const Sidebar = ({ headerHeight }) => {
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [buttonCollapsed, setButtonCollapsed] = useState(false);
 
-
-const Sidebar = () => {
   const menuItems = [
-    { text: 'Home', icon: <img src={houseSolidSVG} alt="Home Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Agendamento', icon: <img src={calendarIconSVG} alt="Calendar Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Administrativo', icon: <img src={gearIconSVG} alt="Gear Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Departamento e Setores', icon: <img src={fileIconSVG} alt="Departamento Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Cartões', icon: <img src={fileIconSVG} alt="Departamento Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Funcionários', icon: <img src={fileIconSVG} alt="Departamento Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Cargos', icon: <img src={fileIconSVG} alt="Departamento Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Locais para Eventos', icon: <img src={fileIconSVG} alt="Departamento Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Documentos', icon: <img src={fileIconSVG} alt="Documento Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Incluir Documentos', icon: <img src={fileIconSVG} alt="Departamento Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Visualizar Documentos', icon: <img src={fileIconSVG} alt="Departamento Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
-    { text: 'Usuários', icon: <img src={fileIconSVG} alt="Usuário Icon" style={{ filter: 'invert(1)', width: '22px', height: '17px' }} /> },
+    { index: 0, text: 'Home', icon: <House size={24} /> },
+    { index: 1, text: 'Agendamento', icon: <CalendarPlus size={24} /> },
+    {
+      index: 2,
+      text: 'Administrativo', icon: <Nut size={24} />,
+      subItems: [
+        { text: 'Departamento e Setores', icon: <File size={24} /> },
+        { text: 'Cartões', icon: <File size={24} /> },
+        { text: 'Funcionários', icon: <File size={24} /> },
+        { text: 'Cargos', icon: <File size={24} /> },
+        { text: 'Locais para Eventos', icon: <File size={24} /> },
+        { text: 'Incluir Documentos', icon: <File size={24} /> },
+        { text: 'Visualizar Documentos', icon: <File size={24} /> },
+        { text: 'Usuários', icon: <File size={24} /> },
+      ],
+    },
+    { index: 3, text: 'Documentos', icon: <File size={24} /> },
   ];
 
-  return (
-    <Drawer variant="permanent" sx={{ backgroundColor: '#242C48'}} PaperProps={{ sx: { backgroundColor: 'transparent' } }}>
-      <CustomList sx={{ background: '#242C48' , height: '100%', width: '50vh', padding: '0px 0px 0px 60px'}}>
-          
-          {/* Botão para alternar a visibilidade do menu */}
-          {/* <ListItem sx={{ justifyContent: 'center', py: 2 }}>
-            <ListItemIcon>
-              <IconButton onClick={toggleMenu} size="large">
-                <MenuIcon sx={{ color: '#FFFFFF' }} />
-              </IconButton>
-            </ListItemIcon>
-          </ListItem> */}
-          
-          {/* Ícone da empresa no meio */}
-          <ListItem sx={{ justifyContent: 'center', py: 4 }}>
-            <ListItemIcon>
-              <img src={portalIconSVG} alt="Portal Icon" style={{ width: '162px', height: '62px' }} />            
-            </ListItemIcon>
-          </ListItem>
+  const handleAdminClick = () => {
+    setAdminOpen(!adminOpen);
+  };
 
-          {menuItems.map((item, index) => (
-            <ListItem
-              button
-              key={index}
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                marginBottom: '5px',
-                height: '43px',
-                width: '90%'
-              }}
-            >
-              <ListItemIcon>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={<Typography variant="body1" sx={{ color: '#FFFFFF' }}>{item.text}</Typography>} />
-            </ListItem>
-          ))}
+  const handleCollapseClick = () => {
+    setButtonCollapsed(!buttonCollapsed);
+  };
+
+  return (
+    <SidebarContainer>
+      <Logo headerHeight={headerHeight} handleCollapseClick={handleCollapseClick} buttonCollapsed={buttonCollapsed} />
+      <CustomList sx={{ background: '#FAFAFA', flex: 1, paddingTop: '20px' }}>
+        {menuItems.map((item, index) => (
+          <Menu key={index} item={item} adminOpen={adminOpen} handleAdminClick={handleAdminClick} />
+        ))}
       </CustomList>
-    </Drawer>
+    </SidebarContainer>
   );
 };
 
