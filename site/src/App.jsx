@@ -1,22 +1,17 @@
+// App.jsx
 import React from 'react';
-import Header from './components/Header/Index';
-import Sidebar from './components/Sidebar';
-import GlobalStyle from './globalStyles';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './components/Login';
+import LoginVisitante from './components/Login/loginVisitante';
 
 function App() {
-  const headerHeight = '64px';
-
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: '40vh auto', // Definindo a largura do Sidebar como 40vh e o Header ocupando o restante do espaço
-      gap: '0', // Espaçamento entre os elementos
-      height: '100vh', // Definindo a altura total da página
-    }}>
-      <GlobalStyle />
-      <Sidebar headerHeight={headerHeight} style={{ height: '100vh' }} />
-      <Header />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="Login/loginVisitante" element={<LoginVisitante />} />
+        <Route path="Login/" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 
