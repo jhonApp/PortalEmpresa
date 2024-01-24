@@ -123,7 +123,7 @@ const Login = () => {
           Entrar
         </StyledButton>
         <Typography variant="body2" color="textSecondary" style={{ marginTop: '16px' }}>
-            <a href="../Login/">Clique aqui para entrar como condômino</a>
+            <a href="../">Clique aqui para entrar como condômino</a>
         </Typography>
         <Typography variant="body2" color="textSecondary" style={{ marginTop: '16px' }}>
             Esqueceu a senha? <a href="#">Recuperar Senha</a>

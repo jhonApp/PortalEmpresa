@@ -1,6 +1,7 @@
 {
   "name": "site",
   "private": true,
+  "proxy": "http://localhost:7244",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -15,10 +16,14 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.2",
     "@mui/material": "^5.15.2",
+    "@mui/system": "^5.15.6",
+    "axios": "^1.6.5",
     "phosphor-react": "^1.4.1",
+    "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.2"
+    "react-router-dom": "^6.21.2",
+    "react-toastify": "^10.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

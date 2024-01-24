@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run site\"",
+    "server": "cd servidor && npm start",
+    "site": "cd site && vite --host"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
