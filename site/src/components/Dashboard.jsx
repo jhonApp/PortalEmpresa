@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from './components/Header/Index';
-import Sidebar from './components/Sidebar';
-import GlobalStyle from './globalStyles';
+import Header from './Header'; // Caminho relativo ao arquivo Dashboard
+import Sidebar from './Sidebar';
+import GlobalStyle from '../globalStyles';
 
 function Dashboard() {
   const headerHeight = '64px';
@@ -9,9 +9,9 @@ function Dashboard() {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: '40vh auto', // Definindo a largura do Sidebar como 40vh e o Header ocupando o restante do espaço
-      gap: '0', // Espaçamento entre os elementos
-      height: '100vh', // Definindo a altura total da página
+      gridTemplateColumns: '40vh auto',
+      gap: '0',
+      height: '100vh',
     }}>
       <GlobalStyle />
       <Sidebar headerHeight={headerHeight} style={{ height: '100vh' }} />
