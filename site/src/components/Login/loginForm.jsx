@@ -89,7 +89,7 @@ const LoginForm = () => {
   const handleLogin = async () => {
     await handleSubmit(async () => {
       await autenticacao(values.email, values.password);
-      navigate('/dashboard');
+      navigate('/system/');
     });
   };
 

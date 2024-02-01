@@ -1,23 +1,26 @@
 import React from 'react';
-import Header from './Header'; // Caminho relativo ao arquivo Dashboard
+import Header from './Header';
 import Sidebar from './Sidebar';
 import GlobalStyle from '../globalStyles';
 
-function Dashboard() {
+function Layout({ children }) {
   const headerHeight = '64px';
 
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: '40vh auto',
+      gridTemplateColumns: 'auto 1fr',
       gap: '0',
       height: '100vh',
     }}>
-      <GlobalStyle />
+      <GlobalStyle></GlobalStyle>
       <Sidebar headerHeight={headerHeight} style={{ height: '100vh' }} />
-      <Header />
+      <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+        <Header />
+        {children}
+      </div>
     </div>
   );
 }
 
-export default Dashboard;
+export default Layout;
