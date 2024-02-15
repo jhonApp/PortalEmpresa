@@ -67,6 +67,8 @@ const FormSection = styled('div')({
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const currentScreen = 'login';
+
   const {
     values,
     errors,
@@ -83,7 +85,8 @@ const LoginForm = () => {
       password: '',
       selectedCondominio: '',
     },
-    validateForm
+    validateForm,
+    currentScreen
   );
 
   const handleLogin = async () => {

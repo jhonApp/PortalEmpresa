@@ -6,60 +6,60 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
+import Typography from '@mui/material/Typography';
 import TableRow from '@mui/material/TableRow';
+import { useTheme } from '@mui/material/styles';
+import { IconMap } from '../../Utils/IconMap';
 
-const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-  {
-    id: 'population',
-    label: 'Population',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'density',
-    label: 'Density',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
-];
+const LoadingRow = ({ columns }) => (
+  <TableRow>
+    <TableCell colSpan={columns.length} align="center">
+      Carregando dados...
+    </TableCell>
+  </TableRow>
+);
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
+const ErrorRow = ({ columns }) => (
+  <TableRow>
+    <TableCell colSpan={columns.length} align="center">
+      Não foi possível obter os dados.
+    </TableCell>
+  </TableRow>
+);
 
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  // createData('United States', 'US', 327167434, 9833520),
-  // createData('Canada', 'CA', 37602103, 9984670),
-  // createData('Australia', 'AU', 25475400, 7692024),
-  // createData('Germany', 'DE', 83019200, 357578),
-  // createData('Ireland', 'IE', 4857000, 70273),
-  // createData('Mexico', 'MX', 126577691, 1972550),
-  // createData('Japan', 'JP', 126317000, 377973),
-  // createData('France', 'FR', 67022000, 640679),
-  // createData('United Kingdom', 'GB', 67545757, 242495),
-  // createData('Russia', 'RU', 146793744, 17098246),
-  // createData('Nigeria', 'NG', 200962417, 923768),
-  // createData('Brazil', 'BR', 210147125, 8515767),
-];
+const EmptyRow = ({ columns }) => (
+  <TableRow>
+    <TableCell colSpan={columns.length} align="center">
+      Nenhum dado disponível.
+    </TableCell>
+  </TableRow>
+);
 
-export default function CustomTable() {
+const DataRow = ({ row, columns, theme }) => (
+  <TableRow hover role="checkbox" tabIndex={-1}>
+    {columns.map((column) => (
+      <TableCell key={column.id} align={column.align}>
+        {column.id === 'nome' ? (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {IconMap[row.tipo](theme)}
+            <div style={{ textAlign: 'justify', width: theme.spacing(16) }}>
+              <Typography variant="body1">{row.userName}</Typography>
+              <Typography variant="caption" color="textSecondary">{row.tipo}</Typography>
+            </div>
+          </div>
+        ) : (
+          row[column.id]
+        )}
+      </TableCell>
+    ))}
+  </TableRow>
+);
+
+export default function CustomTable(props) {
+  console.log(props);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const theme = useTheme();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -70,51 +70,53 @@ export default function CustomTable() {
     setPage(0);
   };
 
+  const renderTableContent = () => {
+    if (props.loading) {
+      return <LoadingRow columns={props.columns} />;
+    }
+
+    if (!props.isValid) {
+      return <ErrorRow columns={props.columns} />;
+    }
+
+    if (props.data.length === 0) {
+      return <EmptyRow columns={props.columns} />;
+    }
+
+    return props.data
+      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      .map((row, index) => (
+        <DataRow key={index} row={row} columns={props.columns} theme={theme} />
+      ));
+  };
+
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', borderRadius: '10px' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {props.columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, backgroundColor: '#EBEAEF' }}
                 >
                   {column.label}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
+          <TableBody>{renderTableContent()}</TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={props.data.length}
         rowsPerPage={rowsPerPage}
         page={page}
+        labelRowsPerPage="Linhas por página"
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />

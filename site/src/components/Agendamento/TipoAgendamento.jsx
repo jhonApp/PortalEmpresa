@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from '@mui/material/Link';
+import Popup from './popupAgendamento';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import { UserMinus, UsersThree, IdentificationCard, UsersFour } from 'phosphor-react';
 import Typography from '@mui/material/Typography';
 
 function TipoAgendamento() {
+  const [openPopup, setOpenPopup] = useState(false);
   const theme = useTheme();
 
   const iconContainerStyle = {
@@ -28,6 +30,15 @@ function TipoAgendamento() {
     width: theme.spacing(29)
   };
 
+  const handleOpenPopup = () => {
+    console.log("entrei aq")
+    setOpenPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setOpenPopup(false);
+  };
+
   return (
     <Box
       gap={1}
@@ -45,7 +56,8 @@ function TipoAgendamento() {
       <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Novo Agendamento</Typography>
       <Typography marginTop={-1} variant="subtitle1" component="subtitle1">Selecione o tipo de agendamento que deseja realizar.</Typography>
       <Box display="flex" gap={2} marginTop={2}>
-        <Button style={{ ...buttonStyle }} variant="contained" startIcon={<div style={iconContainerStyle}><UserMinus size={20} color="#000"/></div>}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={handleOpenPopup}>
+          <div style={iconContainerStyle}><UserMinus size={20} color="#000" /></div>
           Visitante Simples
         </Button>
         <Button style={{ ...buttonStyle }} variant="contained" startIcon={<div style={iconContainerStyle}><UsersThree size={20} color="#000"/></div>}>
@@ -58,6 +70,7 @@ function TipoAgendamento() {
           Múltiplos Visitantes
         </Button>
       </Box>
+      <Popup open={openPopup} handleClose={handleClosePopup} />
     </Box>
   );
 }

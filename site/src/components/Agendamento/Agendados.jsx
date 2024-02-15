@@ -1,38 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Paper, Button, useTheme } from '@mui/material';
-import { UserMinus, UsersThree, IdentificationCard, UsersFour } from 'phosphor-react';
 import ListMagnifyingGlass from '../../assets/images/icones/listmagnifyinglass.svg';
 import Typography from '@mui/material/Typography';
 import Table from '../Table'
+import { obterAgendamento } from '../../../api/visitanteSimples/agendamento';
+import { obterAgendamentoEspecial } from '../../../api/visitanteEspecial/agendamento';
+import { obterAgendamentoPrestador } from '../../../api/prestadorServico/agendamento';
 
 function Agendados() {
   const theme = useTheme();
+  const [agendamentoData, setAgendamentoData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isValid, setValid] = useState(true);
 
-  const tableHeight = 440; // Set the initial height of the Table (adjust as needed)
-  const extraSpace = 0; // Extra space below the Table
 
-  const totalHeight = tableHeight + extraSpace;
-
-  const iconContainerStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '50%',
-    backgroundColor: 'lightgray',
-    padding: theme.spacing(1),
-    height: '20px',
-    marginRight: theme.spacing(1),
-  };
-
-  const buttonStyle = {
-    padding: '17px',
-    borderRadius: '10px',
-    backgroundColor: 'transparent',
-    fontWeight: 'bold',
-    color: 'black',
-    textTransform: 'none',
-    width: theme.spacing(29)
-  };
+  const columns = [
+    { id: 'nome', label: 'Nome', width: 100, align: 'center' },
+    { id: 'userDoc', label: 'RG', minWidth: 100, align: 'center'},
+    { id: 'dtValid', label: 'Data Inicial', minWidth: 100, align: 'center', },
+    { id: 'dtEnd', label: 'Data Final', minWidth: 100, align: 'center', },
+    { id: 'status', label: 'Status', minWidth: 100, align: 'center', },
+  ];
 
   const buttonStyleFiltro = {
     borderRadius: '50px',
@@ -44,6 +32,31 @@ function Agendados() {
     textTransform: 'none',
     width: theme.spacing(15)
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [data1, data2, data3] = await Promise.all([
+          obterAgendamento(1),
+          obterAgendamentoEspecial(1),
+          obterAgendamentoPrestador(1)
+        ]);
+
+        const combinedData = [...data1, ...data2, ...data3];
+        combinedData.sort((a, b) => new Date(b.dtValid) - new Date(a.dtValid));
+
+        setAgendamentoData(combinedData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Erro ao obter dados de agendamento:', error);
+        setLoading(false);
+        setValid(false);
+      }
+    };
+
+    // Chama a função para obter os dados ao montar o componente
+    fetchData();
+  }, [1]);
 
   return (
     <Box
@@ -66,7 +79,7 @@ function Agendados() {
         </Button>
       </Box>
       <Box display="flex" gap={2} marginTop={2}>
-        <Table />
+        <Table data={agendamentoData} columns={columns} loading={loading} isValid={isValid} />
       </Box>
     </Box>
   );
