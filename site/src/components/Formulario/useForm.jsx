@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Typography } from '@mui/material';
 
-const useForm = (initialState, validationCallback) => {
+const useForm = (initialState, validationCallback, currentScreen) => {
   const [values, setValues] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
@@ -10,7 +10,7 @@ const useForm = (initialState, validationCallback) => {
 
   // Função para realizar a validação do formulário com base em uma função de callback
   const handleValidation = () => {
-    const { newErrors, errorTypes } = validationCallback(values);
+    const { newErrors, errorTypes } = validationCallback(values, currentScreen);
     setErrors(newErrors);
     setErrorMessages(errorTypes);
 
@@ -31,10 +31,12 @@ const useForm = (initialState, validationCallback) => {
         setMessageType('error');
         return;
       }
+
       setErrors({});
       await submitCallback();
       setMessage('Ação bem-sucedida!');
       setMessageType('success');
+
     } catch (error) {
       const messageError = error.message;
       setMessage(messageError);
