@@ -5,8 +5,11 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Formulario from './formulario';
-import { styled } from '@mui/system';
 import FormularioAgendamento from './formularioAgendamento';
+import { styled } from '@mui/system';
+import Message from '../Message';
+import { validateForm } from '../Formulario/validation';
+import useForm from '../Formulario/useForm';
 
 const steps = ['Convidado', 'Data do Agendamento'];
 
@@ -43,12 +46,40 @@ export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [formData, setFormData] = useState({});
+  const [invalidFields, setInvalidFields] = useState({});
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
+
+  // Função para atualizar o estado do formulário
+  const handleFormChange = (data) => {
+    setFormData((prevFormData) => ({ ...prevFormData, ...data }));
+  };
+
+  const handleFieldValidationChange = (isInvalid) => {
+    setInvalidFields(isInvalid);
+  };
+
+  // Função para limpar as mensagens do formulário
+  const clearMessage = () => {
+    setMessage('');
+    setMessageType('');
+  };
+
+  // Função USEFORM para validar o formulário
+  //const { handleValidation, clearMessage } = useForm(formData, validateForm, 'agendamento');
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
 
   const handleNext = () => {
+    const hasInvalidField = invalidFields;
+    if (!hasInvalidField) {
+      setMessage('Por favor, preencha os campos obrigatórios');
+      setMessageType('error');
+      return;
+    }
+
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -73,16 +104,12 @@ export default function HorizontalLinearStepper() {
     setActiveStep(0);
   };
 
-  const handleFormChange = (data) => {
-    setFormData((prevFormData) => ({ ...prevFormData, ...data }));
-  };
-
   const renderStepContent = (step) => {
     switch (step) {
       case 0:
-        return <Formulario onDataChange={handleFormChange} />;
+        return <Formulario onDataChange={handleFormChange} onFieldValidationChange={handleFieldValidationChange} />
       case 1:
-        return <FormularioAgendamento onDataChange={handleFormChange} />;
+        return <FormularioAgendamento onDataChange={handleFormChange} onFieldValidationChange={handleFieldValidationChange}/>;
       default:
         return null;
     }
@@ -121,6 +148,7 @@ export default function HorizontalLinearStepper() {
           </Box>
         )}
       </Box>
+      {message && <Message type={messageType} message={message} onClose={clearMessage} />}
     </Box>
   );
 }

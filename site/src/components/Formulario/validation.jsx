@@ -1,74 +1,73 @@
-const isEmailValid = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
 const isFieldEmpty = (value) => {
   if (typeof value === 'string') {
-    return !value.trim();
+    return !value.trim(); // Verifica se o valor é uma string vazia ou contém apenas espaços em branco
   } else {
-    return value != null ? false : true;
+    return value === null || value === undefined; // Verifica se o valor é nulo ou indefinido
   }
 };
 
-export const validateForm = (values, currentScreen) => {
-  const selectedCondominioTrimmed = typeof values.selectedCondominio === 'string'
-  ? values.selectedCondominio.trim()
-  : values.selectedCondominio;
-  console.log(currentScreen);
+const isRegexValid = (value, regex) => {
+  return regex.test(value);
+};
 
+const validateForm = (values, currentScreen) => {
+  console.log(values)
   const fieldValidations = ValidateField(currentScreen);
-  console.log(fieldValidations);
-  const newErrors = {
-    email: fieldValidations.email ? (isFieldEmpty(values.email) || !isEmailValid(values.email)) : false,
-    password: fieldValidations.password ? isFieldEmpty(values.password) : false,
-    rgCpf: fieldValidations.rgCpf ? isFieldEmpty(values.rgCpf) : false,
-    selectedCondominio: fieldValidations.selectedCondominio ? isFieldEmpty(selectedCondominioTrimmed) : false,
-  };
+  const newErrors = {};
+  const errorTypes = {};
 
-  const getErrorMessage = (field) => {
-    if (newErrors[field]) {
+  Object.keys(fieldValidations).forEach(field => {
+    const isFieldRequired = fieldValidations[field];
+    const value = values?.[field];
+
+    // Verificando se o campo está vazio
+    const isEmpty = isFieldEmpty(value);
+
+    newErrors[field] = isFieldRequired && isEmpty;
+
+    if (isFieldRequired) {
       switch (field) {
         case 'email':
-          return isFieldEmpty(values.email) ? 'Campo obrigatório.' : isEmailValid(values.email) ? '' : 'Email inválido.';
-        case 'password':
-          return 'Campo obrigatório.';
+          errorTypes[field] = {
+            message: isEmpty ? 'Campo obrigatório.' : !isEmailValid(value) ? 'Email inválido.' : '',
+            type: newErrors[field] ? 'error' : 'success',
+          };
+          break;
         case 'rgCpf':
-          return newErrors.rgCpf ? 'Campo obrigatório.' : '';
+          errorTypes[field] = {
+            message: isEmpty ? 'Campo obrigatório.' : '',
+            type: newErrors[field] ? 'error' : 'success',
+          };
+          break;
+        case 'password':
+          errorTypes[field] = {
+            message: isEmpty ? 'Campo obrigatório.' : '',
+            type: newErrors[field] ? 'error' : 'success',
+          };
+          break;
+        case 'checked':
+        case 'nomeCompleto':
         case 'selectedCondominio':
-          return 'Campo obrigatório.';
+          errorTypes[field] = {
+            message: isEmpty ? 'Campo obrigatório.' : '',
+            type: newErrors[field] ? 'error' : 'success',
+          };
+          break;
         default:
-          return '';
+          break;
       }
     }
-    return '';
-  };
-
-  const errorTypes = {
-      email: {
-          message: getErrorMessage('email'),
-          type: newErrors.email ? 'error' : 'success',
-      },
-      rgCpf: {
-        message: getErrorMessage('rgCpf'),
-        type: newErrors.rgCpf ? 'error' : 'success',
-    },
-      password: {
-          message: getErrorMessage('password'),
-          type: newErrors.password ? 'error' : 'success',
-      },
-      selectedCondominio: {
-          message: getErrorMessage('selectedCondominio'),
-          type: newErrors.selectedCondominio ? 'error' : 'success',
-      },
-  };
+  });
 
   return { newErrors, errorTypes };
 };
 
+
 const screensValidations = {
   agendamento: {
     rgCpf: true,
+    nomeCompleto: true,
+    email: true
   },
   login: {
     password: true,
@@ -78,6 +77,21 @@ const screensValidations = {
 };
 
 const ValidateField = (currentScreen) => {
-  const validations = { ...screensValidations[currentScreen] };
-  return validations;
+  return { ...screensValidations[currentScreen] };
 };
+
+// Expressões regulares
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const rgRegex = /^\d{2}\.\d{3}\.\d{3}-\d{1,2}$/;
+const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+
+// Funções de validação específicas
+const isEmailValid = (email) => {
+  return isRegexValid(email, emailRegex);
+};
+
+const isRgCpfValid = (rgCpf) => {
+  return isRegexValid(rgCpf, rgRegex) || isRegexValid(rgCpf, cpfRegex);
+};
+
+export { validateForm };

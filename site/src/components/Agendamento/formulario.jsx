@@ -1,17 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../Utils/StyledForm';
-import Checkbox from '@mui/material/Checkbox';
-import { validateForm } from '../Formulario/validation'
+import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
 
-const Formulario = ({ onDataChange }) => {
-  const currentScreen = 'agendamento';
-
+const Formulario = ({ onDataChange, onFieldValidationChange }) => {
   const {
     values,
     errors,
-    message,
-    messageType,
     handleChange,
     handleSubmit,
     handleValidation,
@@ -20,35 +15,19 @@ const Formulario = ({ onDataChange }) => {
   } = useForm(
     {
       rgCpf: '',
-      password: '',
-      selectedCondominio: '',
+      nomeCompleto: '',
+      email: '',
     },
     validateForm,
-    currentScreen
+    'agendamento'
   );
-  const [checked, setChecked] = React.useState(false);
 
-  const [formData, setFormData] = useState({
-    rgCpf: '',
-    nomeCompleto: '',
-    email: '',
-    telefone: '',
-    empresa: '',
-    servico: ''
-  });
-
-  const handleForm = (e) => {
-    setChecked(e.target.checked);
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+  const handleFormChange = (fieldName, value) => {
+    handleChange(fieldName, value);
+    const isValid = handleValidation(fieldName);
+    onDataChange({ ...values, [fieldName]: value }); // Atualize todos os dados do formulário e chame onDataChange
+    onFieldValidationChange (isValid); // Chame a função de callback para atualizar o estado no componente pai
   };
-
-  React.useEffect(() => {
-    onDataChange(formData);
-  }, [formData, onDataChange]);
 
   return (
     <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
@@ -60,11 +39,11 @@ const Formulario = ({ onDataChange }) => {
               variant="outlined"
               fullWidth
               margin="normal"
-              type="text"
-              name="rgCpf"
-              value={formData.rgCpf}
-              onChange={(e) => handleChange('rgCpf', e.target.value)}
-              onBlur={handleValidation}
+              type="number"
+              error={errors.rgCpf}
+              value={values.rgCpf}
+              onChange={(e) => handleFormChange('rgCpf', e.target.value)}
+              onBlur={() => handleValidation('rgCpf')}
             />
             {renderErrorMessage('rgCpf')}
           </FormRow>
@@ -75,10 +54,12 @@ const Formulario = ({ onDataChange }) => {
               fullWidth
               margin="normal"
               type="text"
-              name="nomeCompleto"
-              value={formData.nomeCompleto}
-              onChange={handleChange}
+              error={errors.nomeCompleto}
+              value={values.nomeCompleto}
+              onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
+              onBlur={() => handleValidation('nomeCompleto')}
             />
+            {renderErrorMessage('nomeCompleto')}
           </FormRow>
           <FormRow>
             <StyledTextField
@@ -87,10 +68,12 @@ const Formulario = ({ onDataChange }) => {
               fullWidth
               margin="normal"
               type="text"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              error={errors.email}
+              value={values.email || ''}
+              onChange={(e) => handleFormChange('email', e.target.value)}
+              onBlur={() => handleValidation('email')}
             />
+            {renderErrorMessage('email')}
           </FormRow>
         </Column>
         <Column>
@@ -101,9 +84,9 @@ const Formulario = ({ onDataChange }) => {
               fullWidth
               margin="normal"
               type="text"
-              name="telefone"
-              value={formData.telefone}
-              onChange={handleChange}
+              error={errors.telefone}
+              value={values.telefone || ''}
+              onChange={(e) => handleFormChange('telefone', e.target.value)}
             />
           </FormRow>
           <FormRow>
@@ -113,9 +96,9 @@ const Formulario = ({ onDataChange }) => {
               fullWidth
               margin="normal"
               type="text"
-              name="empresa"
-              value={formData.empresa}
-              onChange={handleChange}
+              error={errors.empresa}
+              value={values.empresa || ''}
+              onChange={(e) => handleFormChange('empresa', e.target.value)}
             />
           </FormRow>
           <FormRow>
@@ -125,25 +108,13 @@ const Formulario = ({ onDataChange }) => {
               fullWidth
               margin="normal"
               type="text"
-              name="servico"
-              value={formData.servico}
-              onChange={handleChange}
+              error={errors.servico}
+              value={values.servico || ''}
+              onChange={(e) => handleFormChange('servico', e.target.value)}
             />
           </FormRow>
         </Column>
       </FormContainer>
-      <FormRow style={{ display: 'flex', alignItems: 'center' }}>
-        <Checkbox
-          sx={{
-            padding: '9px 9px 9px 0px !important',
-            '& .MuiSvgIcon-root': { color: '#C4C7D4' }
-          }}
-          checked={checked}
-          onChange={handleChange}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <span sx={{ fontFamily: '"Roboto","Helvetica","Arial",sans-serif' }}>Confirmo que as informações acima são verdadeiras. *</span>
-      </FormRow>
     </StyledPaper>
   );
 };
