@@ -9,37 +9,34 @@ import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
 
 dayjs.locale('pt-br');
+const today = dayjs();
 
-const FormularioAgendamento = ({ onDataChange, onFieldValidationChange }) => {
+const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData }) => {
+  const [locale, setLocale] = useState('pt-br');
   const {
     values,
     errors,
     handleChange,
-    handleSubmit,
     handleValidation,
-    renderErrorMessage,
-    clearMessage,
   } = useForm(
-    {
-      dataInicial: null,
-      horaEntrada: null,
-      horaSaida: null,
-      dataFim: null,
-      obs: '',
-    },
+    formData,
     validateForm,
-    'agendamento'
+    'agendamento2'
   );
+
+  const handleLocaleChange = (newLocale) => {
+    setLocale(newLocale); // Função para atualizar o estado da localidade
+  };
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
-    onDataChange({ ...values, [fieldName]: value }); // Atualize todos os dados do formulário e chame onDataChange
+    onDataChange({ ...values, [fieldName]: value });
     onFieldValidationChange (isValid);
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} locale="pt-br">
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
       <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
         <FormContainer>
           <Column>
@@ -49,13 +46,14 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange }) => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                type="date"
                 name="dataInicial"
+                minDate={today}
                 error={errors.dataInicial}
-                value={values.dataInicial}
-                onChange={(e) => { handleFormChange('dataInicial', e); }}
+                value={values.dataInicial || null}
+                onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
                 onBlur={() => handleValidation('dataInicial')}
               />
-              {renderErrorMessage('dataInicial')}
             </FormRow>
             <FormRow>
               <StyledTimePicker
@@ -99,8 +97,9 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange }) => {
                 margin="normal"
                 type="date"
                 name="dataFim"
+                minDate={today}
                 error={errors.dataFim}
-                value={values.dataFim}
+                value={values.dataFim || null}
                 onChange={(e) => handleFormChange('dataFim', e)}
                 onBlur={() => handleValidation('dataFim')}
               />
@@ -117,7 +116,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange }) => {
             style={{ width: '100%' }}
             multiline
             error={errors.obs}
-            value={values.obs}
+            value={values.obs || ''}
             onChange={(e) => handleFormChange('obs', e.target.value)}
             onBlur={() => handleValidation('obs')}
           />
