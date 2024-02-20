@@ -11,10 +11,10 @@ const isRegexValid = (value, regex) => {
 };
 
 const validateForm = (values, currentScreen) => {
-  console.log(values)
   const fieldValidations = ValidateField(currentScreen);
   const newErrors = {};
   const errorTypes = {};
+  let errorFound = false; // Variável de controle para verificar se um erro foi encontrado
 
   Object.keys(fieldValidations).forEach(field => {
     const isFieldRequired = fieldValidations[field];
@@ -24,34 +24,33 @@ const validateForm = (values, currentScreen) => {
     const isEmpty = isFieldEmpty(value);
 
     newErrors[field] = isFieldRequired && isEmpty;
-
-    if (isFieldRequired) {
+    //debugger;
+    if (isFieldRequired && isEmpty) {
+      // Campo obrigatório vazio
+      errorTypes[field] = {
+        message: 'Campo obrigatório.',
+        type: 'error',
+        errorFound: true
+      };
+    } else if (!isEmpty) {
       switch (field) {
         case 'email':
-          errorTypes[field] = {
-            message: isEmpty ? 'Campo obrigatório.' : !isEmailValid(value) ? 'Email inválido.' : '',
-            type: newErrors[field] ? 'error' : 'success',
-          };
+          if (!isEmailValid(value)) {
+            errorTypes[field] = {
+              message: 'Email inválido.',
+              type: 'error',
+              errorFound: true
+            };
+          }
           break;
         case 'rgCpf':
-          errorTypes[field] = {
-            message: isEmpty ? 'Campo obrigatório.' : '',
-            type: newErrors[field] ? 'error' : 'success',
-          };
-          break;
-        case 'password':
-          errorTypes[field] = {
-            message: isEmpty ? 'Campo obrigatório.' : '',
-            type: newErrors[field] ? 'error' : 'success',
-          };
-          break;
-        case 'checked':
-        case 'nomeCompleto':
-        case 'selectedCondominio':
-          errorTypes[field] = {
-            message: isEmpty ? 'Campo obrigatório.' : '',
-            type: newErrors[field] ? 'error' : 'success',
-          };
+          if (!isRgCpfValid(value)) {
+            errorTypes[field] = {
+              message: 'RG ou CPF inválido.',
+              type: 'error',
+              errorFound: true
+            };
+          }
           break;
         default:
           break;
@@ -59,11 +58,19 @@ const validateForm = (values, currentScreen) => {
     }
   });
 
-  return { newErrors, errorTypes };
+  return { errorTypes };
 };
 
 
+
+
 const screensValidations = {
+  agendamento2: {
+    dataInicial: true,
+    dataFim: true,
+    horaEntrada: true,
+    horaSaida: true
+  },
   agendamento: {
     rgCpf: true,
     nomeCompleto: true,
@@ -82,8 +89,8 @@ const ValidateField = (currentScreen) => {
 
 // Expressões regulares
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const rgRegex = /^\d{2}\.\d{3}\.\d{3}-\d{1,2}$/;
-const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+const rgRegex = /^\d{9,10}$/;
+const cpfRegex = /^\d{11}$/;
 
 // Funções de validação específicas
 const isEmailValid = (email) => {

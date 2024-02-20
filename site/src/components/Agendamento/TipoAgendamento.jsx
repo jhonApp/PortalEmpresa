@@ -31,7 +31,6 @@ function TipoAgendamento() {
   };
 
   const handleOpenPopup = () => {
-    console.log("entrei aq")
     setOpenPopup(true);
   };
 

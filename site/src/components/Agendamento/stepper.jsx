@@ -59,14 +59,8 @@ export default function HorizontalLinearStepper() {
     setInvalidFields(isInvalid);
   };
 
-  // Função para limpar as mensagens do formulário
-  const clearMessage = () => {
-    setMessage('');
-    setMessageType('');
-  };
-
   // Função USEFORM para validar o formulário
-  //const { handleValidation, clearMessage } = useForm(formData, validateForm, 'agendamento');
+  const { handleSubmit, clearMessage } = useForm(formData, validateForm, 'agendamento2');
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
@@ -98,18 +92,22 @@ export default function HorizontalLinearStepper() {
     setActiveStep(0);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     console.log('Dados enviados:', formData);
+    await handleSubmit(async () => {
+      await save(formData);
+    });
     setFormData({});
     setActiveStep(0);
   };
+  
 
   const renderStepContent = (step) => {
     switch (step) {
       case 0:
-        return <Formulario onDataChange={handleFormChange} onFieldValidationChange={handleFieldValidationChange} />
+        return <Formulario formData={formData} onDataChange={handleFormChange} onFieldValidationChange={handleFieldValidationChange} />
       case 1:
-        return <FormularioAgendamento onDataChange={handleFormChange} onFieldValidationChange={handleFieldValidationChange}/>;
+        return <FormularioAgendamento formData={formData} onDataChange={handleFormChange} onFieldValidationChange={handleFieldValidationChange}/>;
       default:
         return null;
     }

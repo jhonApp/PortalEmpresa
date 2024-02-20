@@ -2,8 +2,9 @@ import React from 'react';
 import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../Utils/StyledForm';
 import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
+import InputMask from 'react-input-mask';
 
-const Formulario = ({ onDataChange, onFieldValidationChange }) => {
+const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
   const {
     values,
     errors,
@@ -13,11 +14,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange }) => {
     renderErrorMessage,
     clearMessage,
   } = useForm(
-    {
-      rgCpf: '',
-      nomeCompleto: '',
-      email: '',
-    },
+    formData,
     validateForm,
     'agendamento'
   );
@@ -25,6 +22,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange }) => {
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
+    console.log(isValid);
     onDataChange({ ...values, [fieldName]: value }); // Atualize todos os dados do formulário e chame onDataChange
     onFieldValidationChange (isValid); // Chame a função de callback para atualizar o estado no componente pai
   };
@@ -40,10 +38,12 @@ const Formulario = ({ onDataChange, onFieldValidationChange }) => {
               fullWidth
               margin="normal"
               type="number"
+              autoComplete="off"
               error={errors.rgCpf}
-              value={values.rgCpf}
+              value={values.rgCpf || ''}
               onChange={(e) => handleFormChange('rgCpf', e.target.value)}
-              onBlur={() => handleValidation('rgCpf')}
+              onBlur={(e) => handleFormChange('rgCpf', e.target.value)}
+
             />
             {renderErrorMessage('rgCpf')}
           </FormRow>
@@ -54,10 +54,11 @@ const Formulario = ({ onDataChange, onFieldValidationChange }) => {
               fullWidth
               margin="normal"
               type="text"
+              autoComplete="off"
               error={errors.nomeCompleto}
-              value={values.nomeCompleto}
+              value={values.nomeCompleto || ''}
               onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
-              onBlur={() => handleValidation('nomeCompleto')}
+              onBlur={(e) => handleFormChange('nomeCompleto', e.target.value)}
             />
             {renderErrorMessage('nomeCompleto')}
           </FormRow>
@@ -68,26 +69,33 @@ const Formulario = ({ onDataChange, onFieldValidationChange }) => {
               fullWidth
               margin="normal"
               type="text"
+              autoComplete="off"
               error={errors.email}
               value={values.email || ''}
               onChange={(e) => handleFormChange('email', e.target.value)}
-              onBlur={() => handleValidation('email')}
+              onBlur={(e) => handleFormChange('email', e.target.value)}
             />
             {renderErrorMessage('email')}
           </FormRow>
         </Column>
         <Column>
           <FormRow>
-            <StyledTextField
-              label="Telefone"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              type="text"
-              error={errors.telefone}
+            <InputMask
+              mask="(99) 99999-9999"
+              maskChar=" "
               value={values.telefone || ''}
               onChange={(e) => handleFormChange('telefone', e.target.value)}
-            />
+            >
+              {() => <StyledTextField
+                label="Telefone"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                autoComplete="off"
+                type="text"
+                error={errors.telefone}
+              />}
+            </InputMask>
           </FormRow>
           <FormRow>
             <StyledTextField
@@ -96,6 +104,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange }) => {
               fullWidth
               margin="normal"
               type="text"
+              autoComplete="off"
               error={errors.empresa}
               value={values.empresa || ''}
               onChange={(e) => handleFormChange('empresa', e.target.value)}
@@ -108,6 +117,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange }) => {
               fullWidth
               margin="normal"
               type="text"
+              autoComplete="off"
               error={errors.servico}
               value={values.servico || ''}
               onChange={(e) => handleFormChange('servico', e.target.value)}

@@ -7,19 +7,18 @@ const useForm = (initialState, validationCallback, currentScreen) => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [errorMessages, setErrorMessages] = useState({});
-
+  
   const handleValidation = () => {
-    const { newErrors, errorTypes } = validationCallback(values, currentScreen);
-
-    setErrors(newErrors);
+    const { errorTypes } = validationCallback(values, currentScreen);
+    setErrors(errorTypes);
     setErrorMessages(errorTypes);
 
-    const hasErrors = Object.values(newErrors).some((error) => error);
+    const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
     if (hasErrors) {
       let errorMessage = '';
-      Object.keys(newErrors).forEach((fieldName) => {
-        if (newErrors[fieldName]) {
-          errorMessage += errorMessages[fieldName]?.message + '\n';
+      Object.keys(errorTypes).forEach((fieldName) => {
+        if (errorTypes[fieldName].errorFound) {
+          errorMessage += errorTypes[fieldName].message + '\n';
         }
       });
       setMessage('Por favor, preencha os campos obrigatórios.');

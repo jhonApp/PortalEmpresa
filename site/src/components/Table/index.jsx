@@ -56,7 +56,6 @@ const DataRow = ({ row, columns, theme }) => (
 );
 
 export default function CustomTable(props) {
-  console.log(props);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const theme = useTheme();
