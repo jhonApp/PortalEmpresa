@@ -34,13 +34,7 @@ const useForm = (initialState, validationCallback, currentScreen) => {
   // Função para lidar com o envio do formulário
   const handleSubmit = async (submitCallback) => {
     try {
-      if (!handleValidation()) {
-        setMessage('Por favor, preencha todos os campos.');
-        setMessageType('error');
-        return;
-      }
 
-      setErrors({});
       await submitCallback();
       setMessage('Ação bem-sucedida!');
       setMessageType('success');

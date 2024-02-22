@@ -3,9 +3,7 @@ import { Box, Paper, Button, useTheme } from '@mui/material';
 import ListMagnifyingGlass from '../../assets/images/icones/listmagnifyinglass.svg';
 import Typography from '@mui/material/Typography';
 import Table from '../Table'
-import { obterAgendamento } from '../../../api/visitanteSimples/agendamento';
-import { obterAgendamentoEspecial } from '../../../api/visitanteEspecial/agendamento';
-import { obterAgendamentoPrestador } from '../../../api/prestadorServico/agendamento';
+import {atualizarTabela} from '../../../service/agendamentoService';
 
 function Agendados() {
   const theme = useTheme();
@@ -35,28 +33,11 @@ function Agendados() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const [data1, data2, data3] = await Promise.all([
-          obterAgendamento(1),
-          obterAgendamentoEspecial(1),
-          obterAgendamentoPrestador(1)
-        ]);
-
-        const combinedData = [...data1, ...data2, ...data3];
-        combinedData.sort((a, b) => new Date(b.dtValid) - new Date(a.dtValid));
-
-        setAgendamentoData(combinedData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Erro ao obter dados de agendamento:', error);
-        setLoading(false);
-        setValid(false);
-      }
+      await atualizarTabela(setAgendamentoData, setLoading, setValid);
     };
 
-    // Chama a função para obter os dados ao montar o componente
     fetchData();
-  }, [1]);
+  }, []);
 
   return (
     <Box

@@ -10,6 +10,7 @@ import { styled } from '@mui/system';
 import Message from '../Message';
 import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
+import { inserirAgendamento } from '../../../service/agendamentoService';
 
 const steps = ['Convidado', 'Data do Agendamento'];
 
@@ -60,7 +61,7 @@ export default function HorizontalLinearStepper() {
   };
 
   // Função USEFORM para validar o formulário
-  const { handleSubmit, clearMessage } = useForm(formData, validateForm, 'agendamento2');
+  const { handleSubmit, clearMessage } = useForm();
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
@@ -93,12 +94,21 @@ export default function HorizontalLinearStepper() {
   };
 
   const handleSave = async () => {
-    console.log('Dados enviados:', formData);
+    
+    const hasInvalidField = invalidFields;
+    if (!hasInvalidField) {
+      setMessage('Por favor, preencha os campos obrigatórios');
+      setMessageType('error');
+      return;
+    }
+
     await handleSubmit(async () => {
-      await save(formData);
+      await inserirAgendamento(formData);
+      setMessage('Criado com sucesso!');
+      setMessageType('sucess');
     });
-    setFormData({});
-    setActiveStep(0);
+    //setFormData({});
+    //setActiveStep(0);
   };
   
 

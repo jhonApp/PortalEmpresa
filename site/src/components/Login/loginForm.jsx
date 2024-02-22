@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Paper,
   Typography,
@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 import { autenticacao } from '../../../api/autenticacao';
+import { obterCliente } from '../../../api/cliente';
 import Message from '../Message';
 import useForm from '../Formulario/useForm';
 import { validateForm } from '../Formulario/validation'
@@ -68,7 +69,7 @@ const FormSection = styled('div')({
 const LoginForm = () => {
   const navigate = useNavigate();
   const currentScreen = 'login';
-
+  const [condominios, setCondominios] = useState([]);
   const {
     values,
     errors,
@@ -91,13 +92,30 @@ const LoginForm = () => {
 
   const handleLogin = async () => {
     await handleSubmit(async () => {
-      await autenticacao(values.email, values.password);
+      await autenticacao(values.email, values.password, values.selectedCondominio);
       navigate('/system/');
     });
   };
 
+  useEffect(() => {
+    const fetchCondominios = async () => {
+      try {
+        const response = await obterCliente();
+        console.log(response)
+        setCondominios(response.data);
+      } catch (error) {
+        console.error('Erro ao obter condomínios:', error);
+      }
+    };
+
+    fetchCondominios();
+  }, []);
+
   const handleCondominioChange = (e) => {
-    handleChange('selectedCondominio', e.target.value);
+    console.log(e);
+    const selectedValue = e.target.value;
+    console.log(selectedValue);
+    handleChange('selectedCondominio', selectedValue);
   };
 
   const handleMessageClose = () => {
@@ -118,14 +136,15 @@ const LoginForm = () => {
               value={values.selectedCondominio}
               onChange={handleCondominioChange}
             >
-              <MenuItem value={1}>Condomínio 1</MenuItem>
-              <MenuItem value={2}>Condomínio 2</MenuItem>
-              <MenuItem value={3}>Condomínio 3</MenuItem>
+              {condominios.map(condominio => (
+                <MenuItem key={condominio.codigo} value={condominio.codigo}>
+                  {condominio.nome}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           {renderErrorMessage('selectedCondominio')}
         </FormSection>
-
         <FormSection>
           <StyledTextField
             label="Email"
