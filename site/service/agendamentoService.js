@@ -13,7 +13,6 @@ export const inserirAgendamento = async (dados) => {
 
       // Aguarda a obtenção do visitante
       const visitante = await obterVisitante(dados.rgCpf);
-      console.log(visitante);
 
       // Verifica se o visitante já existe
       if (visitante.data.codigo == 0) {
@@ -25,10 +24,13 @@ export const inserirAgendamento = async (dados) => {
       const agendamento = {
         codigoVisitante: visitante.data.codigo,
         dataFim: dados.dataFim,
+        horaEntrada: dados.horaEntrada,
+        horaSaida: dados.horaSaida,
         dataInicial: dados.dataInicial,
         obs: dados.obs,
         codigoUsuario: storage.codigo,
-        codigoEmpresa: storage.codigoEmpresa
+        codigoEmpresa: storage.codigoEmpresa,
+        codigoFuncionario: storage.codigoFuncionario
       }
 
       const response = await IncluirAgendamento(agendamento);
@@ -53,7 +55,6 @@ export const atualizarTabela = async (setAgendamentoData, setLoading, setValid) 
     ]);
 
     const combinedData = [...data1, ...data2, ...data3];
-    console.log(combinedData);
     combinedData.sort((a, b) => new Date(b.dtValid) - new Date(a.dtValid));
 
     setAgendamentoData(combinedData);

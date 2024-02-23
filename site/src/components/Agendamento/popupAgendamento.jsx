@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Stepper from './stepper';
 import { Dialog, DialogContent, Paper, useTheme } from '@mui/material';
 
-function PopupDialog({ open, handleClose }) {
+function PopupDialog({ open, handleClose, atualizarAgendamento }) {
   const theme = useTheme();
   
   return (
@@ -22,7 +22,7 @@ function PopupDialog({ open, handleClose }) {
         >
           <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0) }}>Novo Agendamento</Typography>
           <Typography variant="subtitle1" style={{ marginBottom: theme.spacing(2), fontSize: 14 }}>Visitante Simples</Typography>
-          <Stepper />
+          <Stepper atualizarAgendamento={atualizarAgendamento} />
         </Paper>
       </DialogContent>
       {/* <DialogActions>

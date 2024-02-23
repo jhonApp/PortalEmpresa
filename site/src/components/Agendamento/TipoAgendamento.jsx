@@ -5,7 +5,7 @@ import { Box, Paper, Button, useTheme } from '@mui/material';
 import { UserMinus, UsersThree, IdentificationCard, UsersFour } from 'phosphor-react';
 import Typography from '@mui/material/Typography';
 
-function TipoAgendamento() {
+function TipoAgendamento({atualizarAgendamento}) {
   const [openPopup, setOpenPopup] = useState(false);
   const theme = useTheme();
 
@@ -69,7 +69,7 @@ function TipoAgendamento() {
           Múltiplos Visitantes
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} />
+      <Popup open={openPopup} handleClose={handleClosePopup} atualizarAgendamento={atualizarAgendamento} />
     </Box>
   );
 }
