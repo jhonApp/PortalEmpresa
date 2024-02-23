@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import ListMagnifyingGlass from '../../assets/images/icones/listmagnifyinglass.svg';
 import Typography from '@mui/material/Typography';
 import Table from '../Table'
-import {atualizarTabela} from '../../../service/agendamentoService';
 
-function Agendados() {
+function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, isValid, setValid, atualizarAgendamento}) {
   const theme = useTheme();
-  const [agendamentoData, setAgendamentoData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isValid, setValid] = useState(true);
-
 
   const columns = [
     { id: 'nome', label: 'Nome', width: 100, align: 'center' },
@@ -33,7 +28,7 @@ function Agendados() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await atualizarTabela(setAgendamentoData, setLoading, setValid);
+      await atualizarAgendamento(setAgendamentoData, setLoading, setValid);
     };
 
     fetchData();

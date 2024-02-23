@@ -8,7 +8,6 @@ import Formulario from './formulario';
 import FormularioAgendamento from './formularioAgendamento';
 import { styled } from '@mui/system';
 import Message from '../Message';
-import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
 import { inserirAgendamento } from '../../../service/agendamentoService';
 
@@ -43,7 +42,7 @@ const StyledButtonSecundary = styled(Button)({
   },
 });
 
-export default function HorizontalLinearStepper() {
+export default function HorizontalLinearStepper({atualizarAgendamento}) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [formData, setFormData] = useState({});
@@ -104,6 +103,7 @@ export default function HorizontalLinearStepper() {
 
     await handleSubmit(async () => {
       await inserirAgendamento(formData);
+      atualizarAgendamento();
       setMessage('Criado com sucesso!');
       setMessageType('sucess');
     });
