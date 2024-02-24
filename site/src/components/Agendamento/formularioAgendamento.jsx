@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Typography from '@mui/material/Typography';
 import { StyledDatePicker, StyledTimePicker, StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../Utils/StyledForm';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import Checkbox from '@mui/material/Checkbox';
 import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
+import { fontSize } from '@mui/system';
 
 dayjs.locale('pt-br');
 const today = dayjs();
@@ -29,10 +31,17 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
   };
 
   const handleFormChange = (fieldName, value) => {
+    console.log(value)
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
     onDataChange({ ...values, [fieldName]: value });
     onFieldValidationChange (isValid);
+  };
+
+  const handleCheckboxChange = (e) => {
+    const isChecked = e.target.checked;
+    setChegada(isChecked); // Atualiza o estado interno do Checkbox
+    handleFormChange('chegada', isChecked); // Atualiza o estado do formulário
   };
 
   return (
@@ -121,18 +130,22 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
             onBlur={() => handleValidation('obs')}
           />
         </FormRow>
-        {/* <FormRow style={{ display: 'flex', alignItems: 'center' }}>
+        <FormRow style={{ display: 'flex', alignItems: 'center', marginTop: 10, marginBottom: 30 }}>
             <Checkbox
-            sx={{
-                padding: '9px 9px 9px 0px !important',
-                '& .MuiSvgIcon-root': { color: '#C4C7D4' }
-            }}
-            checked={checked}
-            onChange={handleChange}
-            inputProps={{ 'aria-label': 'controlled' }}
+              sx={{
+                  padding: '0px 0px 0px 0px !important',
+                  '& .MuiSvgIcon-root': { color: '#C4C7D4' }
+              }}
+              checked={values.chegada || false}
+              error={errors.chegada}
+              onChange={(e) => {
+                values.chegada = e.target.checked;
+                handleFormChange('chegada', e.target.checked);
+              }}
+              inputProps={{ 'aria-label': 'primary checkbox' }}   
             />
-            <span sx={{ fontFamily: '"Roboto","Helvetica","Arial",sans-serif' }}>Comunicar a empresa quando o visitante chegar</span>
-        </FormRow> */}
+            <Typography sx ={{marginLeft: 1, fontSize: 14}}>Comunicar a empresa quando o visitante chegar</Typography>
+        </FormRow>
       </StyledPaper>
     </LocalizationProvider>
   );

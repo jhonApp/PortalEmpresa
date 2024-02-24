@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
+import {Box, Stepper, Step, StepLabel, Button} from '@mui/material';
 import Formulario from './formulario';
 import FormularioAgendamento from './formularioAgendamento';
 import { styled } from '@mui/system';
 import Message from '../Message';
 import useForm from '../Formulario/useForm';
 import { inserirAgendamento } from '../../../service/agendamentoService';
+import Progress from '../../Utils/LoadingProgress'
 
 const steps = ['Convidado', 'Data do Agendamento'];
 
@@ -42,13 +39,14 @@ const StyledButtonSecundary = styled(Button)({
   },
 });
 
-export default function HorizontalLinearStepper({atualizarAgendamento}) {
+export default function HorizontalLinearStepper({atualizarAgendamento, handleClose}) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [formData, setFormData] = useState({});
   const [invalidFields, setInvalidFields] = useState({});
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Função para atualizar o estado do formulário
   const handleFormChange = (data) => {
@@ -59,7 +57,6 @@ export default function HorizontalLinearStepper({atualizarAgendamento}) {
     setInvalidFields(isInvalid);
   };
 
-  // Função USEFORM para validar o formulário
   const { handleSubmit, clearMessage } = useForm();
 
   const isStepSkipped = (step) => {
@@ -88,36 +85,64 @@ export default function HorizontalLinearStepper({atualizarAgendamento}) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
+  const handleCancel = () => {
+    handleClose(false);
   };
 
   const handleSave = async () => {
-    
-    const hasInvalidField = invalidFields;
-    if (!hasInvalidField) {
-      setMessage('Por favor, preencha os campos obrigatórios');
-      setMessageType('error');
-      return;
-    }
+    try {
+      
+      const hasInvalidField = invalidFields;
+      if (!hasInvalidField) {
+        setMessage('Por favor, preencha os campos obrigatórios');
+        setMessageType('error');
+        return;
+      }
+      setLoading(true);
+  
+      await handleSubmit(async () => {
+        await inserirAgendamento(formData);
+      });
 
-    await handleSubmit(async () => {
-      await inserirAgendamento(formData);
-      atualizarAgendamento();
       setMessage('Criado com sucesso!');
-      setMessageType('sucess');
-    });
-    //setFormData({});
-    //setActiveStep(0);
+      setMessageType('success');
+      atualizarAgendamento();
+      setFormData({});
+      setActiveStep(0);
+      handleClose(false);
+      setLoading(false);
+
+    } catch (error) {
+      setLoading(false);
+      setMessage(error.message);
+      setMessageType('error');
+    }
   };
   
-
   const renderStepContent = (step) => {
     switch (step) {
       case 0:
-        return <Formulario formData={formData} onDataChange={handleFormChange} onFieldValidationChange={handleFieldValidationChange} />
+        return (
+          <>
+            <Formulario
+              formData={formData}
+              onDataChange={handleFormChange}
+              onFieldValidationChange={handleFieldValidationChange}
+            />
+            <Progress isVisible={loading} />
+          </>
+        );
       case 1:
-        return <FormularioAgendamento formData={formData} onDataChange={handleFormChange} onFieldValidationChange={handleFieldValidationChange}/>;
+        return (
+          <>
+            <FormularioAgendamento
+              formData={formData}
+              onDataChange={handleFormChange}
+              onFieldValidationChange={handleFieldValidationChange}
+            />
+            <Progress isVisible={loading} />
+          </>
+        );
       default:
         return null;
     }
@@ -146,7 +171,7 @@ export default function HorizontalLinearStepper({atualizarAgendamento}) {
         {activeStep === steps.length - 1 && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
             <Button onClick={handleBack} sx={{ marginRight: '150px', color: 'black' }}>Voltar</Button>
-            <StyledButtonSecundary onClick={handleReset}>Cancelar</StyledButtonSecundary>
+            <StyledButtonSecundary onClick={handleCancel}>Cancelar</StyledButtonSecundary>
             <StyledButtonPrimary onClick={handleSave}>Finalizar</StyledButtonPrimary>
           </Box>
         )}
