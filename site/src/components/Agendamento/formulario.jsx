@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../Utils/StyledForm';
 import { validateForm } from '../Formulario/validation';
+import { Checkbox, Typography } from '@mui/material';
 import useForm from '../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
@@ -9,10 +10,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     values,
     errors,
     handleChange,
-    handleSubmit,
     handleValidation,
     renderErrorMessage,
-    clearMessage,
   } = useForm(
     formData,
     validateForm,
@@ -23,8 +22,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
     console.log(isValid);
-    onDataChange({ ...values, [fieldName]: value }); // Atualize todos os dados do formulário e chame onDataChange
-    onFieldValidationChange (isValid); // Chame a função de callback para atualizar o estado no componente pai
+    onDataChange({ ...values, [fieldName]: value });
+    onFieldValidationChange (isValid);
   };
 
   return (
@@ -123,8 +122,25 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               onChange={(e) => handleFormChange('servico', e.target.value)}
             />
           </FormRow>
+          
         </Column>
       </FormContainer>
+      <FormRow style={{ display: 'flex', alignItems: 'center', marginTop: 10, marginBottom: 30 }}>
+        <Checkbox
+          sx={{
+            padding: '0px 0px 0px 0px !important',
+            '& .MuiSvgIcon-root': { color: '#C4C7D4' }
+          }}
+          checked={values.confirmacao || false}
+          error={errors.confirmacao}
+          onChange={(e) => {
+            values.confirmacao = e.target.checked;
+            handleFormChange('confirmacao', e.target.checked);
+          }}
+          inputProps={{ 'aria-label': 'primary checkbox' }}   
+        />
+        <Typography sx ={{marginLeft: 1, fontSize: 14}}>Confirmo que as informações acima são verdadeiras *</Typography>
+      </FormRow>
     </StyledPaper>
   );
 };

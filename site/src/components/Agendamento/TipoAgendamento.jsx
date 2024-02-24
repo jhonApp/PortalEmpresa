@@ -53,7 +53,7 @@ function TipoAgendamento({atualizarAgendamento}) {
       component={Paper}
     >
       <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Novo Agendamento</Typography>
-      <Typography marginTop={-1} variant="subtitle1" component="subtitle1">Selecione o tipo de agendamento que deseja realizar.</Typography>
+      <Typography marginTop={-1} variant="subtitle1" component="h6">Selecione o tipo de agendamento que deseja realizar.</Typography>
       <Box display="flex" gap={2} marginTop={2}>
         <Button style={{ ...buttonStyle }} variant="contained" onClick={handleOpenPopup}>
           <div style={iconContainerStyle}><UserMinus size={20} color="#000" /></div>

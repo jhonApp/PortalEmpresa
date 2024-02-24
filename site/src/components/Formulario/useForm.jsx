@@ -34,7 +34,7 @@ const useForm = (initialState, validationCallback, currentScreen) => {
   // Função para lidar com o envio do formulário
   const handleSubmit = async (submitCallback) => {
     try {
-
+      console.log("ENtrei no hadle submit")
       await submitCallback();
       setMessage('Ação bem-sucedida!');
       setMessageType('success');

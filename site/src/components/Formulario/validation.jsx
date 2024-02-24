@@ -12,19 +12,17 @@ const isRegexValid = (value, regex) => {
 
 const validateForm = (values, currentScreen) => {
   const fieldValidations = ValidateField(currentScreen);
-  const newErrors = {};
   const errorTypes = {};
-  let errorFound = false; // Variável de controle para verificar se um erro foi encontrado
-
-  Object.keys(fieldValidations).forEach(field => {
+  
+  Object.keys(fieldValidations).some(field => {
     const isFieldRequired = fieldValidations[field];
     const value = values?.[field];
+    console.log(value)
+    console.log(field)
 
     // Verificando se o campo está vazio
     const isEmpty = isFieldEmpty(value);
 
-    newErrors[field] = isFieldRequired && isEmpty;
-    //debugger;
     if (isFieldRequired && isEmpty) {
       // Campo obrigatório vazio
       errorTypes[field] = {
@@ -32,7 +30,10 @@ const validateForm = (values, currentScreen) => {
         type: 'error',
         errorFound: true
       };
-    } else if (!isEmpty) {
+      return true;
+    }
+
+    if (!isEmpty) {
       switch (field) {
         case 'email':
           if (!isEmailValid(value)) {
@@ -41,6 +42,17 @@ const validateForm = (values, currentScreen) => {
               type: 'error',
               errorFound: true
             };
+            return true;
+          }
+          break;
+        case 'confirmacao':
+          if (value === false) {
+            errorTypes[field] = {
+              message: 'Checked não marcado.',
+              type: 'error',
+              errorFound: true
+            };
+            return true; // Sai da iteração se encontrar um erro
           }
           break;
         case 'rgCpf':
@@ -50,17 +62,19 @@ const validateForm = (values, currentScreen) => {
               type: 'error',
               errorFound: true
             };
+            return true; // Sai da iteração se encontrar um erro
           }
           break;
         default:
           break;
       }
     }
-  });
 
+    return false; // Continua para o próximo campo
+  });
+  console.log(errorTypes)
   return { errorTypes };
 };
-
 
 
 
@@ -69,12 +83,13 @@ const screensValidations = {
     dataInicial: true,
     dataFim: true,
     horaEntrada: true,
-    horaSaida: true
+    horaSaida: true,
   },
   agendamento: {
     rgCpf: true,
     nomeCompleto: true,
-    email: true
+    email: true,
+    confirmacao: true,
   },
   login: {
     password: true,
