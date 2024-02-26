@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Link from '@mui/material/Link';
 import Popup from './popupAgendamento';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import { UserMinus, UsersThree, IdentificationCard, UsersFour } from 'phosphor-react';
@@ -69,7 +68,7 @@ function TipoAgendamento({atualizarAgendamento}) {
           Múltiplos Visitantes
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} atualizarAgendamento={atualizarAgendamento} />
+      <Popup open={openPopup} handleClose={handleClosePopup} updateTable={atualizarAgendamento} title="Novo Agendamento" description="Visitante Simples" type="AgendamentoVisitante"/>
     </Box>
   );
 }

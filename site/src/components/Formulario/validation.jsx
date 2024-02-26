@@ -13,12 +13,10 @@ const isRegexValid = (value, regex) => {
 const validateForm = (values, currentScreen) => {
   const fieldValidations = ValidateField(currentScreen);
   const errorTypes = {};
-  
+
   Object.keys(fieldValidations).some(field => {
     const isFieldRequired = fieldValidations[field];
     const value = values?.[field];
-    console.log(value)
-    console.log(field)
 
     // Verificando se o campo está vazio
     const isEmpty = isFieldEmpty(value);
@@ -52,7 +50,7 @@ const validateForm = (values, currentScreen) => {
               type: 'error',
               errorFound: true
             };
-            return true; // Sai da iteração se encontrar um erro
+            return true;
           }
           break;
         case 'rgCpf':
@@ -62,7 +60,7 @@ const validateForm = (values, currentScreen) => {
               type: 'error',
               errorFound: true
             };
-            return true; // Sai da iteração se encontrar um erro
+            return true;
           }
           break;
         default:
@@ -70,9 +68,10 @@ const validateForm = (values, currentScreen) => {
       }
     }
 
-    return false; // Continua para o próximo campo
+    return false;
   });
-  console.log(errorTypes)
+  
+  
   return { errorTypes };
 };
 
@@ -83,7 +82,6 @@ const screensValidations = {
     dataInicial: true,
     dataFim: true,
     horaEntrada: true,
-    horaSaida: true,
   },
   agendamento: {
     rgCpf: true,

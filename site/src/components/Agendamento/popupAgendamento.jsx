@@ -1,11 +1,20 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import Stepper from './stepper';
+import AgendamentoVisitante from './AgendamentoVisitante'
 import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '@mui/material';
 import { XCircle } from 'phosphor-react';
 
-function PopupDialog({ open, handleClose, atualizarAgendamento }) {
+function PopupDialog({ open, handleClose, updateTable, title, description, type }) {
   const theme = useTheme();
+
+  const renderContent = () => {
+    switch (type) {
+      case 'AgendamentoVisitante':
+        return <AgendamentoVisitante onClose={handleClose} updateTable={updateTable} />;
+      default:
+        return null;
+    }
+  };
   
   return (
     <Dialog open={open} onClose={handleClose} >
@@ -24,9 +33,9 @@ function PopupDialog({ open, handleClose, atualizarAgendamento }) {
             height: 'auto', 
           }}
         >
-          <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0) }}>Novo Agendamento</Typography>
-          <Typography variant="h3" style={{ marginBottom: theme.spacing(2), fontSize: 14 }}>Visitante Simples</Typography>
-          <Stepper atualizarAgendamento={atualizarAgendamento} handleClose={handleClose} />
+          <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0) }}>{title}</Typography>
+          <Typography variant="h3" style={{ marginBottom: theme.spacing(2), fontSize: 14 }}>{description}</Typography>
+          {renderContent()}
         </Paper>
       </DialogContent>
       

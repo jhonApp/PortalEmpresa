@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../Utils/StyledForm';
-import { validateForm } from '../Formulario/validation';
+import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
+import { validateForm } from '../../Formulario/validation';
 import { Checkbox, Typography } from '@mui/material';
-import useForm from '../Formulario/useForm';
+import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
 const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
