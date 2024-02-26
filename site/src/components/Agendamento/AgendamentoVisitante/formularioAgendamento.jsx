@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Typography from '@mui/material/Typography';
-import { StyledDatePicker, StyledTimePicker, StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../Utils/StyledForm';
+import { StyledDatePicker, StyledTimePicker, StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import Checkbox from '@mui/material/Checkbox';
-import { validateForm } from '../Formulario/validation';
-import useForm from '../Formulario/useForm';
+import { validateForm } from '../../Formulario/validation';
+import useForm from '../../Formulario/useForm';
 import { fontSize } from '@mui/system';
 
 dayjs.locale('pt-br');
@@ -31,9 +31,9 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
   };
 
   const handleFormChange = (fieldName, value) => {
-    console.log(value)
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
+    console.log(isValid)
     onDataChange({ ...values, [fieldName]: value });
     onFieldValidationChange (isValid);
   };

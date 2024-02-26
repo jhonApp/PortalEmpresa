@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import {Box, Stepper, Step, StepLabel, Button} from '@mui/material';
-import Formulario from './formulario';
-import FormularioAgendamento from './formularioAgendamento';
-import { styled } from '@mui/system';
+import { Box, Stepper, Step, StepLabel, Button } from '@mui/material';
 import Message from '../Message';
+import { styled } from '@mui/system';
 import useForm from '../Formulario/useForm';
-import { inserirAgendamento } from '../../../service/agendamentoService';
-import Progress from '../../Utils/LoadingProgress'
+import { validateForm } from '../Formulario/validation';
+import PropTypes from 'prop-types';
+import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from '../../Utils/Notification';
 
-const steps = ['Convidado', 'Data do Agendamento'];
 
 const StyledButtonPrimary = styled(Button)({
   backgroundColor: 'black',
@@ -20,7 +18,7 @@ const StyledButtonPrimary = styled(Button)({
   borderRadius: '20px',
   width: '130px',
   '&:hover': {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
 });
 
@@ -34,41 +32,41 @@ const StyledButtonSecundary = styled(Button)({
   borderRadius: '20px',
   width: '130px',
   '&:hover': {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)', 
-    color: '#fff'
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    color: '#fff',
   },
 });
 
-export default function HorizontalLinearStepper({atualizarAgendamento, handleClose}) {
+const HorizontalLinearStepper = ({
+  steps,
+  renderStepContent,
+  updateTable,
+  createData,
+  formData,
+  handleClose,
+  invalidFields,
+  onLoadingChange
+}) => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-  const [formData, setFormData] = useState({});
-  const [invalidFields, setInvalidFields] = useState({});
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  // Função para atualizar o estado do formulário
-  const handleFormChange = (data) => {
-    setFormData((prevFormData) => ({ ...prevFormData, ...data }));
-  };
-
-  const handleFieldValidationChange = (isInvalid) => {
-    setInvalidFields(isInvalid);
-  };
 
   const { handleSubmit, clearMessage } = useForm();
 
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleCancel = () => {
+    handleClose(false);
   };
 
   const handleNext = () => {
-    const hasInvalidField = invalidFields;
-    if (!hasInvalidField) {
-      setMessage('Por favor, preencha os campos obrigatórios');
-      setMessageType('error');
-      return;
+    const { errorTypes } = validateForm(formData, 'agendamento');
+    const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
+    if (hasErrors) {
+        showErrorToast('Por favor, preencha os campos obrigatórios');
+        return;
     }
 
     let newSkipped = skipped;
@@ -81,71 +79,40 @@ export default function HorizontalLinearStepper({atualizarAgendamento, handleClo
     setSkipped(newSkipped);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleCancel = () => {
-    handleClose(false);
-  };
-
   const handleSave = async () => {
     try {
-      
-      const hasInvalidField = invalidFields;
-      if (!hasInvalidField) {
-        setMessage('Por favor, preencha os campos obrigatórios');
-        setMessageType('error');
+      const { errorTypes } = validateForm(formData, 'agendamento2');
+      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
+      if (hasErrors) {
+        showErrorToast('Por favor, preencha os campos obrigatórios');
         return;
       }
-      setLoading(true);
-  
-      await handleSubmit(async () => {
-        await inserirAgendamento(formData);
-      });
 
-      setMessage('Criado com sucesso!');
-      setMessageType('success');
-      atualizarAgendamento();
-      setFormData({});
-      setActiveStep(0);
-      handleClose(false);
-      setLoading(false);
+      onLoadingChange(true);
+  
+      await handleSubmit(async () => {        
+        try{
+            await createData(formData);
+            showSuccessToast('Criado com sucesso!');
+            updateTable();
+            setActiveStep(0);
+            handleClose(false);
+
+        }catch{
+            onLoadingChange(false);
+            showErrorToast(error.message);
+        }
+      });
+      onLoadingChange(false);
 
     } catch (error) {
-      setLoading(false);
-      setMessage(error.message);
-      setMessageType('error');
+      onLoadingChange(false);
+      showErrorToast(error.message);
     }
   };
-  
-  const renderStepContent = (step) => {
-    switch (step) {
-      case 0:
-        return (
-          <>
-            <Formulario
-              formData={formData}
-              onDataChange={handleFormChange}
-              onFieldValidationChange={handleFieldValidationChange}
-            />
-            <Progress isVisible={loading} />
-          </>
-        );
-      case 1:
-        return (
-          <>
-            <FormularioAgendamento
-              formData={formData}
-              onDataChange={handleFormChange}
-              onFieldValidationChange={handleFieldValidationChange}
-            />
-            <Progress isVisible={loading} />
-          </>
-        );
-      default:
-        return null;
-    }
+
+  const isStepSkipped = (step) => {
+    return skipped.has(step);
   };
 
   return (
@@ -159,11 +126,11 @@ export default function HorizontalLinearStepper({atualizarAgendamento, handleClo
           }
           return (
             <Step key={label} {...stepProps}>
-              <StepLabel style={{ fontSize: '0.8rem !important'}} {...labelProps}>
+              <StepLabel style={{ fontSize: '0.8rem !important' }} {...labelProps}>
                 <span style={{ color: 'rgba(0, 0, 0, 0.5)' }}>{label}</span>
               </StepLabel>
             </Step>
-          );                    
+          );
         })}
       </Stepper>
       <Box sx={{ width: '100%' }}>
@@ -181,7 +148,13 @@ export default function HorizontalLinearStepper({atualizarAgendamento, handleClo
           </Box>
         )}
       </Box>
-      {message && <Message type={messageType} message={message} onClose={clearMessage} />}
     </Box>
   );
-}
+};
+
+HorizontalLinearStepper.propTypes = {
+  steps: PropTypes.arrayOf(PropTypes.string).isRequired,
+  renderStepContent: PropTypes.func.isRequired,
+};
+
+export default HorizontalLinearStepper;
