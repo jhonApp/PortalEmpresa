@@ -93,11 +93,10 @@ const HorizontalLinearStepper = ({
       await handleSubmit(async () => {        
         try{
             await createData(formData);
-            showSuccessToast('Criado com sucesso!');
+            showSuccessToast("Criado com sucesso!");
             updateTable();
             setActiveStep(0);
             handleClose(false);
-
         }catch{
             onLoadingChange(false);
             showErrorToast(error.message);
