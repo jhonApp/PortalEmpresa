@@ -4,8 +4,11 @@ import { Box, Paper, Button, useTheme } from '@mui/material';
 import { UserMinus, UsersThree, IdentificationCard, UsersFour } from 'phosphor-react';
 import Typography from '@mui/material/Typography';
 
-function TipoAgendamento({atualizarAgendamento}) {
+function TipoAgendamento({ atualizarAgendamento }) {
   const [openPopup, setOpenPopup] = useState(false);
+  const [popupType, setPopupType] = useState('');
+  const [popupTitle, setPopupTitle] = useState('');
+  const [popupDescription, setPopupDescription] = useState('');
   const theme = useTheme();
 
   const iconContainerStyle = {
@@ -29,7 +32,10 @@ function TipoAgendamento({atualizarAgendamento}) {
     width: theme.spacing(29)
   };
 
-  const handleOpenPopup = () => {
+  const handleOpenPopup = (title, description, type) => {
+    setPopupTitle(title);
+    setPopupType(type);
+    setPopupDescription(description);
     setOpenPopup(true);
   };
 
@@ -54,21 +60,24 @@ function TipoAgendamento({atualizarAgendamento}) {
       <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Novo Agendamento</Typography>
       <Typography marginTop={-1} variant="subtitle1" component="h6">Selecione o tipo de agendamento que deseja realizar.</Typography>
       <Box display="flex" gap={2} marginTop={2}>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={handleOpenPopup}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Simples', 'AgendamentoVisitante')}>
           <div style={iconContainerStyle}><UserMinus size={20} color="#000" /></div>
           Visitante Simples
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" startIcon={<div style={iconContainerStyle}><UsersThree size={20} color="#000"/></div>}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Especial', 'AgendamentoVisitanteEspecial')}>
+          <div style={iconContainerStyle}><UsersThree size={20} color="#000" /></div>
           Visitante Especial
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" startIcon={<div style={iconContainerStyle}><IdentificationCard size={20} color="#000"/></div>}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Prestador de Serviço', 'AgendamentoPrestadorServico')}>
+          <div style={iconContainerStyle}><IdentificationCard size={20} color="#000" /></div>
           Prestador de Serviço
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" startIcon={<div style={iconContainerStyle}><UsersFour size={20} color="#000"/></div>}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Múltiplos Visitantes', 'AgendamentoMultiplosVisitantes')}>
+          <div style={iconContainerStyle}><UsersFour size={20} color="#000" /></div>
           Múltiplos Visitantes
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} updateTable={atualizarAgendamento} title="Novo Agendamento" description="Visitante Simples" type="AgendamentoVisitante"/>
+      <Popup open={openPopup} handleClose={handleClosePopup} updateTable={atualizarAgendamento} title={popupTitle} description={popupDescription} type={popupType} />
     </Box>
   );
 }

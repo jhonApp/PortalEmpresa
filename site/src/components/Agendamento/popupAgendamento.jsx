@@ -1,6 +1,7 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import AgendamentoVisitante from './AgendamentoVisitante'
+import AgendamentoVisitanteEspecial from './AgendamentoVisitanteEspecial'
 import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '@mui/material';
 import { XCircle } from 'phosphor-react';
 
@@ -11,6 +12,8 @@ function PopupDialog({ open, handleClose, updateTable, title, description, type 
     switch (type) {
       case 'AgendamentoVisitante':
         return <AgendamentoVisitante onClose={handleClose} updateTable={updateTable} />;
+      case 'AgendamentoVisitanteEspecial':
+        return <AgendamentoVisitanteEspecial onClose={handleClose} updateTable={updateTable} />;
       default:
         return null;
     }
