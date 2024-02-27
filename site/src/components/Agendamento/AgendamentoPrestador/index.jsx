@@ -3,9 +3,9 @@ import Formulario from './formulario';
 import FormularioAgendamento from './formularioAgendamento';
 import Stepper from '../../stepper';
 import Progress from '../../../Utils/LoadingProgress';
-import { inserirAgendamento } from '../../../../service/agendamentoService';
+import { inserirAgendamentoPrestador } from '../../../../service/agendamentoService';
 
-function AgendamentoVisitante({ updateTable, onClose }) {
+function AgendamentoPrestador({ updateTable, onClose }) {
   const [formData, setFormData] = useState({});
   const [invalidFields, setInvalidFields] = useState({});
   const steps = ['Dados Visitante', 'Dados Agendamento'];
@@ -20,7 +20,6 @@ function AgendamentoVisitante({ updateTable, onClose }) {
   };
 
   const handleFieldValidationChange = (isInvalid) => {
-    console.log("entrei no validation")
     setInvalidFields(isInvalid);
   };
 
@@ -29,7 +28,7 @@ function AgendamentoVisitante({ updateTable, onClose }) {
       <Stepper
         steps={steps}
         updateTable={updateTable}
-        createData={inserirAgendamento}
+        createData={inserirAgendamentoPrestador}
         formData={formData}
         handleClose={onClose}
         onLoadingChange={handleLoadingChange}
@@ -67,4 +66,4 @@ function AgendamentoVisitante({ updateTable, onClose }) {
   );
 }
 
-export default AgendamentoVisitante;
+export default AgendamentoPrestador;

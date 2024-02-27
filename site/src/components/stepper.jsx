@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Box, Stepper, Step, StepLabel, Button } from '@mui/material';
-import Message from '../Message';
+import Message from './Message';
 import { styled } from '@mui/system';
-import useForm from '../Formulario/useForm';
-import { validateForm } from '../Formulario/validation';
+import useForm from './Formulario/useForm';
+import { validateForm } from './Formulario/validation';
 import PropTypes from 'prop-types';
-import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from '../../Utils/Notification';
+import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from '../Utils/Notification';
 
 
 const StyledButtonPrimary = styled(Button)({
@@ -97,9 +97,9 @@ const HorizontalLinearStepper = ({
             updateTable();
             setActiveStep(0);
             handleClose(false);
-        }catch{
+        } catch (e) {
             onLoadingChange(false);
-            showErrorToast(error.message);
+            showErrorToast(e.message);
         }
       });
       onLoadingChange(false);

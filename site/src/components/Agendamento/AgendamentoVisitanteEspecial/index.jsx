@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Formulario from './formulario';
 import FormularioAgendamento from './formularioAgendamento';
-import Stepper from '../stepper';
+import Stepper from '../../stepper';
 import Progress from '../../../Utils/LoadingProgress';
 import { inserirAgendamentoEspecial } from '../../../../service/agendamentoService';
 

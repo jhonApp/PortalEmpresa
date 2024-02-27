@@ -4,6 +4,7 @@ import Login from './components/Login';
 import LoginVisitante from './components/Login/loginVisitante';
 import Dashboard from './components/Dashboard';
 import Agendamento from './components/Agendamento';
+import DepartamentoSetor from './components/DepartamentoSetor';
 import Layout from './components/Layout';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +22,7 @@ function App() {
               <Routes>
                 <Route index element={<Dashboard />} />
                 <Route path="agendamento" element={<Agendamento />} />
+                <Route path="departamentoSetor" element={<DepartamentoSetor />} />
               </Routes>
             </Layout>
           }
