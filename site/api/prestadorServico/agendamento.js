@@ -21,3 +21,47 @@ export const obterAgendamentoPrestador = async (codigoEmpresa) => {
     throw error;
   }
 };
+
+export const IncluirAgendamentoPrestador = async (data) => {
+  try {
+    if (!data) {
+      throw new Error('O valor está nulo.');
+    }
+
+    const url = `${API_URL}/incluirAgendamentoPrestador`;
+
+    const response = await axios.post(url, data, {
+      validateStatus: status => status < 500,
+    });
+
+    if (response.status != 200) {
+      throw new Error(response.data);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const IncluirHoraAgendamento = async (data) => {
+  try {
+    if (!data) {
+      throw new Error('O valor está nulo.');
+    }
+
+    const url = `${API_URL}/incluirHoraAgendamento`;
+
+    const response = await axios.post(url, data, {
+      validateStatus: status => status < 500,
+    });
+
+    if (response.status != 200) {
+      throw new Error(response.data);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
