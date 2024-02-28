@@ -22,7 +22,7 @@ function App() {
               <Routes>
                 <Route index element={<Dashboard />} />
                 <Route path="agendamento" element={<Agendamento />} />
-                <Route path="departamentoSetor" element={<DepartamentoSetor />} />
+                <Route path="departamentoSetores" element={<DepartamentoSetor />} />
               </Routes>
             </Layout>
           }
