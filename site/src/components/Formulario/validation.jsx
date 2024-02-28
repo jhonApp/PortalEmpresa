@@ -89,6 +89,9 @@ const screensValidations = {
     email: true,
     confirmacao: true,
   },
+  departamento: {
+    nome: true,
+  },
   login: {
     password: true,
     selectedCondominio: true,

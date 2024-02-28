@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-// import Popup from './popupAgendamento';
-import { Box, Paper, Button, useTheme } from '@mui/material';
-import { UserMinus, UsersThree } from 'phosphor-react';
-import Typography from '@mui/material/Typography';
+import Popup from './Popup';
+import OfficeChair from '../../assets/images/icones/officechair.svg';
+import { Box, Paper, Button, useTheme, Typography } from '@mui/material';
+import { Briefcase } from 'phosphor-react';
 
 function Header({ atualizarDepartamentoSetor }) {
   const [openPopup, setOpenPopup] = useState(false);
@@ -23,6 +23,8 @@ function Header({ atualizarDepartamentoSetor }) {
   };
 
   const buttonStyle = {
+    display: 'flex',
+    justifyContent: 'flex-start',
     padding: '17px',
     borderRadius: '10px',
     backgroundColor: 'transparent',
@@ -60,16 +62,16 @@ function Header({ atualizarDepartamentoSetor }) {
       <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Configuração de Departamento ou Setor</Typography>
       <Typography marginTop={-1} variant="subtitle1" component="h6">Selecione a opção que deseja configurar</Typography>
       <Box display="flex" gap={2} marginTop={2}>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Simples', 'AgendamentoVisitante')}>
-          <div style={iconContainerStyle}><UserMinus size={20} color="#000" /></div>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Departamentos', 'Insira o nome e clique no botão a seguir para incluir um novo departamento', 'Departamento')}>
+          <div style={iconContainerStyle}><Briefcase size={20} color="#000" /></div>
           Departamento
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Especial', 'AgendamentoVisitanteEspecial')}>
-          <div style={iconContainerStyle}><UsersThree size={20} color="#000" /></div>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Setores', 'Insira o nome e clique no botão a seguir para incluir um novo setores', 'Setor')}>
+          <div style={iconContainerStyle}> <img src={OfficeChair} style={{ width: '20px', height: '20px' }} /> </div>
           Setor
         </Button>
       </Box>
-      {/* <Popup open={openPopup} handleClose={handleClosePopup} updateTable={atualizarAgendamento} title={popupTitle} description={popupDescription} type={popupType} /> */}
+      <Popup open={openPopup} handleClose={handleClosePopup} updateTable={atualizarDepartamentoSetor} title={popupTitle} description={popupDescription} type={popupType} />
     </Box>
   );
 }
