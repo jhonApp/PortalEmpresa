@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Stepper, Step, StepLabel, Button } from '@mui/material';
-import Message from './Message';
 import { styled } from '@mui/system';
 import useForm from './Formulario/useForm';
 import { validateForm } from './Formulario/validation';
 import PropTypes from 'prop-types';
-import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from '../Utils/Notification';
+import { showSuccessToast, showErrorToast } from '../Utils/Notification';
 
 
 const StyledButtonPrimary = styled(Button)({

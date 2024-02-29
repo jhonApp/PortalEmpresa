@@ -21,7 +21,6 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
-    console.log(isValid);
     onDataChange({ ...values, [fieldName]: value });
     onFieldValidationChange (isValid);
   };
