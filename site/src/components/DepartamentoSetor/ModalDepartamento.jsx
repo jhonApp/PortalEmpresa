@@ -6,18 +6,35 @@ import useForm from '../Formulario/useForm';
 import { Box, Card, CardContent, IconButton, Typography } from '@mui/material';
 import { PencilSimple, TrashSimple } from 'phosphor-react';
 import { StyledButtonPrimary } from '../../Utils/StyledButton';
-import { inserirDepartamento, listarDepartamentos } from '../../../service/departamentoService';
+import Progress from '../../Utils/LoadingProgress';
+import AlertDialog from '../../Utils/Modal/Delete';
+import { inserirDepartamento, listarDepartamentos, deleteDepartamento } from '../../../service/departamentoService';
 
 const ModalDepartamento = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [departamentos, setDepartamentos] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [codigoDepartamento, setCodigoDepartamento] = useState(null);
+
+  const handleLoadingChange = (isLoading) => {
+    setLoading(isLoading);
+  };
+
+  const handleClickOpen = (codigo) => {
+    setOpen(true);
+    setCodigoDepartamento(codigo);
+  };
 
   const fetchData = async () => {
     try {
+      handleLoadingChange(true);
+
       const listaDepartamentos = await listarDepartamentos();
       setDepartamentos(listaDepartamentos);
+      handleLoadingChange(false);
     } catch (error) {
+      handleLoadingChange(false);
       showErrorToast('Erro ao obter lista de departamentos');
     }
   };
@@ -26,8 +43,21 @@ const ModalDepartamento = () => {
     fetchData();
   }, []);
 
-  const handleLoadingChange = (isLoading) => {
-    setLoading(isLoading);
+  const handleDelete = async () => {
+    try {
+      handleLoadingChange(true);
+
+      if (!codigoDepartamento) return;
+
+      await deleteDepartamento(codigoDepartamento);
+      showSuccessToast("Departamento excluído com sucesso!");
+      fetchData();
+      handleLoadingChange(false);
+    } catch (error) {
+
+      handleLoadingChange(false);
+      showErrorToast(error.message);
+    }
   };
 
   const handleFormChange = (data) => {
@@ -49,6 +79,7 @@ const ModalDepartamento = () => {
 
   const handleSave = async () => {
     try {
+      handleLoadingChange(true);
 
       const { errorTypes } = validateForm(formData, 'departamento');
       const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
@@ -57,14 +88,11 @@ const ModalDepartamento = () => {
         return;
       }
 
-      handleLoadingChange(true);
-  
       await handleSubmit(async () => {        
         try{
             await inserirDepartamento(formData);
             showSuccessToast("Criado com sucesso!");
             fetchData();
-
         } catch (e) {
             handleLoadingChange(false);
             showErrorToast(e.message);
@@ -120,10 +148,10 @@ const ModalDepartamento = () => {
               </CardContent>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pr: 1}}>
-                  <IconButton aria-label="play/pause">
+                  <IconButton aria-label="play/pause" >
                     <PencilSimple size={20} color="#676767" />
                   </IconButton>
-                  <IconButton aria-label="play/pause">
+                  <IconButton aria-label="play/pause" onClick={() => handleClickOpen(departamento.codigo)} >
                     <TrashSimple size={20} color="#FF0B0B"/>
                   </IconButton>
                 </Box>
@@ -132,6 +160,8 @@ const ModalDepartamento = () => {
           ))}
         </Box>
       </div>
+      <AlertDialog dialogOpen={open} handleClose={() => setOpen(false)} handleDelete={handleDelete}/>
+      <Progress isVisible={loading} />
     </StyledPaper>
   );
 };

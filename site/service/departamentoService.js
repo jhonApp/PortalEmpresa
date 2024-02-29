@@ -1,5 +1,6 @@
 import { obterDepartamento } from "../api/departamento";
 import { incluirDepartamento } from "../api/departamento";
+import { excluirDepartamento } from "../api/departamento";
 import { getData } from './storageService';
 
 export const inserirDepartamento = async (dados) => {
@@ -25,6 +26,24 @@ export const inserirDepartamento = async (dados) => {
 
     if (response.status !== 200) {
       throw new Error('Erro ao inserir departamento, entre em contato com o suporte técnico.');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error('Erro ao inserir departamento: ' + error.message);
+  }
+};
+
+export const deleteDepartamento = async (codigoDepartamento) => {
+  try {
+    if (!codigoDepartamento) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    const response = await excluirDepartamento(codigoDepartamento);
+
+    if (response.status !== 200) {
+      throw new Error('Erro ao excluir departamento, entre em contato com o suporte técnico.');
     }
 
     return response;
