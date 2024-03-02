@@ -9,6 +9,7 @@ const useForm = (initialState, validationCallback, currentScreen) => {
   const [errorMessages, setErrorMessages] = useState({});
   
   const handleValidation = () => {
+    debugger;
     const { errorTypes } = validationCallback(values, currentScreen);
     setErrors(errorTypes);
     setErrorMessages(errorTypes);

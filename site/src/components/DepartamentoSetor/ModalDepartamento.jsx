@@ -10,7 +10,7 @@ import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
 import { inserirDepartamento, listarDepartamentos, deleteDepartamento } from '../../../service/departamentoService';
 
-const ModalDepartamento = () => {
+const ModalDepartamento = ({ updateDepartamento }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [departamentos, setDepartamentos] = useState([]);
@@ -52,6 +52,7 @@ const ModalDepartamento = () => {
       await deleteDepartamento(codigoDepartamento);
       showSuccessToast("Departamento excluído com sucesso!");
       fetchData();
+      updateDepartamento();
       handleLoadingChange(false);
     } catch (error) {
 
@@ -93,6 +94,7 @@ const ModalDepartamento = () => {
             await inserirDepartamento(formData);
             showSuccessToast("Criado com sucesso!");
             fetchData();
+            updateDepartamento();
         } catch (e) {
             handleLoadingChange(false);
             showErrorToast(e.message);

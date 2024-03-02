@@ -1,26 +1,28 @@
-import { obterDepartamento, incluirDepartamento, excluirDepartamento } from "../api/departamento";
+import { obterSecao, incluirSecao, excluirSecao } from "../api/secaoDepartamentoSetor";
 import { getData } from './storageService';
 
-export const inserirDepartamento = async (dados) => {
+export const inserirSecao = async (dados) => {
   try {
+    
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
 
     const storage = getData();
-    const departamento = await obterDepartamento(storage.codigoEmpresa, dados.nome);
-    if (departamento.data != null) {
-      throw new Error('Departamento já foi registrado.');
+    const existeSecao = await obterSecao(storage.codigoEmpresa, dados.codigoDepartamento, dados.codigoSetor);
+    if (existeSecao) {
+        throw new Error(`O Departamento e o Setor, já estão associados.`);
     }
-
-    var departamentoDto = {
+      
+    var secaoDto = {
+      CodigoDepartamento: dados.codigoDepartamento,
+      CodigoSetor: dados.codigoSetor,
       CodigoEmpresa: storage.codigoEmpresa,
       CodigoUsuario: storage.codigo,
-      Nome: dados.nome
     }
 
     // Aguarda a conclusão da função incluirDepartamento
-    const response = await incluirDepartamento(departamentoDto);
+    const response = await incluirSecao(secaoDto);
 
     if (response.status !== 200) {
       throw new Error('Erro ao inserir departamento, entre em contato com o suporte técnico.');
@@ -28,7 +30,7 @@ export const inserirDepartamento = async (dados) => {
 
     return response;
   } catch (error) {
-    throw new Error('Erro ao inserir departamento: ' + error.message);
+    throw new Error(error.message);
   }
 };
 

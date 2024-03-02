@@ -6,15 +6,15 @@ import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '
 import { XCircle } from 'phosphor-react';
 import { StyledButtonPrimary } from '../../Utils/StyledButton';
 
-function PopupDialog({ open, handleClose, updateTable, title, description, type }) {
+function PopupDialog({ open, handleClose, updateDepartamento, updateSetor, title, description, type }) {
   const theme = useTheme();
 
   const renderContent = () => {
     switch (type) {
       case 'Departamento':
-        return <Departamento onClose={handleClose} updateTable={updateTable} />;
+        return <Departamento onClose={handleClose} updateDepartamento={updateDepartamento} />;
       case 'Setor':
-        return <Setor onClose={handleClose} updateTable={updateTable} />;
+        return <Setor onClose={handleClose} updateSetor={updateSetor} />;
       default:
         return null;
     }
