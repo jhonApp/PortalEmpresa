@@ -4,7 +4,7 @@ import OfficeChair from '../../assets/images/icones/officechair.svg';
 import { Box, Paper, Button, useTheme, Typography } from '@mui/material';
 import { Briefcase } from 'phosphor-react';
 
-function Header({ atualizarDepartamentoSetor }) {
+function Header({ atualizarDepartamento, atualizarSetor }) {
   const [openPopup, setOpenPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupTitle, setPopupTitle] = useState('');
@@ -71,7 +71,7 @@ function Header({ atualizarDepartamentoSetor }) {
           Setor
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} updateTable={atualizarDepartamentoSetor} title={popupTitle} description={popupDescription} type={popupType} />
+      <Popup open={openPopup} handleClose={handleClosePopup} updateDepartamento={atualizarDepartamento} updateSetor={atualizarSetor} title={popupTitle} description={popupDescription} type={popupType} />
     </Box>
   );
 }

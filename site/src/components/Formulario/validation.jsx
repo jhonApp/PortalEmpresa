@@ -92,6 +92,9 @@ const screensValidations = {
   departamento: {
     nome: true,
   },
+  secao: {
+    checkedSecao: true,
+  },
   login: {
     password: true,
     selectedCondominio: true,
