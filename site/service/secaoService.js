@@ -1,5 +1,6 @@
-import { obterSecao, incluirSecao, excluirSecao } from "../api/secaoDepartamentoSetor";
+import { obterSecao, existeSecao, incluirSecao, excluirSecao } from "../api/secaoDepartamentoSetor";
 import { getData } from './storageService';
+import { incluirSecaoCargo, obterSecaoCargo } from "../api/secaoCargo";
 
 export const inserirSecao = async (dados) => {
   try {
@@ -9,8 +10,8 @@ export const inserirSecao = async (dados) => {
     }
 
     const storage = getData();
-    const existeSecao = await obterSecao(storage.codigoEmpresa, dados.codigoDepartamento, dados.codigoSetor);
-    if (existeSecao) {
+    const hasSecao = await existeSecao(storage.codigoEmpresa, dados.codigoDepartamento, dados.codigoSetor);
+    if (hasSecao) {
         throw new Error(`O Departamento e o Setor, já estão associados.`);
     }
       
@@ -26,6 +27,41 @@ export const inserirSecao = async (dados) => {
 
     if (response.status !== 200) {
       throw new Error('Erro ao inserir departamento, entre em contato com o suporte técnico.');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const inserirSecaoCargo = async (dados) => {
+  try {
+    if (!dados) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+    const storage = getData();
+    const secao = await obterSecao(storage.codigoEmpresa, dados.codigoDepartamento, dados.codigoSetor);
+    if (secao.codigo == 0) {
+        throw new Error(`Não há associação entre o Departamento e o Setor.`);
+    }
+    
+    const existeSecaoCargo = await obterSecaoCargo(secao.codigo, dados.codigoCargo);
+    if(existeSecaoCargo){
+      throw new Error(`As opções selecionas já estão associadas.`);
+    }
+
+    var secaoDto = {
+      CodigoDepartamentoSetor: secao.codigo,
+      CodigoCargo: dados.codigoCargo,
+      CodigoEmpresa: storage.codigoEmpresa,
+      CodigoUsuario: storage.codigo,
+    }
+
+    // Aguarda a conclusão da função incluirDepartamento
+    const response = await incluirSecaoCargo(secaoDto);
+    if (response.status !== 200) {
+      throw new Error('Erro ao realizar associação, entre em contato com o suporte técnico.');
     }
 
     return response;
