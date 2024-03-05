@@ -1,42 +1,16 @@
 import axios from 'axios';
 
-const API_URL = 'https://localhost:7243/secao';
+const API_URL = 'https://localhost:7243/secaoCargo';
 
-export const existeSecao = async (codigoEmpresa, codigoDepartamento, codigoSetor) => {
+export const obterSecaoCargo = async (codigoDepartamentoSetor, codigoCargo) => {
   try {
 
-    if (!codigoEmpresa) {
-      throw new Error('O código da empresa é obrigatório para realizar a consulta.');
+    if (!codigoCargo) {
+      throw new Error('O código da cargo é obrigatório para realizar a consulta.');
     }
 
     // Objeto para armazenar os parâmetros da solicitação
-    const params = { codigoEmpresa, codigoDepartamento, codigoSetor };
-
-    const response = await axios.get(`${API_URL}/existeSecao`, {
-      params,
-      validateStatus: status => status < 500
-    });
-
-    if (response.status !== 200) {
-      throw new Error(response.data);
-    }
-
-    // Retorna os dados obtidos
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const obterSecao = async (codigoEmpresa, codigoDepartamento, codigoSetor) => {
-  try {
-
-    if (!codigoEmpresa) {
-      throw new Error('O código da empresa é obrigatório para realizar a consulta.');
-    }
-
-    // Objeto para armazenar os parâmetros da solicitação
-    const params = { codigoEmpresa, codigoDepartamento, codigoSetor };
+    const params = { codigoDepartamentoSetor, codigoCargo };
 
     const response = await axios.get(`${API_URL}/obterSecao`, {
       params,
@@ -54,9 +28,8 @@ export const obterSecao = async (codigoEmpresa, codigoDepartamento, codigoSetor)
   }
 };
 
-export const incluirSecao = async (data) => {
+export const incluirSecaoCargo = async (data) => {
   try {
-    debugger;
     if (!data) {
       throw new Error('O valor está nulo.');
     }
