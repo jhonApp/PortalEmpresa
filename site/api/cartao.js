@@ -55,16 +55,17 @@ export const incluirCartao = async (data) => {
   }
 };
 
-export const excluirCartao = async (codigoCartao) => {
+export const excluirCartao = async (codigoCartao, codigoEmpresa) => {
   try {
     if (!codigoCartao) {
       throw new Error('O valor está nulo.');
     }
 
-    const url = `${API_URL}/excluirCartao?codigoCartao=${codigoCartao}`;
-    
-    const response = await axios.delete(url, codigoCartao, {
-      validateStatus: status => status < 500,
+    const params = { codigoCartao, codigoEmpresa };
+
+    const response = await axios.delete(`${API_URL}/excluirCartao`, {
+      params,
+      validateStatus: status => status < 500
     });
 
     if (response.status != 200) {
