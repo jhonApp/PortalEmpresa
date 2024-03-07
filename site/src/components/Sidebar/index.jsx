@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { List, Box } from '@mui/material';
 import { styled } from '@mui/system';
-import { House, CalendarPlus, Nut, File } from 'phosphor-react';
+import { House, CalendarPlus, Nut, File, MagnifyingGlass, Factory, Briefcase, CreditCard, IdentificationCard, MapPin, ChatCenteredText  } from 'phosphor-react';
 import Menu from './Menu';
 import Logo from './Logo';
 
@@ -42,17 +42,24 @@ const Sidebar = ({ headerHeight }) => {
       text: 'Administrativo',
       icon: <Nut size={24} />,
       subItems: [
-        { link: 'system/departamentoSetores', text: 'Departamento e Setores', icon: <File size={24} /> },
-        { link: 'system/cartoes', text: 'Cartões', icon: <File size={24} /> },
-        { link: 'system/funcionarios', text: 'Funcionários', icon: <File size={24} /> },
-        { link: 'system/cargos', text: 'Cargos', icon: <File size={24} /> },
-        { link: 'system/locaisEventos', text: 'Locais para Eventos', icon: <File size={24} /> },
-        { link: 'system/incluirDocumentos', text: 'Incluir Documentos', icon: <File size={24} /> },
-        { link: 'system/visualizarDocumentos', text: 'Visualizar Documentos', icon: <File size={24} /> },
-        { link: 'system/usuarios', text: 'Usuários', icon: <File size={24} /> },
+        { link: 'system/departamentoSetores', text: 'Dep e Setores', icon: <Factory size={24} /> },
+        { link: 'system/cargos', text: 'Cargos', icon: <Briefcase size={24} /> },
+        { link: 'system/cartoes', text: 'Cartões', icon: <CreditCard size={24} /> },
+        { link: 'system/funcionarios', text: 'Funcionários', icon: <IdentificationCard size={24} /> },
+        { link: 'system/locaisEventos', text: 'Reserva de Espaço', icon: <MapPin size={24} /> }
       ],
     },
     { index: 3, link: '', text: 'Documentos', icon: <File size={24} /> },
+    { index: 4, link: '', text: 'Mural', icon: <ChatCenteredText size={24} /> },
+    {
+      index: 5,
+      link: '',
+      text: 'Pesquisas',
+      icon: <MagnifyingGlass size={24} />,
+      subItems: [
+        { link: 'system/pesquisas', text: 'Acessos', icon: <File size={24} /> },
+      ],
+    },
   ];
 
   const handleAdminClick = () => {

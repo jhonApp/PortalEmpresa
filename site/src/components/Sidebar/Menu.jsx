@@ -5,10 +5,19 @@ import { Link } from 'react-router-dom';
 import { CaretLeft, CaretDown } from 'phosphor-react';
 
 const StyledListItem = styled(ListItem)({
-  marginBottom: '5px',
+  marginBottom: '0px',
   height: '43px',
   width: '90%',
   margin: '10px',
+  borderRadius: '20px',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+const StyledSubListItem = styled(ListItem)({
+  marginBottom: '0px',
+  height: '43px',
+  width: '90%',
   borderRadius: '20px',
   display: 'flex',
   alignItems: 'center',
@@ -34,7 +43,7 @@ const Menu = ({ route, adminOpen, handleAdminClick }) => (
       </StyledListItem>
     ) : (
       <Link to={generateLink(route.link)} style={{ textDecoration: 'none', color: '#242C48' }}>
-        <StyledListItem button sx={{ backgroundColor: route.index === 0 ? '#BCC0CF' : '' }}>
+        <StyledListItem button sx={{ backgroundColor: route.index === 0 ? '#BCC0CF' : ''}}>
           <ListItemIcon sx={{ minWidth: '35px' }}>
             {route.icon}
           </ListItemIcon>
@@ -43,13 +52,16 @@ const Menu = ({ route, adminOpen, handleAdminClick }) => (
       </Link>
     )}
     {route.subItems && (
-      <Collapse in={adminOpen}>
-        <Box paddingLeft="44px">
+      <Collapse in={adminOpen} >
+        <Box paddingLeft="25px">
           {route.subItems.map((subItem, subIndex) => (
             <Link to={generateLink(subItem.link)} key={subIndex} style={{ textDecoration: 'none', color: '#242C48' }}>
-              <ListItem>
+              <StyledSubListItem button sx={{ backgroundColor: route.index === 0 ? '#BCC0CF' : '' }}>
+                <ListItemIcon sx={{ minWidth: '35px' }}>
+                  {subItem.icon}
+                </ListItemIcon>
                 <ListItemText primary={<Typography variant="body1" sx={{ color: '#242C48', fontSize: '14px', fontWeight: 500 }}>{subItem.text}</Typography>} />
-              </ListItem>
+              </StyledSubListItem>
             </Link>
           ))}
         </Box>
