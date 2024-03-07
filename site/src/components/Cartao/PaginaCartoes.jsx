@@ -1,14 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Paper, Card, CardContent, Typography, IconButton } from '@mui/material';
+import { Box, Paper, Card, CardContent, Typography, IconButton, useTheme } from '@mui/material';
 import { MagnifyingGlass } from 'phosphor-react';
+import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { Search, SearchIconWrapper, StyledInputBase } from '../../Utils/StyledSearch';
-import { PencilSimple, TrashSimple } from 'phosphor-react';
+import { PencilSimple, TrashSimple, CreditCard } from 'phosphor-react';
+import { deleteCartao } from '../../../service/cartaoService';
 import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
 
-function PaignaCartao({ cartaoData, loading, setLoading }) {
+function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
   const [digitado, setDigitado] = useState('');
+  const [codigoCartao, setCodigoCartao] = useState(null);
   const [cartoesFiltrados, setCartoesFiltrados] = useState(cartaoData);
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+
+  const iconContainerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '40%',
+    backgroundColor: 'lightgray',
+    padding: theme.spacing(1),
+    height: 'auto',
+    width: '20px',
+    marginRight: theme.spacing(1),
+  };
+
+  // Calcula dinamicamente o número de cartões por linha
+  const cartoesPorLinha = 4;
+  const cartoesPorLinhaAtual = Math.min(cartoesPorLinha, Math.ceil(cartoesFiltrados.length / cartoesPorLinha));
 
   // Atualiza os cartões filtrados sempre que os dados de cartão ou o valor digitado mudarem
   useEffect(() => {
@@ -18,8 +39,29 @@ function PaignaCartao({ cartaoData, loading, setLoading }) {
     setCartoesFiltrados(filteredCards);
   }, [cartaoData, digitado]);
 
+  const handleClickOpen = (codigo) => {
+    setOpen(true);
+    setCodigoCartao(codigo);
+  };
+
   const handleSearch = (value) => {
     setDigitado(value);
+  };
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+
+      if (!codigoCartao) return;
+      await deleteCartao(codigoCartao);
+      showSuccessToast("Cartão excluído com sucesso!");
+      atualizaCartao();
+      setLoading(false);
+    } catch (error) {
+
+      setLoading(false);
+      showErrorToast(error.message);
+    }
   };
 
   return (
@@ -58,31 +100,36 @@ function PaignaCartao({ cartaoData, loading, setLoading }) {
             <Typography style={{ marginTop: 15, textAlign: 'center' }}>Nenhum resultado encontrado</Typography>
           )}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-            {cartoesFiltrados.map((cartao, index) => (
-              <Box key={index} sx={{ width: 'calc(20% - 10px)', mt: 2 }}>
-                <Card sx={{ display: 'flex', height: 45, borderRadius: 10, backgroundColor: cartao.status === 'A' ? '#D6EADF' : '#FBE4E4', border: cartao.status === 'A' ? '1px solid #D6EADF' : '1px solid #FBE4E4' }}>
-                  <CardContent sx={{ flex: '1 0 auto', p: '10px' }} >
-                    <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 16 }}>
-                      {cartao.codigoCartao}
-                    </Typography>
-                  </CardContent>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pr: 1}}>
-                      <IconButton aria-label="play/pause" >
-                        <PencilSimple size={20} color="#676767"  />
-                      </IconButton>
-                      <IconButton aria-label="play/pause" onClick={() => handleClickOpen(cartao.codigoCartao)} >
-                        <TrashSimple size={20} color="#FF0B0B"/>
-                      </IconButton>
+            {Array.from({ length: cartoesPorLinhaAtual * cartoesPorLinha }, (_, index) => (
+              <Box key={index} sx={{ width: `calc(${100 / cartoesPorLinha}% - 10px)`, mt: 2 }}>
+                {index < cartoesFiltrados.length && (
+                  <Card sx={{ display: 'flex', height: 'auto', borderRadius: 3 }}>
+                    <CardContent sx={{ flex: '1 0 auto', p: '10px', display: 'flex', alignItems: 'center' }} >
+                      <div style={iconContainerStyle}><CreditCard size={20} color="#000" /></div>
+                      <div style={{ marginLeft: theme.spacing(1), display:'flex', flexDirection:'column' }}>
+                        <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 16 }}>
+                          {cartoesFiltrados[index].codigoCartao}
+                        </Typography>
+                        <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 12, maxWidth: 100 }}>
+                          {cartoesFiltrados[index].nomeUsuario}
+                        </Typography>
+                      </div>
+                    </CardContent>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pr: 1}}>
+                        <IconButton aria-label="play/pause" onClick={() => handleClickOpen(cartoesFiltrados[index].codigoCartao)} >
+                          <TrashSimple size={20} color="#FF0B0B"/>
+                        </IconButton>
+                      </Box>
                     </Box>
-                  </Box>
-                </Card>
+                  </Card>
+                )}
               </Box>
             ))}
           </Box>
         </div>
       </Box>
-      {/* <AlertDialog dialogOpen={open} handleClose={() => setOpen(false)} handleDelete={handleDelete}/> */}
+      <AlertDialog dialogOpen={open} handleClose={() => setOpen(false)} handleDelete={handleDelete}/>
       <Progress isVisible={loading} />
     </Box>
   );

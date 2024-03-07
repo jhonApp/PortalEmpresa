@@ -36,8 +36,8 @@ export const deleteCartao = async (codigoCartao) => {
     if (!codigoCartao) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
-
-    const response = await excluirCartao(codigoCartao);
+    const storage = getData();
+    const response = await excluirCartao(codigoCartao, storage.codigoEmpresa);
 
     if (response.status !== 200) {
       throw new Error('Erro ao excluir cartão, entre em contato com o suporte técnico.');

@@ -5,13 +5,13 @@ import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '
 import { XCircle } from 'phosphor-react';
 import { StyledButtonPrimary } from '../../Utils/StyledButton';
 
-function PopupDialog({ open, handleClose, updateCargo, title, description, type }) {
+function PopupDialog({ open, handleClose, atualizaCartao, title, description, type }) {
   const theme = useTheme();
 
   const renderContent = () => {
     switch (type) {
       case 'Cartao':
-        return <Cartao onClose={handleClose} updateCargo={updateCargo} />;
+        return <Cartao onClose={handleClose} atualizaCartao={atualizaCartao} />;
       default:
         return null;
     }

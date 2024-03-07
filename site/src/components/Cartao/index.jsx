@@ -25,11 +25,12 @@ function Cartao() {
 
   return (
     <div>
-      <Menu atualizarCartao={cartaoData} />
+      <Menu atualizaCartao={atualizaCartao} />
       <Pagination
         cartaoData={cartaoData}
         loading={loading}
         setLoading={setLoading}
+        atualizaCartao={atualizaCartao}
       />
     </div>
   );

@@ -11,7 +11,7 @@ import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
 import { inserirCartao, listarCartao, deleteCartao } from '../../../service/cartaoService';
 
-const ModalCargo = ({ updateCartao }) => {
+const ModalCargo = ({ atualizaCartao }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [cartoes, setCartoes] = useState([]);
@@ -64,7 +64,7 @@ const ModalCargo = ({ updateCartao }) => {
       await deleteCartao(codigoCartao);
       showSuccessToast("Cartão excluído com sucesso!");
       fetchData();
-      updateCartao();
+      atualizaCartao();
       handleLoadingChange(false);
     } catch (error) {
 
@@ -106,7 +106,7 @@ const ModalCargo = ({ updateCartao }) => {
             await inserirCartao(formData);
             showSuccessToast("Criado com sucesso!");
             fetchData();
-            updateCartao();
+            atualizaCartao();
         } catch (e) {
             handleLoadingChange(false);
             showErrorToast(e.message);
