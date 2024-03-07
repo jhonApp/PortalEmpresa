@@ -55,7 +55,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
         </Button>
       </Box>
       <Box display="flex" gap={2} marginTop={2}>
-        <Table data={agendamentoData} columns={columns} loading={loading} isValid={isValid} />
+        <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} />
       </Box>
     </Box>
   );

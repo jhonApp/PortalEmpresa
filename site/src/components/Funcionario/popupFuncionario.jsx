@@ -1,17 +1,22 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import Cartao from './ModalCartao'
+import AgendamentoVisitante from './AgendamentoVisitante'
+import AgendamentoVisitanteEspecial from './AgendamentoVisitanteEspecial'
+import AgendamentoPrestador from './AgendamentoPrestador'
 import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '@mui/material';
 import { XCircle } from 'phosphor-react';
-import { StyledButtonPrimary } from '../../Utils/StyledButton';
 
-function PopupDialog({ open, handleClose, atualizaCartao, title, description, type }) {
+function PopupDialog({ open, handleClose, updateTable, title, description, type }) {
   const theme = useTheme();
 
   const renderContent = () => {
     switch (type) {
-      case 'Cartao':
-        return <Cartao onClose={handleClose} atualizaCartao={atualizaCartao} />;
+      case 'AgendamentoVisitante':
+        return <AgendamentoVisitante onClose={handleClose} updateTable={updateTable} />;
+      case 'AgendamentoVisitanteEspecial':
+        return <AgendamentoVisitanteEspecial onClose={handleClose} updateTable={updateTable} />;
+      case 'AgendamentoPrestadorServico':
+          return <AgendamentoPrestador onClose={handleClose} updateTable={updateTable} />;
       default:
         return null;
     }
@@ -35,13 +40,11 @@ function PopupDialog({ open, handleClose, atualizaCartao, title, description, ty
           }}
         >
           <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0) }}>{title}</Typography>
-          <Typography variant="h3" style={{ marginBottom: theme.spacing(2), fontSize: 13 }}>{description}</Typography>
+          <Typography variant="h3" style={{ marginBottom: theme.spacing(2), fontSize: 14 }}>{description}</Typography>
           {renderContent()}
         </Paper>
       </DialogContent>
-      <DialogActions sx={{ backgroundColor: '#FAFAFA' }}>
-        <StyledButtonPrimary autoFocus onClick={handleClose}> Cancelar </StyledButtonPrimary>
-      </DialogActions>
+      
     </Dialog>
   );
 }

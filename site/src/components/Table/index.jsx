@@ -6,10 +6,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
-import Typography from '@mui/material/Typography';
 import TableRow from '@mui/material/TableRow';
 import { useTheme } from '@mui/material/styles';
-import { IconMap } from '../../Utils/IconMap';
+import DataRow from '../Table/dataRow';
 
 const LoadingRow = ({ columns }) => (
   <TableRow>
@@ -32,26 +31,6 @@ const EmptyRow = ({ columns }) => (
     <TableCell colSpan={columns.length} align="center">
       Nenhum dado disponível.
     </TableCell>
-  </TableRow>
-);
-
-const DataRow = ({ row, columns, theme }) => (
-  <TableRow hover role="checkbox" tabIndex={-1}>
-    {columns.map((column) => (
-      <TableCell key={column.id} align={column.align}>
-        {column.id === 'nome' ? (
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            {IconMap[row.tipo](theme)}
-            <div style={{ textAlign: 'justify', width: theme.spacing(16) }}>
-              <Typography variant="body1">{row.userName}</Typography>
-              <Typography variant="caption" color="textSecondary">{row.tipo}</Typography>
-            </div>
-          </div>
-        ) : (
-          row[column.id]
-        )}
-      </TableCell>
-    ))}
   </TableRow>
 );
 
@@ -85,7 +64,7 @@ export default function CustomTable(props) {
     return props.data
       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
       .map((row, index) => (
-        <DataRow key={index} row={row} columns={props.columns} theme={theme} />
+        <DataRow key={index} row={row} columns={props.columns} window={props.window} theme={theme} />
       ));
   };
 

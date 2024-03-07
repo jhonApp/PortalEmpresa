@@ -5,7 +5,7 @@ import { Checkbox, Typography } from '@mui/material';
 import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
-const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
+const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
   const {
     values,
     errors,
