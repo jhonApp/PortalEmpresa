@@ -7,6 +7,8 @@ import Agendamento from './components/Agendamento';
 import DepartamentoSetor from './components/DepartamentoSetor';
 import Cargo from './components/Cargo';
 import Cartao from './components/Cartao';
+import Funcionario from './components/Funcionario';
+import FormFuncionario from './components/Funcionario/Formulario';
 import Layout from './components/Layout';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,6 +29,8 @@ function App() {
                 <Route path="departamentoSetores" element={<DepartamentoSetor />} />
                 <Route path="cargos" element={<Cargo />} />
                 <Route path="cartoes" element={<Cartao />} />
+                <Route path="funcionarios" element={<Funcionario />} />
+                <Route path="funcionarios/novo-funcionario" element={<FormFuncionario />} />
               </Routes>
             </Layout>
           }

@@ -29,10 +29,11 @@ const SearchIconWrapper = styled('div')({
 const StyledInputBase = styled(InputBase)({
   color: 'inherit',
   '& .MuiInputBase-input': {
-    padding: '5px',
+    padding: '7px',
+    fontSize: '14px',
     paddingLeft: 'calc(1em + 32px)',
     transition: 'width 300ms',
-    width: '100%',
+    width: '240px',
     '@media (min-width: 960px)': {
       width: '200px',
     },

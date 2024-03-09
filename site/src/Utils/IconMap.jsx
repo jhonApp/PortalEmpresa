@@ -8,3 +8,8 @@ export const IconMap = {
   'Prestador de Serviço': (theme) => <Avatar style={{ marginRight: theme.spacing(2), borderRadius: '10px', backgroundColor: '#E4E1CC' }}><IdentificationCard color="#AA9F63" /></Avatar>,
   'Multiplos Visitantes': (theme) => <Avatar style={{ marginRight: theme.spacing(2), borderRadius: '10px', backgroundColor: '#D2E7DB' }}><UsersFour color="#1C843C" /></Avatar>,
 };
+
+export const StatusMap = {
+  'Ativo': (theme) => <Avatar style={{ marginRight: theme.spacing(2), borderRadius: '10px', backgroundColor: '#D2E7DB' }}><UserMinus color="#1C843C" /></Avatar>,
+  'Pendente': (theme) => <Avatar style={{ marginRight: theme.spacing(2), borderRadius: '10px', backgroundColor: '#F8D5D5' }}><UsersThree color="#FE4141" /></Avatar>,
+};
