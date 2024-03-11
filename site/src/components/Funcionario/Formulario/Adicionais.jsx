@@ -1,5 +1,7 @@
-import * as React from 'react';
-import { StyledTextField, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
+import React, { useState } from 'react';
+import { StyledTextField, FormContainer, Column, FormRow, StyledDatePicker  } from '../../../Utils/StyledForm';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -9,9 +11,15 @@ import useForm from '../../Formulario/useForm';
 import { validateForm } from '../../Formulario/validation';
 import Fade from '@mui/material/Fade';
 
-export default function AccordionTransition({ formData }) {
-  const [expanded, setExpanded] = React.useState(false);
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
 
+dayjs.locale('pt-br');
+const today = dayjs();
+
+export default function AccordionTransition({ onDataChange, onFieldValidationChange, formData }) {
+  const [expanded, setExpanded] = React.useState(false);
+  const [locale, setLocale] = useState('pt-br');
   const {
     values,
     errors,
@@ -21,7 +29,7 @@ export default function AccordionTransition({ formData }) {
   } = useForm(
     formData,
     validateForm,
-    'agendamento'
+    'funcionario'
   );
 
   const handleFormChange = (fieldName, value) => {
@@ -77,19 +85,20 @@ export default function AccordionTransition({ formData }) {
               </FormRow>
               {/*Admissão*/}
               <FormRow>
-                <StyledTextField
-                  label="Admissão"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  type="text"
-                  autoComplete="off"
-                  error={errors.admissao}
-                  value={values.admissao || ''}
-                  onChange={(e) => handleFormChange('admissao', e.target.value)}
-                  onBlur={(e) => handleFormChange('admissao', e.target.value)}
-                />
-                {renderErrorMessage('admissao')}
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                  <StyledDatePicker
+                    label="Admissão"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    type="date"
+                    name="admissao"
+                    error={errors.admissao}
+                    value={values.admissao || null}
+                    onChange={(newValue) => { handleFormChange('admissao', newValue); }}
+                    onBlur={() => handleValidation('admissao')}
+                  />
+                </ LocalizationProvider>
               </FormRow>
             </Column>
             <Column>
@@ -111,17 +120,20 @@ export default function AccordionTransition({ formData }) {
               </FormRow>
               {/*Demissão*/}
               <FormRow>
-                <StyledTextField
-                  label="Demissão"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  type="text"
-                  autoComplete="off"
-                  error={errors.demissao}
-                  value={values.demissao || ''}
-                  onChange={(e) => handleFormChange('demissao', e.target.value)}
-                />
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                  <StyledDatePicker
+                    label="Demissão"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    type="date"
+                    name="demissao"
+                    error={errors.demissao}
+                    value={values.demissao || null}
+                    onChange={(newValue) => { handleFormChange('demissao', newValue); }}
+                    onBlur={() => handleValidation('demissao')}
+                  />
+                </ LocalizationProvider>
               </FormRow>
             </Column>
             

@@ -22,19 +22,32 @@ export const obterFuncionario = async (codigoEmpresa) => {
   }
 };
 
-export const IncluirAgendamentoPrestador = async (data) => {
+export const inserirFuncionario = async (data, foto) => {
   try {
     if (!data) {
       throw new Error('O valor está nulo.');
     }
 
-    const url = `${API_URL}/incluirAgendamentoPrestador`;
+    const formData = new FormData();
+    
+    // Adicione os dados do funcionário dentro da chave "funcionario" no FormData
+    formData.append('funcionario', JSON.stringify(data));
 
-    const response = await axios.post(url, data, {
+    // Adicione a imagem do funcionário
+    if (foto) {
+      formData.append('foto', foto);
+    }
+
+    const url = `${API_URL}/inserirFuncionario`;
+
+    const response = await axios.post(url, formData, {
       validateStatus: status => status < 500,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(response.data);
     }
 
@@ -44,24 +57,3 @@ export const IncluirAgendamentoPrestador = async (data) => {
   }
 };
 
-export const IncluirHoraAgendamento = async (data) => {
-  try {
-    if (!data) {
-      throw new Error('O valor está nulo.');
-    }
-
-    const url = `${API_URL}/incluirHoraAgendamento`;
-
-    const response = await axios.post(url, data, {
-      validateStatus: status => status < 500,
-    });
-
-    if (response.status != 200) {
-      throw new Error(response.data);
-    }
-
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};

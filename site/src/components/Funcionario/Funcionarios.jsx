@@ -115,6 +115,7 @@ function Funcionarios({funcionarioData, setFuncionarioData, loading, setLoading,
             <RadioGroup
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
+              defaultValue="ativo"
               name="row-radio-buttons-group"
             >
               <FormControlLabel value="ativo" control={<Radio />} label={<Typography style={labelStyle}>Ativo</Typography>} />
