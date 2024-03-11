@@ -111,7 +111,6 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     margin="normal"
                     type="date"
                     name="dataNascimento"
-                    minDate={today}
                     error={errors.dataNascimento}
                     value={values.dataNascimento || null}
                     onChange={(newValue) => { handleFormChange('dataNascimento', newValue); }}
@@ -181,7 +180,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    type="text"
+                    type="number"
                     autoComplete="off"
                     error={errors.telefone}
                     value={values.telefone || ''}
