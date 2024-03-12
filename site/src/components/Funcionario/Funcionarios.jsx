@@ -1,35 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Paper, Button, useTheme, IconButton } from '@mui/material';
+import { Box, Paper, Typography, IconButton, useTheme, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
 import { MagnifyingGlass, PlusCircle } from 'phosphor-react';
 import { Search, SearchIconWrapper, StyledInputBase } from '../../Utils/StyledSearch';
-import Typography from '@mui/material/Typography';
-import Table from '../Table'
+import Table from '../Table';
+import Progress from '../../Utils/LoadingProgress';
 import { Link } from 'react-router-dom';
-import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
 
-function Funcionarios({funcionarioData, setFuncionarioData, loading, setLoading, isValid, setValid, atualizarFuncionario}) {
+function Funcionarios({ funcionarioData, setFuncionarioData, loading, setLoading, isValid, setValid, atualizarFuncionario, setStatus }) {
   const [digitado, setDigitado] = useState('');
+  const [status, setStatusLocal] = useState('ativo');
+  const [funcionariosFiltrados, setFuncionariosFiltrados] = useState([]);
+  const [funcionarios, setFuncionarios] = useState([]);
   const theme = useTheme();
 
   const columns = [
     { id: 'nome', label: 'Nome', width: 100, align: 'center' },
-    { id: 'rg', label: 'RG/CPF', minWidth: 100, align: 'center'},
+    { id: 'rg', label: 'RG/CPF', minWidth: 100, align: 'center' },
     { id: 'cartao', label: 'Cartão', minWidth: 100, align: 'center', },
     { id: 'email', label: 'Email', minWidth: 100, align: 'center', },
     { id: 'cargo', label: 'Cargo', minWidth: 100, align: 'center', },
     { id: 'status', label: 'Status', width: 'auto', align: 'center', }
   ];
-
-  const iconContainerStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '20%',
-    backgroundColor: 'lightgray',
-    padding: theme.spacing(2),
-    height: '20px',
-    marginRight: theme.spacing(1),
-  };
 
   const buttonStyle = {
     display: 'flex',
@@ -45,17 +36,6 @@ function Funcionarios({funcionarioData, setFuncionarioData, loading, setLoading,
     height: theme.spacing(4)
   };
 
-  const buttonStyleFiltro = {
-    borderRadius: '50px',
-    backgroundColor: 'transparent',
-    border: '0.5px solid #000',
-    fontWeight: 'bold',
-    fontSize: '13px',
-    color: 'black',
-    textTransform: 'none',
-    width: theme.spacing(15)
-  };
-
   const labelStyle = {
     fontSize: '13px',
     fontWeight: 600,
@@ -63,13 +43,28 @@ function Funcionarios({funcionarioData, setFuncionarioData, loading, setLoading,
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await atualizarFuncionario(setFuncionarioData, setLoading, setValid);
-    };
-
+    async function fetchData() {
+      await atualizarFuncionario(setFuncionarioData, setLoading, setValid, status);
+      setFuncionarios(funcionarioData);
+      setFuncionariosFiltrados(funcionarioData);
+    }
     fetchData();
-  }, []);
+  }, [status]);
 
+  const handleSearch = (value) => {
+    setDigitado(value);
+    
+    const filteredFuncionarios = funcionarioData.filter(funcionario => {
+      return Object.values(funcionario).some(attrValue => {
+        if (typeof attrValue === 'string' || typeof attrValue === 'number') {
+          return String(attrValue).toLowerCase().includes(value.toLowerCase());
+        }
+        return false;
+      });
+    });
+    setFuncionariosFiltrados(filteredFuncionarios);
+  };
+  
   return (
     <Box
       gap={1}
@@ -85,7 +80,7 @@ function Funcionarios({funcionarioData, setFuncionarioData, loading, setLoading,
       component={Paper}
     >
       <Box display="flex" justifyContent="space-between" flexDirection="column" >
-        <div style={{ display:"flex", justifyContent:"space-between" }}  >
+        <div style={{ display: "flex", justifyContent: "space-between" }}  >
           <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Funcionários Cadastrados</Typography>
           <Link style={{ ...buttonStyle }} variant="contained" to={'/system/funcionarios/novo-funcionario'}>
             <PlusCircle size={20} color="#fff" />
@@ -94,8 +89,8 @@ function Funcionarios({funcionarioData, setFuncionarioData, loading, setLoading,
             </div>
           </Link>
         </div>
-        <div style={{ display:"flex", flexDirection:"row", marginTop:'20px' }} >
-          <Search style={{ marginTop:'15px' }}>
+        <div style={{ display: "flex", flexDirection: "row", marginTop: '20px' }} >
+          <Search style={{ marginTop: '15px' }}>
             <SearchIconWrapper>
               <IconButton>
                 <MagnifyingGlass size={20} color="#666666" />
@@ -115,7 +110,13 @@ function Funcionarios({funcionarioData, setFuncionarioData, loading, setLoading,
             <RadioGroup
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
-              defaultValue="ativo"
+              value={status}
+              onChange={(e) => {
+                setStatusLocal(e.target.value);
+                setStatus(e.target.value);
+                setDigitado("");
+                setLoading(true);
+              }}
               name="row-radio-buttons-group"
             >
               <FormControlLabel value="ativo" control={<Radio />} label={<Typography style={labelStyle}>Ativo</Typography>} />
@@ -126,8 +127,9 @@ function Funcionarios({funcionarioData, setFuncionarioData, loading, setLoading,
         </div>
       </Box>
       <Box display="flex" gap={2} marginTop={2}>
-        <Table data={funcionarioData} window={"funcionario"} columns={columns} loading={loading} isValid={isValid} />
+        <Table data={digitado ? funcionariosFiltrados : funcionarioData} window={"funcionario"} columns={columns} loading={loading} isValid={isValid} />
       </Box>
+      <Progress isVisible={loading} />
     </Box>
   );
 }
