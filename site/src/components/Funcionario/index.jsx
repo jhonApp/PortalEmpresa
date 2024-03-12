@@ -5,12 +5,13 @@ import {atualizarTabela} from '../../../service/funcionarioService';
 
 function Funcionario() {
   const [funcionarioData, setFuncionarioData] = useState([]);
+  const [status, setStatus] = useState('ativo');
   const [loading, setLoading] = useState(true);
   const [isValid, setValid] = useState(true);
 
   const atualizarFuncionario = async () => {
     try {
-      await atualizarTabela(setFuncionarioData, setLoading, setValid);
+      await atualizarTabela(setFuncionarioData, setLoading, setValid, status);
     } catch (error) {
       console.error('Erro ao atualizar tabela de funcionarios:', error);
     }
@@ -27,6 +28,7 @@ function Funcionario() {
         isValid={isValid}
         setValid={setValid}
         atualizarFuncionario={atualizarFuncionario}
+        setStatus={setStatus}
       />
     </div>
   );

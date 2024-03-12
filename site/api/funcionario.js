@@ -2,20 +2,21 @@ import axios from 'axios';
 
 const API_URL = 'https://localhost:7243/funcionario';
 
-export const obterFuncionario = async (codigoEmpresa) => {
+export const obterFuncionario = async (codigoEmpresa, status) => {
   try {
     if (!codigoEmpresa) {
-      throw new Error('Não foi posível obter a empresa, para realização da consulta.');
+      throw new Error('Código da empresa não fornecido.');
     }
-    const url = `${API_URL}/obterFuncionario?codigoEmpresa=${encodeURIComponent(codigoEmpresa)}`;
+    const url = `${API_URL}/obterFuncionario?codigoEmpresa=${encodeURIComponent(codigoEmpresa)}&status=${encodeURIComponent(status)}`;
 
     const response = await axios.get(url, {
       validateStatus: status => status < 500,
     });
 
-    if (response.status != 200) {
-      throw new Error(response.data);
+    if (response.status !== 200) {
+      throw new Error(response.data || 'Erro desconhecido ao obter funcionário.');
     }
+
     return response.data;
   } catch (error) {
     throw error;

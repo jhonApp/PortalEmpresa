@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Paper, TextField } from '@mui/material';
+import { Paper, TextField, Select, FormControl } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
@@ -20,6 +20,26 @@ const StyledTextField = styled(TextField)({
   },
 });
 
+const StyledSelectField = styled(Select)({
+    borderRadius: '12px',
+    background: '#EBEAEF',
+    marginBottom: 5,
+    '& .MuiOutlinedInput-root': {
+      borderRadius: '12px',
+      fontSize: '12px',
+    },
+    '& .MuiInputLabel-root': {
+      fontSize: '0.9rem',
+      top: '-5px'
+    },
+    '& .MuiOutlinedInput-input': {
+      padding: '12px',
+    },
+    '& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input': {
+        fontSize: '14px',
+    }
+});
+
 const StyledPaper = styled(Paper)({
     textAlign: 'center',
     boxShadow: 'none',
@@ -38,6 +58,11 @@ const Column = styled('div')({
 });
 
 const FormRow = styled('div')({
+    width: '100%',
+    marginBottom: (theme) => theme.spacing(2),
+});
+
+const FormControlSelect = styled(FormControl)({
     width: '100%',
     marginBottom: (theme) => theme.spacing(2),
 });
@@ -88,4 +113,4 @@ const FormSection = styled('div')({
     marginBottom: (theme) => theme.spacing(2),
 });
 
-export { StyledTextField, StyledPaper, FormContainer, Column, StyledDatePicker, FormColumn, FormSection, FormRow, StyledTimePicker };
+export { FormControlSelect, StyledTextField, StyledSelectField, StyledPaper, FormContainer, Column, StyledDatePicker, FormColumn, FormSection, FormRow, StyledTimePicker };

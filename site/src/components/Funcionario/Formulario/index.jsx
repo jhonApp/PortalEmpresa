@@ -15,10 +15,6 @@ import StyledLink from '../../../Utils/StyledLink';
 import {StyledButtonPrimary} from '../../../Utils/StyledButton';
 import { cadastrarFuncionario } from '../../../../service/funcionarioService';
 
-// Icone para o botão de upload
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { fontSize } from '@mui/system';
-
 function FormFuncionario({ updateTable }) {
   const theme = useTheme();
   const [formData, setFormData] = useState({});
@@ -35,7 +31,6 @@ function FormFuncionario({ updateTable }) {
     setInvalidFields(isInvalid);
   };
 
-  // Função para lidar com a mudança de arquivo (imagem) selecionado
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -59,10 +54,7 @@ function FormFuncionario({ updateTable }) {
     
         reader.readAsDataURL(file); // Lê o arquivo como um URL de dados
     }
-};
-
-  
-  
+  };
 
   const handleSave = async () => {
     try {
@@ -151,7 +143,6 @@ function FormFuncionario({ updateTable }) {
         </StyledButtonPrimary>
       </Box>
     </div>
-    
   );
 }
 

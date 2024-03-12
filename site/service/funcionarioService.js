@@ -1,10 +1,10 @@
 import { obterFuncionario, inserirFuncionario } from '../api/funcionario';
 import { getData } from './storageService';
 
-export const atualizarTabela = async (setFuncionarioData, setLoading, setValid) => {
+export const atualizarTabela = async (setFuncionarioData, setLoading, setValid, status) => {
     try {
         const storage = getData();
-        const data = await  obterFuncionario(storage.codigoEmpresa);
+        const data = await  obterFuncionario(storage.codigoEmpresa, status);
         setFuncionarioData(data.sort((a, b) => new Date(b.dtValid) - new Date(a.dtValid)));
         setLoading(false);
     } catch (error) {
@@ -22,15 +22,11 @@ export const cadastrarFuncionario = async (dados) => {
     // Obtenha os dados de armazenamento necessários
     const storage = getData();
 
-    function base64Valid(base64) {
-      const newBase64 = base64.split(',')[1]
-      return newBase64;
-    }
-
     // Crie o objeto funcionário com os dados fornecidos
     const funcionario = {
       CodigoEmpresa: storage.codigoEmpresa,
-      CodigoCargo: dados.codigoCargo,
+      CodigoCargo: dados.selectedCargo,
+      Cartao: dados.selectedCartao,
       CodigoUsuario: storage.codigo,
       Nome: dados.nome,
       File: dados.file,
@@ -70,7 +66,7 @@ export const cadastrarFuncionario = async (dados) => {
       }
     };
 
-    const foto = base64Valid(dados.file);
+    const foto = dados.file ? base64Valid(dados.file) : "";
 
     // Envia a solicitação de inserção do funcionário
     const response = await inserirFuncionario(funcionario, foto);
@@ -108,3 +104,8 @@ export const inserirFoto = async (data) => {
     throw error;
   }
 };
+
+function base64Valid(base64) {
+  const newBase64 = base64.split(',')[1]
+  return newBase64;
+}
