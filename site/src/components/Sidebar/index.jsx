@@ -49,8 +49,8 @@ const Sidebar = ({ headerHeight }) => {
         { link: 'system/locaisEventos', text: 'Reserva de Espaço', icon: <MapPin size={24} /> }
       ],
     },
-    { index: 3, link: '', text: 'Documentos', icon: <File size={24} /> },
-    { index: 4, link: '', text: 'Mural', icon: <ChatCenteredText size={24} /> },
+    { index: 3, link: 'system/documentos', text: 'Documentos', icon: <File size={24} /> },
+    { index: 4, link: 'system/mural', text: 'Mural', icon: <ChatCenteredText size={24} /> },
     {
       index: 5,
       link: '',

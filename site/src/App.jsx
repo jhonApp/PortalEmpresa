@@ -8,6 +8,7 @@ import DepartamentoSetor from './components/DepartamentoSetor';
 import Cargo from './components/Cargo';
 import Cartao from './components/Cartao';
 import Funcionario from './components/Funcionario';
+import Mural from './components/Mural';
 import FormFuncionario from './components/Funcionario/Formulario';
 import Layout from './components/Layout';
 import { ToastContainer } from 'react-toastify';
@@ -31,6 +32,7 @@ function App() {
                 <Route path="cartoes" element={<Cartao />} />
                 <Route path="funcionarios" element={<Funcionario />} />
                 <Route path="funcionarios/novo-funcionario" element={<FormFuncionario />} />
+                <Route path="mural" element={<Mural />} />
               </Routes>
             </Layout>
           }
