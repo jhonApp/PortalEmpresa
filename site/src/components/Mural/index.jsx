@@ -18,7 +18,7 @@ function Mural() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await atualizaMural();
+      await atualizaMural(setMuralData, setLoading, setValid);
     };
     fetchData();
   }, []);
@@ -26,12 +26,16 @@ function Mural() {
   return (
     <div>
       <Menu atualizaMural={atualizaMural} />
-      <Pagination
-        muralData={muralData}
-        loading={loading}
-        setLoading={setLoading}
-        atualizaMural={atualizaMural}
-      />
+      {!loading && (
+        <Pagination
+          muralData={muralData}
+          setMuralData={setMuralData}
+          loading={loading}
+          setLoading={setLoading}
+          atualizaMural={atualizaMural}
+          setValid={setValid}
+        />
+      )}
     </div>
   );
 }

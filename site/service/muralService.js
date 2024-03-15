@@ -6,9 +6,8 @@ export const getMural = async (setMuralData, setLoading, setValid) => {
       setLoading(true);
   
       const data = await obterMural();
-      console.log(data)
+
       setMuralData(data);
-  
       setLoading(false);
       setValid(true);
     } catch (error) {
