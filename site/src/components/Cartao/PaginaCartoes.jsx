@@ -31,7 +31,6 @@ function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
   const cartoesPorLinha = 4;
   const cartoesPorLinhaAtual = Math.min(cartoesPorLinha, Math.ceil(cartoesFiltrados.length / cartoesPorLinha));
 
-  // Atualiza os cartões filtrados sempre que os dados de cartão ou o valor digitado mudarem
   useEffect(() => {
     const filteredCards = cartaoData.filter(cartao => {
       return cartao.codigoCartao.toString().includes(digitado);

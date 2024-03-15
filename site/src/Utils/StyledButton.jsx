@@ -4,14 +4,29 @@ import { Button } from '@mui/material';
 const StyledButtonPrimary = styled(Button)({
   backgroundColor: 'black',
   color: 'white',
-  padding: '10px',
+  padding: '10px 20px',
   fontSize: '12px',
   marginLeft: 15,
   height: '38px',
   borderRadius: '20px',
-  width: '130px',
+  width: 'auto',
   '&:hover': {
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+});
+
+const StyledButtonSecundary = styled(Button)({
+  backgroundColor: '#EBEAEF',
+  border: '1px solid #000',
+  color: 'black',
+  padding: '10px 20px',
+  fontSize: '12px',
+  height: '38px',
+  borderRadius: '20px',
+  width: 'auto',
+  '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    color: '#fff',
   },
 });
 
@@ -29,4 +44,4 @@ const StyledButtonDelete = styled(Button)({
   },
 });
 
-export { StyledButtonPrimary, StyledButtonDelete };
+export { StyledButtonPrimary, StyledButtonSecundary, StyledButtonDelete };

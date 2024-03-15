@@ -1,22 +1,45 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Comunicado from './ModalComunicado'
+import ExibiComunicado from './Modal/ExibiComunicado'
+import ExibiEnquete from './Modal/ExibirEnquete'
 import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '@mui/material';
 import { XCircle } from 'phosphor-react';
-import { StyledButtonPrimary } from '../../Utils/StyledButton';
+import { StyledButtonPrimary, StyledButtonSecundary } from '../../Utils/StyledButton';
 
-function PopupDialog({ open, handleClose, atualizaMural, title, description, type }) {
+function PopupDialog({ open, handleClose, atualizaMural, title, sub, description, type }) {
   const theme = useTheme();
 
   const renderContent = () => {
     switch (type) {
+      case 'ExibirEnquete':
+        return <ExibiEnquete sub={sub} description={description} onClose={handleClose} />;
+      case 'ExibirComunicado':
+        return <ExibiComunicado sub={sub} description={description} onClose={handleClose} />;
       case 'Comunicado':
         return <Comunicado onClose={handleClose} atualizaMural={atualizaMural} />;
-      default:
+        
+        default:
         return null;
     }
   };
   
+  const renderActionButton = () => {
+    if (type === 'ExibirComunicado') {
+      return (
+        <div>
+          <StyledButtonPrimary onClick={handleClose} sx={{mr: 2}}>Já recebi a encomenda</StyledButtonPrimary>
+          <StyledButtonSecundary autoFocus onClick={handleClose}>Cancelar</StyledButtonSecundary>
+        </div>
+      );
+    } else {
+      return (
+        <StyledButtonPrimary autoFocus onClick={handleClose}>Cancelar</StyledButtonPrimary>
+      );
+    }
+  };
+  
+
   return (
     <Dialog open={open} onClose={handleClose} >
       <DialogActions sx={{position: 'absolute', marginRight: 0, top: 16, right: 0}}>
@@ -35,12 +58,11 @@ function PopupDialog({ open, handleClose, atualizaMural, title, description, typ
           }}
         >
           <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0) }}>{title}</Typography>
-          <Typography variant="h3" style={{ marginBottom: theme.spacing(2), fontSize: 13 }}>{description}</Typography>
           {renderContent()}
         </Paper>
       </DialogContent>
-      <DialogActions sx={{ backgroundColor: '#FAFAFA' }}>
-        <StyledButtonPrimary autoFocus onClick={handleClose}> Cancelar </StyledButtonPrimary>
+      <DialogActions sx={{ backgroundColor: '#FAFAFA', m: 2}}>
+        {renderActionButton()}
       </DialogActions>
     </Dialog>
   );

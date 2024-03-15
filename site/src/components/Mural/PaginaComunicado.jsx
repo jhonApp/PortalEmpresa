@@ -3,15 +3,17 @@ import { Box, Paper, Card, CardContent, Typography, IconButton, useTheme } from 
 import { MagnifyingGlass } from 'phosphor-react';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { Search, SearchIconWrapper, StyledInputBase } from '../../Utils/StyledSearch';
-import { PencilSimple, TrashSimple, CreditCard } from 'phosphor-react';
+import { Eye, TrashSimple, CreditCard } from 'phosphor-react';
 import { deleteCartao } from '../../../service/cartaoService';
 import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
+import ComunicadoCard from '../Mural/Card';
 
-function PaginaComunicado({ muralData, setComunicadoData, loading, setLoading, atualizaMural }) {
+
+function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atualizaMural, setValid }) {
   const [digitado, setDigitado] = useState('');
-  const [comunicadosFiltrados, setComunicadosFiltrados] = useState([]);
-  const [comunicados, setComunicados] = useState([]);
+  const [comunicadosFiltrados, setComunicadosFiltrados] = useState(muralData);
+  const [comunicados, setComunicados] = useState(muralData);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
 
@@ -27,17 +29,10 @@ function PaginaComunicado({ muralData, setComunicadoData, loading, setLoading, a
     marginRight: theme.spacing(1),
   };
 
-  const comunicadosPorLinha = 4;
-  const comunicadosPorLinhaAtual = Math.min(comunicadosPorLinha, Math.ceil(comunicadosFiltrados.length / comunicadosPorLinha));
+  console.log(comunicadosFiltrados);
 
-  useEffect(() => {
-    async function fetchData() {
-      await atualizaMural(setComunicadoData, setLoading, setValid);
-      setComunicados(muralData);
-      setComunicadosFiltrados(muralData);
-    }
-    fetchData();
-  }, []);
+  const comunicadosPorLinha = 3;
+  const comunicadosPorLinhaAtual = Math.min(comunicadosPorLinha, Math.ceil(comunicadosFiltrados.length / comunicadosPorLinha));
 
   const handleClickOpen = (codigo) => {
     setOpen(true);
@@ -101,7 +96,7 @@ function PaginaComunicado({ muralData, setComunicadoData, loading, setLoading, a
               </SearchIconWrapper>
               <StyledInputBase
                 value={digitado}
-                placeholder="Pesquisar Comunicados"
+                placeholder="titulo, mensagem"
                 inputProps={{ 'aria-label': 'search' }}
                 onChange={(e) => handleSearch(e.target.value)}
               />
@@ -115,26 +110,13 @@ function PaginaComunicado({ muralData, setComunicadoData, loading, setLoading, a
             {Array.from({ length: comunicadosPorLinhaAtual * comunicadosPorLinha }, (_, index) => (
               <Box key={index} sx={{ width: `calc(${100 / comunicadosPorLinha}% - 10px)`, mt: 2 }}>
                 {index < comunicadosFiltrados.length && (
-                  <Card sx={{ display: 'flex', height: 'auto', borderRadius: 3 }}>
-                    <CardContent sx={{ flex: '1 0 auto', p: '10px', display: 'flex', alignItems: 'center' }} >
-                      <div style={iconContainerStyle}><CreditCard size={20} color="#000" /></div>
-                      <div style={{ marginLeft: theme.spacing(1), display:'flex', flexDirection:'column' }}>
-                        <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 16 }}>
-                          {comunicadosFiltrados[index].idComunicado}
-                        </Typography>
-                        <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 12, maxWidth: 100 }}>
-                          {comunicadosFiltrados[index].titulo}
-                        </Typography>
-                      </div>
-                    </CardContent>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pr: 1}}>
-                        <IconButton aria-label="play/pause" onClick={() => handleClickOpen(comunicadosFiltrados[index].idComunicado)} >
-                          <TrashSimple size={20} color="#FF0B0B"/>
-                        </IconButton>
-                      </Box>
-                    </Box>
-                  </Card>
+                  <ComunicadoCard
+                    tipoComunicado={comunicadosFiltrados[index].tipoComunicado}
+                    mensagem={comunicadosFiltrados[index].mensagem}
+                    status={comunicadosFiltrados[index].status}
+                    idComunicado={comunicadosFiltrados[index].idComunicado}
+                    titulo={comunicadosFiltrados[index].titulo}
+                  />
                 )}
               </Box>
             ))}

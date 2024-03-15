@@ -5,7 +5,8 @@ import { Checkbox, Typography } from '@mui/material';
 import useForm from '../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
-const ModalComunicado = ({ onDataChange, onFieldValidationChange, formData }) => {
+const ModalComunicado = ({ onDataChange, onFieldValidationChange, atualizaMural }) => {
+  const [formData, setFormData] = useState({});
   const {
     values,
     errors,
@@ -23,7 +24,7 @@ const ModalComunicado = ({ onDataChange, onFieldValidationChange, formData }) =>
     const isValid = handleValidation(fieldName);
     console.log(isValid);
     onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange (isValid);
+    onFieldValidationChange(isValid);
   };
 
   return (
