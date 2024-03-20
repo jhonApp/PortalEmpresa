@@ -33,14 +33,15 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
+    console.log(isValid)
     onDataChange({ ...values, [fieldName]: value });
     onFieldValidationChange (isValid);
   };
 
   const handleCheckboxChange = (e) => {
     const isChecked = e.target.checked;
-    setChegada(isChecked);
-    handleFormChange('chegada', isChecked);
+    setChegada(isChecked); // Atualiza o estado interno do Checkbox
+    handleFormChange('chegada', isChecked); // Atualiza o estado do formulário
   };
 
   return (
@@ -135,11 +136,11 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                   padding: '0px 0px 0px 0px !important',
                   '& .MuiSvgIcon-root': { color: '#C4C7D4' }
               }}
-              checked={values.chegada || false}
-              error={errors.chegada}
+              checked={values.concordaTermo || false}
+              error={errors.concordaTermo}
               onChange={(e) => {
-                values.chegada = e.target.checked;
-                handleFormChange('chegada', e.target.checked);
+                values.concordaTermo = e.target.checked;
+                handleFormChange('concordaTermo', e.target.checked);
               }}
               inputProps={{ 'aria-label': 'primary checkbox' }}   
             />

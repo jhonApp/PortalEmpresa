@@ -28,7 +28,7 @@ const renderAgendamento = (row, theme) => (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       {IconMap[row.tipo](theme)}
       <div style={{ textAlign: 'justify', width: theme.spacing(16) }}>
-        <Typography variant="body1">{row.userName}</Typography>
+        <Typography variant="body1" fontWeight={600}>{row.userName}</Typography>
         <Typography variant="caption" color="textSecondary">{row.tipo}</Typography>
       </div>
     </div>
