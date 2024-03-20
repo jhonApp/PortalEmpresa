@@ -1,4 +1,3 @@
-// Sidebar.jsx
 import React, { useState } from 'react';
 import { List, Box } from '@mui/material';
 import { styled } from '@mui/system';
@@ -31,28 +30,27 @@ const CustomList = styled(List)({
 
 const Sidebar = ({ headerHeight }) => {
   const [adminOpen, setAdminOpen] = useState(false);
-  const [buttonCollapsed, setButtonCollapsed] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const routes = [
     { index: 0, link: 'system/', text: 'Home', icon: <House size={24} /> },
     { index: 1, link: 'system/agendamento', text: 'Agendamento', icon: <CalendarPlus size={24} /> },
     {
-      index: 2,
       link: '',
       text: 'Administrativo',
       icon: <Nut size={24} />,
       subItems: [
-        { link: 'system/departamentoSetores', text: 'Dep e Setores', icon: <Factory size={24} /> },
-        { link: 'system/cargos', text: 'Cargos', icon: <Briefcase size={24} /> },
-        { link: 'system/cartoes', text: 'Cartões', icon: <CreditCard size={24} /> },
-        { link: 'system/funcionarios', text: 'Funcionários', icon: <IdentificationCard size={24} /> },
-        { link: 'system/locaisEventos', text: 'Reserva de Espaço', icon: <MapPin size={24} /> }
+        { index: 2, link: 'system/departamentoSetores', text: 'Dep e Setores', icon: <Factory size={24} /> },
+        { index: 3, link: 'system/cargos', text: 'Cargos', icon: <Briefcase size={24} /> },
+        { index: 4, link: 'system/cartoes', text: 'Cartões', icon: <CreditCard size={24} /> },
+        { index: 5, link: 'system/funcionarios', text: 'Funcionários', icon: <IdentificationCard size={24} /> },
+        { index: 6, link: 'system/locaisEventos', text: 'Reserva de Espaço', icon: <MapPin size={24} /> }
       ],
     },
-    { index: 3, link: 'system/documentos', text: 'Documentos', icon: <File size={24} /> },
-    { index: 4, link: 'system/mural', text: 'Mural', icon: <ChatCenteredText size={24} /> },
+    { index: 7, link: 'system/documentos', text: 'Documentos', icon: <File size={24} /> },
+    { index: 8, link: 'system/mural', text: 'Mural', icon: <ChatCenteredText size={24} /> },
     {
-      index: 5,
+      index: 9,
       link: '',
       text: 'Pesquisas',
       icon: <MagnifyingGlass size={24} />,
@@ -66,16 +64,23 @@ const Sidebar = ({ headerHeight }) => {
     setAdminOpen(!adminOpen);
   };
 
-  const handleCollapseClick = () => {
-    setButtonCollapsed(!buttonCollapsed);
+  const handleMenuItemClick = (index) => {
+    setSelectedIndex(index);
   };
 
   return (
     <SidebarContainer>
-      <Logo headerHeight={headerHeight} handleCollapseClick={handleCollapseClick} buttonCollapsed={buttonCollapsed} />
+      <Logo headerHeight={headerHeight} />
       <CustomList sx={{ background: '#FAFAFA', flex: 1, paddingTop: '20px' }}>
         {routes.map((route, index) => (
-          <Menu key={index} route={route} adminOpen={adminOpen} handleAdminClick={handleAdminClick} />
+          <Menu 
+            key={index} 
+            route={route} 
+            adminOpen={adminOpen} 
+            handleAdminClick={handleAdminClick} 
+            selectedIndex={selectedIndex} 
+            handleMenuItemClick={handleMenuItemClick} 
+          />
         ))}
       </CustomList>
     </SidebarContainer>

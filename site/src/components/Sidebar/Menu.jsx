@@ -1,3 +1,4 @@
+// Menu.jsx
 import React from 'react';
 import { ListItem, ListItemIcon, ListItemText, Typography, Collapse, Box } from '@mui/material';
 import { styled } from '@mui/system';
@@ -29,10 +30,14 @@ const ArrowIcon = styled('span')({
 
 const generateLink = (link) => `/${link.toLowerCase()}`;
 
-const Menu = ({ route, adminOpen, handleAdminClick }) => (
+const Menu = ({ route, adminOpen, handleAdminClick, selectedIndex, handleMenuItemClick }) => (
   <div>
     {route.subItems ? (
-      <StyledListItem button onClick={handleAdminClick} sx={{ backgroundColor: route.index === 0 ? '#BCC0CF' : '' }}>
+      <StyledListItem 
+        button 
+        onClick={handleAdminClick} 
+        sx={{ backgroundColor: selectedIndex === route.index ? '#BCC0CF' : '' }}
+      >
         <ListItemIcon sx={{ minWidth: '35px' }}>
           {route.icon}
         </ListItemIcon>
@@ -43,7 +48,11 @@ const Menu = ({ route, adminOpen, handleAdminClick }) => (
       </StyledListItem>
     ) : (
       <Link to={generateLink(route.link)} style={{ textDecoration: 'none', color: '#242C48' }}>
-        <StyledListItem button sx={{ backgroundColor: route.index === 0 ? '#BCC0CF' : ''}}>
+        <StyledListItem 
+          button 
+          sx={{ backgroundColor: selectedIndex === route.index ? '#BCC0CF' : ''}}
+          onClick={() => handleMenuItemClick(route.index)}
+        >
           <ListItemIcon sx={{ minWidth: '35px' }}>
             {route.icon}
           </ListItemIcon>
@@ -56,7 +65,11 @@ const Menu = ({ route, adminOpen, handleAdminClick }) => (
         <Box paddingLeft="25px">
           {route.subItems.map((subItem, subIndex) => (
             <Link to={generateLink(subItem.link)} key={subIndex} style={{ textDecoration: 'none', color: '#242C48' }}>
-              <StyledSubListItem button sx={{ backgroundColor: route.index === 0 ? '#BCC0CF' : '' }}>
+              <StyledSubListItem 
+                button 
+                sx={{ backgroundColor: selectedIndex === subItem.index ? '#BCC0CF' : '' }}
+                onClick={() => handleMenuItemClick(subItem.index)}
+              >
                 <ListItemIcon sx={{ minWidth: '35px' }}>
                   {subItem.icon}
                 </ListItemIcon>
