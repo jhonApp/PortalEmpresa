@@ -89,6 +89,9 @@ const screensValidations = {
     email: true,
     confirmacao: true,
   },
+  agendamentoEmMassa: {
+    tipo: true
+  },
   funcionario: {
     nome: true,
     dataNascimento: true,

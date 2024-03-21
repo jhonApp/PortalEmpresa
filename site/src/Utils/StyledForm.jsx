@@ -4,11 +4,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 const StyledTextField = styled(TextField)({
-  borderRadius: '12px',
+  borderRadius: '4px',
   background: '#EBEAEF',
+  width: '100%',
   marginBottom: 5,
   '& .MuiOutlinedInput-root': {
-    borderRadius: '12px',
+    borderRadius: '4px',
     fontSize: '12px',
   },
   '& .MuiInputLabel-root': {
@@ -21,11 +22,12 @@ const StyledTextField = styled(TextField)({
 });
 
 const StyledSelectField = styled(Select)({
-    borderRadius: '12px',
+    borderRadius: '4px',
     background: '#EBEAEF',
+    width: '100%',
     marginBottom: 5,
     '& .MuiOutlinedInput-root': {
-      borderRadius: '12px',
+      borderRadius: '4px',
       fontSize: '12px',
     },
     '& .MuiInputLabel-root': {
@@ -44,7 +46,8 @@ const StyledPaper = styled(Paper)({
     textAlign: 'center',
     boxShadow: 'none',
     marginTop: '20px',
-    minWidth: 500,
+    width: 620,
+    height: 290,
 });
 
 const StyledPaperFiltro = styled(Paper)({
@@ -56,13 +59,11 @@ const StyledPaperFiltro = styled(Paper)({
 
 const FormContainer = styled('div')({
     display: 'flex',
-    justifyContent: 'space-between',
+    width: '100%',
     gap: '20px',
 });
 
-const Column = styled('div')({
-    width: '48%',
-});
+const Column = styled('div')({ width: '100%' });
 
 const FormRow = styled('div')({
     width: '100%',
@@ -79,12 +80,13 @@ const FormControlSelect = styled(FormControl)({
 });
 
 const StyledDatePicker = styled(DatePicker)({
-    borderRadius: '12px',
+    borderRadius: '4px',
     background: '#EBEAEF',
     marginBottom: 5,
+    width: '100%',
     marginTop: '16px',
     '& .MuiOutlinedInput-root': {
-        borderRadius: '12px',
+        borderRadius: '4px',
         fontSize: '12px',
     },
     '& .MuiInputLabel-root': {
@@ -93,16 +95,18 @@ const StyledDatePicker = styled(DatePicker)({
     },
     '& .MuiOutlinedInput-input': {
         padding: '12px',
+        width: '100%',
     },
 });
 
 const StyledTimePicker = styled(TimePicker)({
-    borderRadius: '12px',
+    borderRadius: '4px',
     background: '#EBEAEF',
     marginBottom: 5,
     marginTop: '16px',
+    width: '100%',
     '& .MuiOutlinedInput-root': {
-        borderRadius: '12px',
+        borderRadius: '4px',
         fontSize: '12px',
     },
     '& .MuiInputLabel-root': {
@@ -110,7 +114,7 @@ const StyledTimePicker = styled(TimePicker)({
         top: '-5px'
     },
     '& .MuiOutlinedInput-input': {
-        width: '165px',
+        width: '100%',
         padding: '12px',
     },
 });

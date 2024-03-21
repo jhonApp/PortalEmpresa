@@ -11,11 +11,11 @@ const StyledButtonPrimary = styled(Button)({
   backgroundColor: 'black',
   color: 'white',
   padding: '10px',
-  fontSize: '12px',
+  fontSize: '14px',
   marginLeft: 15,
-  height: '38px',
-  borderRadius: '20px',
-  width: '130px',
+  height: '50px',
+  borderRadius: '50px',
+  width: '180px',
   '&:hover': {
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
@@ -26,10 +26,10 @@ const StyledButtonSecundary = styled(Button)({
   border: '1px solid #000',
   color: 'black',
   padding: '10px',
-  fontSize: '12px',
-  height: '38px',
-  borderRadius: '20px',
-  width: '130px',
+  fontSize: '14px',
+  height: '50px',
+  borderRadius: '50px',
+  width: '180px',
   '&:hover': {
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     color: '#fff',
@@ -44,6 +44,7 @@ const HorizontalLinearStepper = ({
   formData,
   handleClose,
   invalidFields,
+  screenValidation,
   onLoadingChange
 }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -61,7 +62,8 @@ const HorizontalLinearStepper = ({
   };
 
   const handleNext = () => {
-    const { errorTypes } = validateForm(formData, 'agendamento');
+    console.log(screenValidation)
+    const { errorTypes } = validateForm(formData, screenValidation);
     const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
     if (hasErrors) {
         showErrorToast('Por favor, preencha os campos obrigatórios');
@@ -135,7 +137,7 @@ const HorizontalLinearStepper = ({
         {renderStepContent(activeStep)}
         {activeStep === steps.length - 1 && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
-            <Button onClick={handleBack} sx={{ marginRight: '150px', color: 'black' }}>Voltar</Button>
+            <Button onClick={handleBack} sx={{ marginRight: '180px', color: 'black' }}>Voltar</Button>
             <StyledButtonSecundary onClick={handleCancel}>Cancelar</StyledButtonSecundary>
             <StyledButtonPrimary onClick={handleSave}>Finalizar</StyledButtonPrimary>
           </Box>
