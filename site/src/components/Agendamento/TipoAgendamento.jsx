@@ -72,7 +72,7 @@ function TipoAgendamento({ atualizarAgendamento }) {
           <div style={iconContainerStyle}><IdentificationCard size={20} color="#000" /></div>
           Prestador de Serviço
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Múltiplos Visitantes', 'AgendamentoMultiplosVisitantes')}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Múltiplos Visitantes', 'AgendamentoMassa')}>
           <div style={iconContainerStyle}><UsersFour size={20} color="#000" /></div>
           Múltiplos Visitantes
         </Button>

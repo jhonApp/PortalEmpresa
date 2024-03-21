@@ -65,6 +65,23 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
               />
             </FormRow>
             <FormRow>
+              <StyledDatePicker
+                label="Data Fim *"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                type="date"
+                name="dataFim"
+                minDate={today}
+                error={errors.dataFim}
+                value={values.dataFim || null}
+                onChange={(e) => handleFormChange('dataFim', e)}
+                onBlur={() => handleValidation('dataFim')}
+              />
+            </FormRow>
+          </Column>
+          <Column>
+            <FormRow>
               <StyledTimePicker
                 label="Hora de Entrada *"
                 variant="outlined"
@@ -80,8 +97,6 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 onBlur={() => handleValidation('horaEntrada')}
               />
             </FormRow>
-          </Column>
-          <Column>
             <FormRow>
               <StyledTimePicker
                 label="Hora de Saída"
@@ -96,21 +111,6 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 value={values.horaSaida}
                 onChange={(e) => handleFormChange('horaSaida', e)}
                 onBlur={() => handleValidation('horaSaida')}
-              />
-            </FormRow>
-            <FormRow>
-              <StyledDatePicker
-                label="Data Fim *"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type="date"
-                name="dataFim"
-                minDate={today}
-                error={errors.dataFim}
-                value={values.dataFim || null}
-                onChange={(e) => handleFormChange('dataFim', e)}
-                onBlur={() => handleValidation('dataFim')}
               />
             </FormRow>
           </Column>

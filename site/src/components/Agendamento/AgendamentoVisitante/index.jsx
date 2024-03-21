@@ -33,6 +33,7 @@ function AgendamentoVisitante({ updateTable, onClose }) {
         handleClose={onClose}
         onLoadingChange={handleLoadingChange}
         invalidFields={invalidFields}
+        screenValidation={"agendamento"}
         renderStepContent={(step) => {
           switch (step) {
             case 0:

@@ -5,7 +5,7 @@ import Stepper from '../../stepper';
 import Progress from '../../../Utils/LoadingProgress';
 import { inserirAgendamentoPrestador } from '../../../../service/agendamentoService';
 
-function AgendamentoPrestador({ updateTable, onClose }) {
+function AgendamentoMassa({ updateTable, onClose }) {
   const [formData, setFormData] = useState({});
   const [invalidFields, setInvalidFields] = useState({});
   const steps = ['Dados Visitante', 'Dados Agendamento'];
@@ -17,6 +17,7 @@ function AgendamentoPrestador({ updateTable, onClose }) {
 
   const handleFormChange = (data) => {
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
+    console.log(formData)
   };
 
   const handleFieldValidationChange = (isInvalid) => {
@@ -33,6 +34,7 @@ function AgendamentoPrestador({ updateTable, onClose }) {
         handleClose={onClose}
         onLoadingChange={handleLoadingChange}
         invalidFields={invalidFields}
+        screenValidation={"agendamentoEmMassa"}
         renderStepContent={(step) => {
           switch (step) {
             case 0:
@@ -66,4 +68,4 @@ function AgendamentoPrestador({ updateTable, onClose }) {
   );
 }
 
-export default AgendamentoPrestador;
+export default AgendamentoMassa;

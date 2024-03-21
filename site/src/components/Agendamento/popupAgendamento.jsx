@@ -3,6 +3,8 @@ import Typography from '@mui/material/Typography';
 import AgendamentoVisitante from './AgendamentoVisitante'
 import AgendamentoVisitanteEspecial from './AgendamentoVisitanteEspecial'
 import AgendamentoPrestador from './AgendamentoPrestador'
+import AgendamentoMassa from './AgendamentoMassa'
+
 import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '@mui/material';
 import { XCircle } from 'phosphor-react';
 
@@ -17,13 +19,15 @@ function PopupDialog({ open, handleClose, updateTable, title, description, type 
         return <AgendamentoVisitanteEspecial onClose={handleClose} updateTable={updateTable} />;
       case 'AgendamentoPrestadorServico':
           return <AgendamentoPrestador onClose={handleClose} updateTable={updateTable} />;
+      case 'AgendamentoMassa':
+          return <AgendamentoMassa onClose={handleClose} updateTable={updateTable} />;
       default:
         return null;
     }
   };
   
   return (
-    <Dialog open={open} onClose={handleClose} >
+    <Dialog open={open} onClose={handleClose} maxWidth="none">
       <DialogActions sx={{position: 'absolute', marginRight: 0, top: 16, right: 0}}>
         <Button onClick={handleClose}><XCircle size={28} color="#FF0B0B"></XCircle></Button>
       </DialogActions>
@@ -36,7 +40,7 @@ function PopupDialog({ open, handleClose, updateTable, title, description, type 
             padding: '30px',
             boxShadow: 'none',
             overflowY: 'auto',
-            height: 'auto', 
+            height: 'auto'
           }}
         >
           <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0) }}>{title}</Typography>
