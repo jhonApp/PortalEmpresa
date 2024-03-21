@@ -3,12 +3,13 @@ import Formulario from './formulario';
 import FormularioAgendamento from './formularioAgendamento';
 import Stepper from '../../stepper';
 import Progress from '../../../Utils/LoadingProgress';
-import { inserirAgendamentoPrestador } from '../../../../service/agendamentoService';
+import { inserirAgendamentoEmMassa } from '../../../../service/agendamentoService';
+
 
 function AgendamentoMassa({ updateTable, onClose }) {
   const [formData, setFormData] = useState({});
   const [invalidFields, setInvalidFields] = useState({});
-  const steps = ['Dados Visitante', 'Dados Agendamento'];
+  const steps = ['Convidado', 'Data do Agendamento'];
   const [loading, setLoading] = useState(false);
 
   const handleLoadingChange = (isLoading) => {
@@ -17,7 +18,6 @@ function AgendamentoMassa({ updateTable, onClose }) {
 
   const handleFormChange = (data) => {
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
-    console.log(formData)
   };
 
   const handleFieldValidationChange = (isInvalid) => {
@@ -29,7 +29,7 @@ function AgendamentoMassa({ updateTable, onClose }) {
       <Stepper
         steps={steps}
         updateTable={updateTable}
-        createData={inserirAgendamentoPrestador}
+        createData={inserirAgendamentoEmMassa}
         formData={formData}
         handleClose={onClose}
         onLoadingChange={handleLoadingChange}
