@@ -57,9 +57,65 @@ export const inserirAgendamento = async (dados) => {
   }
 };
 
+export const inserirAgendamentoEmMassa = async (dados) => {
+  try {
+    if (!dados) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    // Array para armazenar todas as promessas de inserção de agendamento
+    const insercoesAgendamento = [];
+
+    for (let i = 0; i < dados.visitantes.length; i++) {
+      const data = dados.visitantes[i];
+
+      // Espera a obtenção do visitante
+      const visitante = await obterEInserirVisitante(data.visDoc, data);
+
+      const storage = getData();
+      const agendamento = {
+        codigoVisitante: visitante.data.codigo,
+        dataFim: dados.dataFim,
+        horaEntrada: dados.horaEntrada,
+        horaSaida: dados.horaSaida,
+        dataInicial: dados.dataInicial,
+        obs: dados.obs,
+        codigoUsuario: storage.codigo,
+        codigoEmpresa: storage.codigoEmpresa,
+        codigoFuncionario: storage.codigoFuncionario,
+        chegada: dados.chegada
+      };
+
+      // Adiciona a promessa de inserção de agendamento ao array
+      if (dados.tipo == "agendamentoVisitante") {
+        insercoesAgendamento.push(IncluirAgendamentoEspecial(agendamento));
+      } else {
+        insercoesAgendamento.push(IncluirAgendamentoPrestador(agendamento));
+      }
+
+      // Aguarda a conclusão da inserção do agendamento atual antes de prosseguir para o próximo
+      await insercoesAgendamento[i];
+    }
+
+    // Aguarda a conclusão de todas as inserções de agendamento sequencialmente
+    const resultados = await Promise.all(insercoesAgendamento);
+
+    // Verifica se todos os agendamentos foram inseridos com sucesso
+    resultados.forEach((result) => {
+      if (result.status !== 200) {
+        throw new Error('Erro ao inserir agendamento, entre em contato com o suporte técnico.');
+      }
+    });
+
+    return resultados;
+  } catch (error) {
+    throw new Error('Erro ao inserir agendamento: ' + error.message);
+  }
+};
+
 export const inserirAgendamentoEspecial = async (dados) => {
   try {
-    
+    debugger
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
@@ -179,3 +235,23 @@ export const atualizarTabela = async (setAgendamentoData, setLoading, setValid) 
     setValid(false);
   }
 };
+
+async function obterEInserirVisitante(visDoc, data) {
+  // Espera a obtenção do visitante
+  const visitante = await obterVisitante(visDoc);
+
+  // Verifica se o visitante já existe
+  if (visitante.data.codigo == 0) {
+    const dataVisitante = {
+      nomeCompleto: data.visName,
+      rgCpf: visDoc,
+      email: data.visEmail,
+      telefone: data.visTel,
+    };
+    // Se não existe, cadastra o visitante e espera a conclusão
+    const response = await cadastrar(dataVisitante);
+    return response;
+  }
+
+  return visitante;
+}

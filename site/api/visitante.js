@@ -25,7 +25,7 @@ export const cadastrar = async (data) => {
     if (!data) {
       throw new Error('O valor está nulo.');
     }
-    const url = `${API_URL}/cadastrar`; // Ajustar a URL para corresponder à rota correta no servidor
+    const url = `${API_URL}/cadastrar`;
 
     const response = await axios.post(url, data, {
       validateStatus: status => status < 500,
