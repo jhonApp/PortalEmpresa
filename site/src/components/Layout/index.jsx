@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { Box, Drawer as MuiDrawer, AppBar as MuiAppBar, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse } from '@mui/material';
 import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material';
 import { CaretLeft, CaretDown, SignOut, House, CalendarPlus, Nut, File, MagnifyingGlass, Factory, Briefcase, CreditCard, IdentificationCard, MapPin, ChatCenteredText  } from 'phosphor-react';
 import portalIconSVG from '../../assets/images/icones/Portal Empresa II.svg';
+import { getData } from '../../../service/storageService';
 
 const drawerWidth = 240;
 
@@ -123,6 +124,8 @@ export default function MiniDrawer({ children }) {
   const [open, setOpen] = React.useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [title, setTitle] = useState('Dashboard');
+  const memoizedTitle = useMemo(() => title, [title]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -132,16 +135,27 @@ export default function MiniDrawer({ children }) {
     setOpen(false);
   };
 
-  const handleAdminClick = (index) => {
-    if (selectedIndex === index) {
-      setAdminOpen(!adminOpen); // Toggle the adminOpen state if clicking on the same item
-    } else {
-      setAdminOpen(true); // Open the admin menu if clicking on a different item
+  const hadleDrawerTitle = (newTitle) => {
+    if (title !== newTitle) {
+      setTitle(newTitle);
     }
-    setSelectedIndex(index);
+  }
+  
+
+  const handleAdminClick = (item) => {
+    if (adminOpen) {
+      setAdminOpen(!adminOpen);
+    } else {
+      setAdminOpen(true);
+    }
+    setSelectedIndex(item.index);
+    hadleDrawerTitle(item.text);
   };
   
-  const handleMenuItemClick = (index) => { setSelectedIndex(index); };
+  const handleSubItemClick = (item) => {
+    setSelectedIndex(item.index);
+    hadleDrawerTitle(item.text);
+  };
 
   const generateLink = (link) => `/${link.toLowerCase()}`;
 
@@ -164,18 +178,19 @@ export default function MiniDrawer({ children }) {
           </IconButton>
           
           <Typography variant="h6" noWrap component="div">
-            Dashboard
+            {memoizedTitle}
           </Typography>
           <FlexDiv>
             <Typography variant="h6" sx={{ fontFamily: 'Inter, sans-serif', color: '#fff', fontSize: '16px', textAlign: 'center', marginRight: '24px' }}>
-              Olá, fulano West Union
+              Olá, {getData().userName}
             </Typography>
             <SignOut size={26} sx={{ marginTop: '-2px' }} />
           </FlexDiv>
 
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer sx={{backgroundColor: '#FAFAFA'}} variant="permanent" open={open}>
+        {/* Logo */}
         <DrawerHeader sx={{backgroundColor: '#242C48'}}>
           <ListItemIcon>
               <img src={portalIconSVG} alt="Portal Icon" style={{ marginRight: '10px', width: '12vh' }} />
@@ -186,20 +201,21 @@ export default function MiniDrawer({ children }) {
           
         </DrawerHeader>
         <Divider />
-        <List>
+        {/* Menu */}
+        <List sx={{backgroundColor: '#FAFAFA'}}>
           {routes.map((route) => (
             <React.Fragment key={route.index}>
               <ListItem disablePadding>
                 {route.subItems ? (
                   <ListItemButton
-                    onClick={() => handleAdminClick(route.index)}
+                    onClick={() => handleAdminClick(route)}
                     sx={{
                       minHeight: 48,
                       justifyContent: open ? 'initial' : 'center',
                       px: 2.5,
                       m: 1,
                       borderRadius: '20px',
-                      backgroundColor: selectedIndex === route.index && !adminOpen ? '#f0f0f0' : 'transparent',
+                      backgroundColor: selectedIndex === route.index && !adminOpen ? '#BCC0CF' : 'transparent',
                       '&:hover': {
                         backgroundColor: '#f0f0f0',
                       }
@@ -221,14 +237,14 @@ export default function MiniDrawer({ children }) {
                   </ListItemButton>
                 ) : (
                   <ListItemButton
-                    onClick={() => handleAdminClick(route.index)}
+                    onClick={() => handleAdminClick(route)}
                     sx={{
                       minHeight: 48,
                       justifyContent: open ? 'initial' : 'center',
                       px: 2.5,
                       m: 1,
                       borderRadius: '20px',
-                      backgroundColor: selectedIndex === route.index ? '#f0f0f0' : 'transparent',
+                      backgroundColor: selectedIndex === route.index ? '#BCC0CF' : 'transparent',
                       '&:hover': {
                         backgroundColor: '#f0f0f0',
                       }
@@ -256,10 +272,10 @@ export default function MiniDrawer({ children }) {
                       <ListItem
                         key={subIndex}
                         button
-                        sx={{width: '90%', m: 1, borderRadius: '20px', paddingLeft: 4, backgroundColor: selectedIndex === subItem.index ? '#f0f0f0' : 'transparent', '&:hover': { backgroundColor: '#f0f0f0' } }}
+                        sx={{width: '90%', m: 1, borderRadius: '20px', paddingLeft: open ? 3 : 2, backgroundColor: selectedIndex === subItem.index ? '#BCC0CF' : 'transparent', '&:hover': { backgroundColor: '#f0f0f0' } }}
                         component={Link}
                         to={generateLink(subItem.link)}
-                        onClick={() => handleMenuItemClick(subItem.index)}
+                        onClick={() => handleSubItemClick(subItem)}
                       >
                         <ListItemIcon
                           sx={{
@@ -270,7 +286,7 @@ export default function MiniDrawer({ children }) {
                         >
                           {subItem.icon}
                         </ListItemIcon>
-                        <ListItemText primary={<Typography variant="body1" sx={{ color: '#242C48', fontSize: '14px', fontWeight: 500 }}>{subItem.text}</Typography>} />
+                        <ListItemText primary={<Typography variant="body1" sx={{ display: open ? 'block' : 'none', color: '#242C48', fontSize: '14px', fontWeight: 500 }}>{subItem.text}</Typography>} />
                       </ListItem>
                     ))}
                   </List>
@@ -281,6 +297,7 @@ export default function MiniDrawer({ children }) {
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        {/* Conteudo */}
         <DrawerHeader />
         {children}
       </Box>

@@ -15,21 +15,26 @@ function TipoAgendamento({ atualizarAgendamento }) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '50%',
+    borderRadius: '15px',
     backgroundColor: 'lightgray',
     padding: theme.spacing(1),
-    height: '20px',
+    height: '40px',
+    width: '40px',
     marginRight: theme.spacing(1),
   };
 
   const buttonStyle = {
+    display: 'flex',
+    justifyContent: 'flex-start',
     padding: '17px',
     borderRadius: '10px',
     backgroundColor: 'transparent',
     fontWeight: 'bold',
+    fontSize: '20px',
     color: 'black',
     textTransform: 'none',
-    width: theme.spacing(29)
+    width: '300px',
+    height: '84px'
   };
 
   const handleOpenPopup = (title, description, type) => {
@@ -53,27 +58,27 @@ function TipoAgendamento({ atualizarAgendamento }) {
       display="flex"
       backgroundColor="#FAFAFA"
       flexDirection="column"
-      height={theme.spacing(20)}
+      height='auto'
       style={{ borderRadius: '10px' }}
       component={Paper}
     >
-      <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Novo Agendamento</Typography>
-      <Typography marginTop={-1} variant="subtitle1" component="h6">Selecione o tipo de agendamento que deseja realizar.</Typography>
+      <Typography variant="h5" component="h1" style={{  fontWeight: 'bold' }}>Novo Agendamento</Typography>
+      <Typography marginTop={-1} variant="subtitle1" component="h5">Selecione o tipo de agendamento que deseja realizar.</Typography>
       <Box display="flex" gap={2} marginTop={2}>
         <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Simples', 'AgendamentoVisitante')}>
-          <div style={iconContainerStyle}><UserMinus size={20} color="#000" /></div>
+          <div style={iconContainerStyle}><UserMinus size={20} color="#72788E" /></div>
           Visitante Simples
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Especial', 'AgendamentoVisitanteEspecial')}>
-          <div style={iconContainerStyle}><UsersThree size={20} color="#000" /></div>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Especial', 'Visitante Especial')}>
+          <div style={iconContainerStyle}><UsersThree size={20} color="#72788E" /></div>
           Visitante Especial
         </Button>
         <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Prestador de Serviço', 'AgendamentoPrestadorServico')}>
-          <div style={iconContainerStyle}><IdentificationCard size={20} color="#000" /></div>
+          <div style={iconContainerStyle}><IdentificationCard size={20} color="#72788E" /></div>
           Prestador de Serviço
         </Button>
         <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Múltiplos Visitantes', 'AgendamentoMassa')}>
-          <div style={iconContainerStyle}><UsersFour size={20} color="#000" /></div>
+          <div style={iconContainerStyle}><UsersFour size={20} color="#72788E" /></div>
           Múltiplos Visitantes
         </Button>
       </Box>

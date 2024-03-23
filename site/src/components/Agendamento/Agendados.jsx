@@ -10,11 +10,11 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
   const [openPopup, setOpenPopup] = useState(false);
 
   const columns = [
-    { id: 'nome', label: 'Nome', width: 100, align: 'center' },
+    { id: 'nome', label: 'Nome', width: 200, align: 'center' },
     { id: 'userDoc', label: 'RG', minWidth: 100, align: 'center'},
     { id: 'dtValid', label: 'Data Inicial', minWidth: 100, align: 'center', },
     { id: 'dtEnd', label: 'Data Final', minWidth: 100, align: 'center', },
-    { id: 'status', label: 'Status', minWidth: 100, align: 'center', },
+    { id: 'status', label: 'Status', width: 260, align: 'center', },
     { id: 'action', label: '', minWidth: 100, align: 'center', },
   ];
 
@@ -26,7 +26,8 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
     fontSize: '13px',
     color: 'black',
     textTransform: 'none',
-    width: theme.spacing(15)
+    width: theme.spacing(16),
+    height: theme.spacing(5)
   };
 
   useEffect(() => {
@@ -61,7 +62,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
       component={Paper}
     >
       <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Agendados</Typography>
+        <Typography variant="h5" component="h1" style={{ fontWeight: 'bold' }}>Agendados</Typography>
         <Button style={buttonStyleFiltro} onClick={handleOpenPopup} variant="contained" startIcon={<img src={ListMagnifyingGlass} style={{ width: '25px', height: '25px' }} />}>
           FILTRAR
         </Button>
