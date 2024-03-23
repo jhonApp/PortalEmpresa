@@ -1,89 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StyledTextField, StyledDatePicker, StyledPaperFiltro, StyledFormControlLabel, FormContainer, Column, FormRow  } from '../../Utils/StyledForm';
-import { Dialog, DialogContent, DialogActions , Button, RadioGroup, Paper, useTheme, Radio, FormGroup, FormControl, FormLabel, FormControlLabel  } from '@mui/material';
-import { validateForm } from '../Formulario/validation';
-import useForm from '../Formulario/useForm';
+import { Dialog, DialogContent, DialogActions, RadioGroup, Paper, useTheme, Radio, FormControl, FormLabel } from '@mui/material';
 import { StyledButtonPrimaryFiltro, StyledButtonSecundaryFiltro } from '../../Utils/StyledButton';
 import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import 'dayjs/locale/pt-br';
 
 dayjs.locale('pt-br');
+dayjs.extend(isSameOrAfter);
 
 function PopupDialog({ open, handleClose, data, setData }) {
   const theme = useTheme();
   const [locale, setLocale] = useState('pt-br');
-  const [formData, setFormData] = useState({});
-  const {
-    values,
-    errors,
-    renderErrorMessage,
-  } = useForm(
-    formData,
-    validateForm,
-    'agendamento'
-  );
+  const [formData, setFormData] = useState({
+    userName: '',
+    userDoc: '',
+    dtValid: null,
+    dtEnd: null,
+    status: '',
+    tipo: ''
+  });
 
   const handleFormChange = (fieldName, value) => {
-    setFormData((prevFormData) => ({ ...prevFormData, [fieldName]: value }));
+    setFormData(prevFormData => ({ ...prevFormData, [fieldName]: value }));
   };
-  
+
+  useEffect(() => {
+    if (!open) {
+      setFormData({
+        userName: '',
+        userDoc: '',
+        dtValid: null,
+        dtEnd: null,
+        status: '',
+        tipo: ''
+      });
+    }
+  }, [open]);
 
   const handleSearch = () => {
-    const filters = [
-      {
-        key: 'userName',
-        filterFunc: (item, value) => value && item.userName.toLowerCase().includes(value.toLowerCase())
-      },
-      {
-        key: 'userDoc',
-        filterFunc: (item, value) => value && item.userDoc.includes(value)
-      },
-      {
-        key: 'dtValid',
-        filterFunc: (item, value) => dayjs(item.dtValid).isAfter(dayjs(value), 'day')
-      },
-      {
-        key: 'dtEnd',
-        filterFunc: (item, value) => dayjs(item.dtEnd).isBefore(dayjs(value), 'day')
-      },
-      {
-        key: 'status',
-        filterFunc: (item, value) => {
-          if (values.todos) return true;
-          return item.status === (values.ativo ? 'ativo' : 'inativo');
+    const filteredData = data.filter(item => {
+      return Object.entries(formData).every(([key, value]) => {
+        if (key === 'dtValid' || key === 'dtEnd') {
+            return !value || dayjs(item[key]).isSameOrAfter(dayjs(value), 'day');
+        } else if (key === 'status' || key === 'tipo') {
+          return !value || item[key] === value;
+        } else {
+          return !value || item[key].toLowerCase().includes(value.toLowerCase());
         }
-      },
-      {
-        key: 'tipo',
-        filterFunc: (item, value) => {
-          if (values.todos) return true;
-          return item.tipo === (values.visitanteSimples ? 'visitanteSimples' : (values.visitanteEspecial ? 'visitanteEspecial' : 'prestadorServico'));
-        }
-      }
-    ];
-
-    let filteredData = [];
-    data.forEach(item => {
-        filters.every(filter => {
-            if (filter.key === 'todos') return true;
-            const fieldValue = formData[filter.key];
-            console.log(item.userDoc.includes(formData.userDoc))
-            if(filter.filterFunc(item, fieldValue)){ 
-                filteredData.push(item) 
-            }
-        });
+      });
     });
 
-    console.log(filteredData)
     setData(filteredData);
     handleClose();
   };
-
-  
-  
   
   return (
     <Dialog open={open} onClose={handleClose} >
@@ -110,8 +83,7 @@ function PopupDialog({ open, handleClose, data, setData }) {
                             margin="normal"
                             type="text"
                             autoComplete="off"
-                            error={errors.userName}
-                            value={values.userName}
+                            value={formData.userName}
                             onChange={(e) => handleFormChange('userName', e.target.value)}
                             onBlur={(e) => handleFormChange('userName', e.target.value)}
                         />
@@ -126,8 +98,7 @@ function PopupDialog({ open, handleClose, data, setData }) {
                                 margin="normal"
                                 type="date"
                                 name="dtValid"
-                                error={errors.dtValid}
-                                value={values.dtValid || null}
+                                value={formData.dtValid || null}
                                 onChange={(newValue) => { handleFormChange('dtValid', newValue); }}
                                 onBlur={() => handleValidation('dtValid')}
                             />
@@ -144,8 +115,7 @@ function PopupDialog({ open, handleClose, data, setData }) {
                             margin="normal"
                             type="number"
                             autoComplete="off"
-                            error={errors.userDoc}
-                            value={values.userDoc}
+                            value={formData.userDoc}
                             onChange={(e) => handleFormChange('userDoc', e.target.value)}
                             onBlur={(e) => handleFormChange('userDoc', e.target.value)}
 
@@ -161,8 +131,7 @@ function PopupDialog({ open, handleClose, data, setData }) {
                                 margin="normal"
                                 type="date"
                                 name="dtEnd"
-                                error={errors.dtEnd}
-                                value={values.dtEnd || null}
+                                value={formData.dtEnd || null}
                                 onChange={(newValue) => { handleFormChange('dtEnd', newValue); }}
                                 onBlur={() => handleValidation('dtEnd')}
                             />
@@ -175,94 +144,81 @@ function PopupDialog({ open, handleClose, data, setData }) {
                     <FormLabel id="status-radio" sx={{ textAlign: 'end', fontWeight: 600, mb:'10px' }} component="legend">Status</FormLabel>
                     <RadioGroup
                         aria-labelledby="status-radio"
-                        name="radio-buttons-group"
+                        name="status-radio"
                     >
                         <StyledFormControlLabel
                             control={
-                                <Radio checked={values.todos || false} 
-                                onChange={(e) => {
-                                    values.todos = e.target.checked;
-                                    handleFormChange('todos', e.target.checked);
-                                }}
-                                name="todos" />
+                                <Radio checked={formData.status === 'todos'} 
+                                   onChange={() => handleFormChange('tipo', 'todos')}
+                                   name="todos" 
+                                />
                             }
                             label="Todos"
                         />
                         <StyledFormControlLabel
                             control={
-                                <Radio checked={values.ativo || false} 
-                                    onChange={(e) => {
-                                        values.ativo = e.target.checked;
-                                        handleFormChange('ativo', e.target.checked);
-                                    }}
-                                name="ativo" />
+                                <Radio
+                                    checked={formData.status === 'Ativo'}
+                                    onChange={() => handleFormChange('status', 'Ativo')}
+                                    name="ativo"
+                                />
                             }
                             label="Ativo"
                         />
                         <StyledFormControlLabel
                             control={
-                            <Radio checked={values.inativo || false} 
-                                onChange={(e) => {
-                                    values.inativo = e.target.checked;
-                                    handleFormChange('inativo', e.target.checked);
-                                }}
-                            name="inativo" />
-                        }
-                        label="Inativo"
+                                <Radio checked={formData.status === 'Inativo'} 
+                                   onChange={() => handleFormChange('status', 'Inativo')}
+                                   name="inativo" 
+                                />
+                            }
+                            label="Inativo"
                         />
                     </RadioGroup>
                 </FormControl>
             </FormContainer>
             <FormContainer>
                 <FormControl sx={{ mt: 1 }} component="fieldset" variant="standard">
-                    <FormLabel id="status-radio" sx={{ textAlign: 'end', fontWeight: 600, mb:'10px' }} component="legend">Tipo de Agendamento</FormLabel>
+                    <FormLabel id="tipo-radio" sx={{ textAlign: 'end', fontWeight: 600, mb:'10px' }} component="legend">Tipo de Agendamento</FormLabel>
                     <RadioGroup
-                        aria-labelledby="status-radio"
-                        name="radio-buttons-group"
+                        aria-labelledby="tipo-radio"
+                        name="tipo-radio"
                     >
                         <StyledFormControlLabel
                             control={
-                                <Radio checked={values.todos || false} 
-                                onChange={(e) => {
-                                    values.todos = e.target.checked;
-                                    handleFormChange('todos', e.target.checked);
-                                }}
-                                name="todos" />
+                                <Radio checked={formData.tipo === 'todos'} 
+                                   onChange={() => handleFormChange('tipo', 'todos')}
+                                   name="todos" 
+                                />
                             }
                             label="Todos"
                         />
                         <StyledFormControlLabel
                             control={
-                                <Radio checked={values.ativo || false} 
-                                    onChange={(e) => {
-                                        values.visitanteSimples = e.target.checked;
-                                        handleFormChange('visitanteSimples', e.target.checked);
-                                    }}
-                                name="visitanteSimples" />
+                                <Radio checked={formData.tipo === 'Visitante Simples'} 
+                                   onChange={() => handleFormChange('tipo', 'Visitante Simples')}
+                                   name="visitanteSimples" 
+                                />
                             }
                             label="Visitante Simples"
                         />
                         <StyledFormControlLabel
                             control={
-                            <Radio checked={values.visitanteEspecial || false} 
-                                onChange={(e) => {
-                                    values.visitanteEspecial = e.target.checked;
-                                    handleFormChange('visitanteEspecial', e.target.checked);
-                                }}
-                            name="visitanteEspecial" />
-                        }
-                        label="Visitante Especial"
+                                <Radio checked={formData.tipo === 'Visitante Especial'} 
+                                    onChange={() => handleFormChange('tipo', 'Visitante Especial')}
+                                    name="visitanteEspecial" 
+                                />
+                            }
+                            label="Visitante Especial"
                         />
                         <StyledFormControlLabel
                             control={
-                            <Radio checked={values.prestadorServico || false} 
-                                onChange={(e) => {
-                                    values.prestadorServico = e.target.checked;
-                                    handleFormChange('prestadorServico', e.target.checked);
-                                }}
-                            name="prestadorServico" />
-                        }
-                        label="Prestador de Serviço"
+                                <Radio checked={formData.tipo === 'Prestador de Serviço'} 
+                                    onChange={() => handleFormChange('tipo', 'Prestador de Serviço')}
+                                    name="prestadorServico" 
+                                />
+                            }
+                            label="Prestador de Serviço"
                         />
                     </RadioGroup>
                 </FormControl>

@@ -15,6 +15,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
     { id: 'dtValid', label: 'Data Inicial', minWidth: 100, align: 'center', },
     { id: 'dtEnd', label: 'Data Final', minWidth: 100, align: 'center', },
     { id: 'status', label: 'Status', minWidth: 100, align: 'center', },
+    { id: 'action', label: '', minWidth: 100, align: 'center', },
   ];
 
   const buttonStyleFiltro = {
@@ -38,6 +39,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
 
   const handleOpenPopup = () => {
     setOpenPopup(true);
+    atualizarAgendamento(setAgendamentoData, setLoading, setValid);
   };
 
   const handleClosePopup = () => {

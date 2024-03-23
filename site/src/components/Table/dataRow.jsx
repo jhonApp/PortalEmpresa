@@ -1,5 +1,6 @@
 import { IconMap } from '../../Utils/IconMap';
 import { StatusMap } from '../../Utils/StatusMap';
+import LongMenu from './menuAction';
 import Avatar from '@mui/material/Avatar';
 import { TableRow, TableCell, Typography } from '@mui/material';
 
@@ -12,11 +13,18 @@ const DataRow = ({ row, columns, window, theme }) => {
             {column.id === 'nome' && window === 'funcionario' && renderFuncionario(row, theme)}
             {(column.id === 'status') && renderStatus(row)}
             {(column.id !== 'nome' && column.id !== 'status') && row[column.id]}
+            {(column.id === 'action') && renderAction(row.tipo)}
           </TableCell>
         ))}
       </TableRow>
     );
 };
+
+const renderAction = (tipo) => (
+  <div style={{ justifyContent: 'center' }}>
+      <LongMenu tipo={tipo} />
+  </div>
+);
 
 const renderStatus = (row) => (
     <div style={{ justifyContent: 'center' }}>

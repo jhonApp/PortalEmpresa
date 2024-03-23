@@ -42,9 +42,7 @@ const Menu = ({ route, adminOpen, handleAdminClick, selectedIndex, handleMenuIte
           {route.icon}
         </ListItemIcon>
         <ListItemText primary={<Typography variant="body1" sx={{ fontSize: '14px', fontWeight: 500 }}>{route.text}</Typography>} />
-        <ArrowIcon>
-          {adminOpen ? <CaretDown size={18} /> : <CaretLeft size={18} />}
-        </ArrowIcon>
+        {adminOpen ? <CaretDown size={18} /> : <CaretLeft size={18} />}
       </StyledListItem>
     ) : (
       <Link to={generateLink(route.link)} style={{ textDecoration: 'none', color: '#242C48' }}>

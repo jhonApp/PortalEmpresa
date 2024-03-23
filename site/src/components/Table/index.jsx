@@ -78,7 +78,7 @@ export default function CustomTable(props) {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth, backgroundColor: '#EBEAEF' }}
+                  style={{ width: column.width, maxWidth: column.width, backgroundColor: '#EBEAEF' }}
                 >
                   {column.label}
                 </TableCell>
