@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './Header';
-import Sidebar from './Sidebar';
+import Sidebar from './Layout';
 import GlobalStyle from '../globalStyles';
 
 function Layout({ children }) {
@@ -15,10 +15,10 @@ function Layout({ children }) {
     }}>
       <GlobalStyle></GlobalStyle>
       <Sidebar headerHeight={headerHeight} style={{ height: '100vh' }} />
-      <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+      {/* <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
         <Header />
         {children}
-      </div>
+      </div> */}
     </div>
   );
 }
