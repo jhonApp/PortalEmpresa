@@ -5,8 +5,8 @@ import Stepper from '../../stepper';
 import Progress from '../../../Utils/LoadingProgress';
 import { inserirAgendamentoEspecial } from '../../../../service/agendamentoService';
 
-function AgendamentoVisitanteEspecial({ updateTable, onClose }) {
-  const [formData, setFormData] = useState({});
+function AgendamentoVisitanteEspecial({ updateTable, onClose, data }) {
+  const [formData, setFormData] = useState({data});
   const [invalidFields, setInvalidFields] = useState({});
   const steps = ['Dados Visitante Especial', 'Dados Agendamento'];
   const [loading, setLoading] = useState(false);

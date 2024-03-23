@@ -25,7 +25,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     onDataChange({ ...values, [fieldName]: value });
     onFieldValidationChange (isValid);
   };
-
+  // console.log(formData)
+  console.log(values)
   return (
     <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
       <FormContainer>
@@ -39,10 +40,9 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               type="number"
               autoComplete="off"
               error={errors.rgCpf}
-              value={values.rgCpf || ''}
+              value={values.data.userDoc || ''}
               onChange={(e) => handleFormChange('rgCpf', e.target.value)}
               onBlur={(e) => handleFormChange('rgCpf', e.target.value)}
-
             />
             {renderErrorMessage('rgCpf')}
           </FormRow>

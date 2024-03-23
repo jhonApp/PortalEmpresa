@@ -10,7 +10,7 @@ import Cartao from './components/Cartao';
 import Funcionario from './components/Funcionario';
 import Mural from './components/Mural';
 import FormFuncionario from './components/Funcionario/Formulario';
-import Layout from './components/LayoutTeste';
+import Layout from './components/Layout';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

@@ -1,44 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { ListItemIcon } from '@mui/material';
 import { Visibility, Edit, Delete } from '@mui/icons-material';
+import PopupDialog from '../Agendamento/popupAgendamento';
 
 const ITEM_HEIGHT = 48;
 
-export default function LongMenu({ tipo }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+export default function LongMenu({ tipo, data }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => { 
     setAnchorEl(null);
+  };
+
+  const handleAction = (action) => {
+    switch (action) {
+      case 'view':
+        setTitle('Visualizar Agendamento');
+        setDescription('Descrição para visualização');
+        break;
+      case 'edit':
+        setTitle('Alterar Agendamento');
+        setDescription('Descrição para alteração');
+        break;
+      case 'delete':
+        setTitle('Excluir Agendamento');
+        setDescription('Descrição para exclusão');
+        break;
+      default:
+        setTitle('');
+        setDescription('');
+    }
+    setDialogOpen(true);
+    handleClose();
   };
 
   const options = [
     { 
       label: 'Visualizar', 
       icon: <Visibility />, 
-      action: () => {
-        console.log("Visualizar")
-      }
+      action: 'view'
     },
     { 
       label: 'Alterar', 
       icon: <Edit />, 
-      action: () => {
-        console.log("Alterar")
-      }
+      action: 'edit'
     },
     { 
       label: 'Excluir', 
       icon: <Delete />, 
-      action: () => {
-        console.log("Excluir")
-      }
+      action: 'delete'
     }
   ];
 
@@ -47,8 +68,8 @@ export default function LongMenu({ tipo }) {
       <IconButton
         aria-label="more"
         id="long-button"
-        aria-controls={open ? 'long-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
+        aria-controls={anchorEl ? 'long-menu' : undefined}
+        aria-expanded={anchorEl ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleClick}
       >
@@ -60,7 +81,7 @@ export default function LongMenu({ tipo }) {
           'aria-labelledby': 'long-button',
         }}
         anchorEl={anchorEl}
-        open={open}
+        open={Boolean(anchorEl)}
         onClose={handleClose}
         PaperProps={{
           style: {
@@ -70,12 +91,21 @@ export default function LongMenu({ tipo }) {
         }}
       >
         {options.map((option) => (
-          <MenuItem key={option.label} onClick={option.action}>
+          <MenuItem key={option.label} onClick={() => handleAction(option.action)}>
             <ListItemIcon>{option.icon}</ListItemIcon>
             {option.label}
           </MenuItem>
         ))}
       </Menu>
+
+      <PopupDialog 
+        open={dialogOpen} 
+        handleClose={() => setDialogOpen(false)} 
+        title={title} 
+        description={description} 
+        type={tipo}
+        data={data}
+      />
     </div>
   );
 }
