@@ -3,19 +3,22 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { ListItemIcon } from '@mui/material';
+import { Visibility, Edit, Delete } from '@mui/icons-material';
+import PopupDialog from '../Agendamento/popupAgendamento';
 import AlertDialog from '../../Utils/Modal/Delete';
-import Progress from '../../Utils/LoadingProgress';
+
 
 const ITEM_HEIGHT = 48;
 
-function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }) {
+export default function LongMenu({ tipo, data }) {
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogDeleteOpen, setDialogDeleteOpen] = useState(false);
-  const [dialogConfig, setDialogConfig] = useState({ title: '', action: '' });
-  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState('');
+  const [action, setAction] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -25,51 +28,47 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
     setAnchorEl(null);
   };
 
-  const handleAction = (action, title) => {
-    // Define o título com base na ação
-    let dialogTitle = '';
+  const handleAction = (action) => {
     switch (action) {
       case 'view':
-        dialogTitle = 'Visualizar Agendamento';
-        setDialogOpen(true);
+        setTitle('Visualizar Agendamento');
+        setDescription('');
+        setAction(action)
         break;
       case 'edit':
-        dialogTitle = 'Alterar Agendamento';
-        setDialogOpen(true);
+        setTitle('Alterar Agendamento');
+        setDescription('');
+        setAction(action)
+        break;
+      case 'delete':
+        setDialogOpen(false);
+        setDialogDeleteOpen(true)
         break;
       default:
-        dialogTitle = title;
-        setDialogDeleteOpen(true);
-        setDialogOpen(false);
+        setTitle('');
+        setDescription('');
     }
-  
-    // Configuração do diálogo
-    const dialogConfig = {
-      title: dialogTitle,
-      action: action,
-    };
-
-    setDialogConfig(dialogConfig);
+    setDialogOpen(true);
     handleClose();
   };
 
-  const handleDelete = async (codigo) => {
-    try {
-      setLoading(true);
-
-      if (!codigo) return;
-
-      await onDelete(codigo);
-      showSuccessToast("Excluído com sucesso!");
-      updateTable();
-      setLoading(false);
-    } catch (error) {
-
-      setLoading(false);
-      showErrorToast(error.message);
+  const options = [
+    { 
+      label: 'Visualizar', 
+      icon: <Visibility />, 
+      action: 'view'
+    },
+    { 
+      label: 'Alterar', 
+      icon: <Edit />, 
+      action: 'edit'
+    },
+    { 
+      label: 'Excluir', 
+      icon: <Delete />, 
+      action: 'delete'
     }
-  };
-  
+  ];
 
   return (
     <div>
@@ -99,31 +98,29 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
         }}
       >
         {options.map((option) => (
-          <MenuItem key={option.label} onClick={() => handleAction(option.action, option.label)}>
+          <MenuItem key={option.label} onClick={() => handleAction(option.action)}>
             <ListItemIcon>{option.icon}</ListItemIcon>
             {option.label}
           </MenuItem>
         ))}
       </Menu>
-      <PopupDialogComponent
+      <PopupDialog 
         open={dialogOpen} 
         handleClose={() => setDialogOpen(false)} 
-        title={dialogConfig.title} 
-        description={dialogConfig.description} 
-        type={data.tipo}
+        title={title} 
+        description={description} 
+        type={tipo}
         data={data}
-        action={dialogConfig.action}
+        action={action}
       />
       <AlertDialog 
         dialogOpen={dialogDeleteOpen}
-        handleClose={() => setDialogDeleteOpen(false)} // Aqui deve ser setDialogDeleteOpen(false)
-        handleDelete={() => { 
-          handleDelete(data.codigo); 
+        handleClose={() => setDialogOpen(false)} 
+        handleDelete={() => {
+          onDelete(data.id);
+          setDialogOpen(false);
         }}
       />
-      <Progress isVisible={loading} />
     </div>
   );
 }
-
-export default LongMenu;

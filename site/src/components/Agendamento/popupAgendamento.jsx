@@ -8,18 +8,18 @@ import AgendamentoMassa from './AgendamentoMassa'
 import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '@mui/material';
 import { XCircle } from 'phosphor-react';
 
-function PopupDialog({ open, handleClose, updateTable, title, description, type, data }) {
+function PopupDialog({ open, handleClose, atualizarAgendamento, title, description, type, data, action }) {
   const theme = useTheme();
   const renderContent = () => {
     switch (type) {
       case 'AgendamentoVisitante':
-        return <AgendamentoVisitante onClose={handleClose} updateTable={updateTable} />;
+        return <AgendamentoVisitante onClose={handleClose} updateTable={atualizarAgendamento} />;
       case 'Visitante Especial':
-        return <AgendamentoVisitanteEspecial onClose={handleClose} updateTable={updateTable} data={data} />;
+        return <AgendamentoVisitanteEspecial onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;
       case 'AgendamentoPrestadorServico':
-          return <AgendamentoPrestador onClose={handleClose} updateTable={updateTable} />;
+          return <AgendamentoPrestador onClose={handleClose} updateTable={atualizarAgendamento} />;
       case 'AgendamentoMassa':
-          return <AgendamentoMassa onClose={handleClose} updateTable={updateTable} />;
+          return <AgendamentoMassa onClose={handleClose} updateTable={atualizarAgendamento} />;
       default:
         return null;
     }

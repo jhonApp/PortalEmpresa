@@ -11,8 +11,8 @@ import { StyledButtonDelete } from '../../Utils/StyledButton';
 export default function AlertDialog({ dialogOpen, handleClose, handleDelete }) {
   
   const handleConfirmDelete = () => {
-    handleDelete();
     handleClose();
+    handleDelete();
   };
   
   return (

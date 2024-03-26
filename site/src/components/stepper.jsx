@@ -6,7 +6,6 @@ import { validateForm } from './Formulario/validation';
 import PropTypes from 'prop-types';
 import { showSuccessToast, showErrorToast } from '../Utils/Notification';
 
-
 const StyledButtonPrimary = styled(Button)({
   backgroundColor: 'black',
   color: 'white',
@@ -38,19 +37,18 @@ const StyledButtonSecundary = styled(Button)({
 
 const HorizontalLinearStepper = ({
   steps,
-  renderStepContent,
   updateTable,
-  createData,
+  createFunction,
   formData,
   handleClose,
+  onLoadingChange,
   invalidFields,
   screenValidation,
-  onLoadingChange
+  action,
+  renderStepContent
 }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-
-
   const { handleSubmit, clearMessage } = useForm();
 
   const handleBack = () => {
@@ -62,7 +60,6 @@ const HorizontalLinearStepper = ({
   };
 
   const handleNext = () => {
-    console.log(screenValidation)
     const { errorTypes } = validateForm(formData, screenValidation);
     const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
     if (hasErrors) {
@@ -82,7 +79,7 @@ const HorizontalLinearStepper = ({
 
   const handleSave = async () => {
     try {
-      const { errorTypes } = validateForm(formData, 'agendamento2');
+      const { errorTypes } = validateForm(formData, screenValidation);
       const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
       if (hasErrors) {
         showErrorToast('Por favor, preencha os campos obrigatórios');
@@ -93,9 +90,40 @@ const HorizontalLinearStepper = ({
   
       await handleSubmit(async () => {        
         try{
-            await createData(formData);
+            await createFunction(formData);
             showSuccessToast("Criado com sucesso!");
             updateTable();
+            setActiveStep(0);
+            handleClose(false);
+        } catch (e) {
+            onLoadingChange(false);
+            showErrorToast(e.message);
+        }
+      });
+      onLoadingChange(false);
+
+    } catch (error) {
+      onLoadingChange(false);
+      showErrorToast(error.message);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const { errorTypes } = validateForm(formData, screenValidation);
+      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
+      if (hasErrors) {
+        showErrorToast('Por favor, preencha os campos obrigatórios');
+        return;
+      }
+
+      onLoadingChange(true);
+  
+      await handleSubmit(async () => {        
+        try{
+            await createFunction(formData);
+            showSuccessToast("Alterado com sucesso!");
+            // updateTable();
             setActiveStep(0);
             handleClose(false);
         } catch (e) {
@@ -139,7 +167,12 @@ const HorizontalLinearStepper = ({
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
             <Button onClick={handleBack} sx={{ marginRight: '180px', color: 'black' }}>Voltar</Button>
             <StyledButtonSecundary onClick={handleCancel}>Cancelar</StyledButtonSecundary>
-            <StyledButtonPrimary onClick={handleSave}>Finalizar</StyledButtonPrimary>
+            {action !== 'view' && action !== 'edit' && (
+              <StyledButtonPrimary onClick={handleSave}>Finalizar</StyledButtonPrimary>
+            )}
+            {action === 'edit' && (
+              <StyledButtonPrimary onClick={handleUpdate}>Alterar</StyledButtonPrimary>
+            )}
           </Box>
         )}
         {activeStep !== steps.length - 1 && (

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import ListMagnifyingGlass from '../../assets/images/icones/listmagnifyinglass.svg';
 import Typography from '@mui/material/Typography';
+import {excluirAgendamento} from '../../../service/agendamentoService';
+import PopupDialog from './popupAgendamento';
 import PopupFiltro from './popupFiltro';
 import Table from '../Table'
 
@@ -11,9 +13,9 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
 
   const columns = [
     { id: 'nome', label: 'Nome', width: 200, align: 'center' },
-    { id: 'userDoc', label: 'RG', minWidth: 100, align: 'center'},
-    { id: 'dtValid', label: 'Data Inicial', minWidth: 100, align: 'center', },
-    { id: 'dtEnd', label: 'Data Final', minWidth: 100, align: 'center', },
+    { id: 'rgCpf', label: 'RG', minWidth: 100, align: 'center'},
+    { id: 'descricaoDataInicial', label: 'Data Inicial', minWidth: 100, align: 'center', },
+    { id: 'descricaoDataFim', label: 'Data Final', minWidth: 100, align: 'center', },
     { id: 'status', label: 'Status', width: 260, align: 'center', },
     { id: 'action', label: '', minWidth: 100, align: 'center', },
   ];
@@ -68,7 +70,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
         </Button>
       </Box>
       <Box display="flex" gap={2} marginTop={2}>
-        <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} />
+        <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} hadleDelete={excluirAgendamento} PopupDialog={PopupDialog} updateTable={atualizarAgendamento}/>
       </Box>
       <PopupFiltro open={openPopup} handleClose={handleClosePopup} data={agendamentoData} setData={setAgendamentoData} />
     </Box>
