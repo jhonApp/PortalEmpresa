@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 const getStatusComponent = (backgroundColor, iconElement, iconColor, labelText) => (
     <Box style={{ display: 'flex', width: 'fit-content' ,alignItems: 'center', backgroundColor, borderRadius: '50px', p: 3, justifyContent: 'center', padding: '3px 20px' }}>
         {iconElement}
-        <Typography variant="body1" style={{ marginLeft: 3, fontSize: 14, color: iconColor }}>{labelText}</Typography>
+        <Typography variant="body1" style={{ marginLeft: 3, fontSize: 15, color: iconColor }}>{labelText}</Typography>
     </Box>
 );
 

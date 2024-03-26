@@ -10,14 +10,14 @@ const StyledTextField = styled(TextField)({
   marginBottom: 5,
   '& .MuiOutlinedInput-root': {
     borderRadius: '4px',
-    fontSize: '12px',
+    fontSize: '15px',
   },
   '& .MuiInputLabel-root': {
-    fontSize: '0.9rem',
-    top: '-5px'
+    fontSize: '1.1rem',
+    top: '-2px'
   },
   '& .MuiOutlinedInput-input': {
-    padding: '12px',
+    padding: '17px',
   },
 });
 
@@ -28,14 +28,14 @@ const StyledSelectField = styled(Select)({
     marginBottom: 5,
     '& .MuiOutlinedInput-root': {
       borderRadius: '4px',
-      fontSize: '12px',
+      fontSize: '15px',
     },
     '& .MuiInputLabel-root': {
       fontSize: '0.9rem',
-      top: '-5px'
+      top: '-2px'
     },
     '& .MuiOutlinedInput-input': {
-      padding: '12px',
+      padding: '17px',
     },
     '& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input': {
         fontSize: '14px',
@@ -87,14 +87,14 @@ const StyledDatePicker = styled(DatePicker)({
     marginTop: '16px',
     '& .MuiOutlinedInput-root': {
         borderRadius: '4px',
-        fontSize: '12px',
+        fontSize: '15px',
     },
     '& .MuiInputLabel-root': {
-        fontSize: '0.9rem',
-        top: '-5px'
+        fontSize: '1.1rem',
+        top: '-2px'
     },
     '& .MuiOutlinedInput-input': {
-        padding: '12px',
+        padding: '14px',
         width: '100%',
     },
 });
@@ -107,15 +107,15 @@ const StyledTimePicker = styled(TimePicker)({
     width: '100%',
     '& .MuiOutlinedInput-root': {
         borderRadius: '4px',
-        fontSize: '12px',
+        fontSize: '15px',
     },
     '& .MuiInputLabel-root': {
-        fontSize: '0.9rem',
-        top: '-5px'
+        fontSize: '1.1rem',
+        top: '-2px'
     },
     '& .MuiOutlinedInput-input': {
         width: '100%',
-        padding: '12px',
+        padding: '14px',
     },
 });
 

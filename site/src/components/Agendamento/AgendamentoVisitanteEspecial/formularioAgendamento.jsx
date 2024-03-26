@@ -43,7 +43,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
     setChegada(isChecked); // Atualiza o estado interno do Checkbox
     handleFormChange('chegada', isChecked); // Atualiza o estado do formulário
   };
-
+  console.log(values)
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
       <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
@@ -59,7 +59,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 name="dataInicial"
                 minDate={today}
                 error={errors.dataInicial}
-                value={values.dataInicial || null}
+                value={values.dataInicial}
                 onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
                 onBlur={() => handleValidation('dataInicial')}
               />

@@ -64,7 +64,7 @@ export default function CustomTable(props) {
     return props.data
       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
       .map((row, index) => (
-        <DataRow key={index} row={row} columns={props.columns} window={props.window} theme={theme} />
+        <DataRow key={index} row={row} columns={props.columns} window={props.window} theme={theme} hadleDelete={props.hadleDelete} PopupDialog={props.PopupDialog} updateTable={props.updateTable}/>
       ));
   };
 

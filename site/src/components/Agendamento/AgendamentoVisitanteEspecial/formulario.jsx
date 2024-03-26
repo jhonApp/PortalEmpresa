@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState , useEffect } from 'react';
 import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
 import { Checkbox, Typography } from '@mui/material';
@@ -6,8 +6,8 @@ import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
 const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
+  const [values, setValues] = useState({});
   const {
-    values,
     errors,
     handleChange,
     handleValidation,
@@ -18,15 +18,23 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     'agendamento'
   );
 
+  useEffect(() => {
+    // Verifique se formData está definido e não vazio
+    if (formData && Object.keys(formData).length > 0) {
+      // Defina os valores de formData em values
+      setValues(formData);
+    }
+  }, [formData, setValues]);
+
   const handleFormChange = (fieldName, value) => {
+    const updatedValues = { ...values, [fieldName]: value };
+    setValues(updatedValues); // Atualize os valores
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
-    console.log(isValid);
-    onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange (isValid);
+    onDataChange(updatedValues);
+    onFieldValidationChange(isValid);
   };
-  // console.log(formData)
-  console.log(values)
+  
   return (
     <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
       <FormContainer>
@@ -40,7 +48,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               type="number"
               autoComplete="off"
               error={errors.rgCpf}
-              value={values.data.userDoc || ''}
+              value={values.rgCpf || ''}
               onChange={(e) => handleFormChange('rgCpf', e.target.value)}
               onBlur={(e) => handleFormChange('rgCpf', e.target.value)}
             />

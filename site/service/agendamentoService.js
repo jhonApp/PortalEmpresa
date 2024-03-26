@@ -1,9 +1,9 @@
 import { obterVisitante, cadastrar } from '../api/visitante';
 import { IncluirAgendamento } from '../api/visitanteSimples/agendamento';
-import { IncluirAgendamentoEspecial } from '../api/visitanteEspecial/agendamento';
+import { IncluirAgendamentoEspecial, AlterarAgendamentoEspecial } from '../api/visitanteEspecial/agendamento';
 import { IncluirAgendamentoPrestador } from '../api/prestadorServico/agendamento';
 import { obterAgendamento } from '../api/visitanteSimples/agendamento';
-import { obterAgendamentoEspecial } from '../api/visitanteEspecial/agendamento';
+import { obterAgendamentoEspecial, excluirAgendamentoEspecial } from '../api/visitanteEspecial/agendamento';
 import { obterAgendamentoPrestador } from '../api/prestadorServico/agendamento';
 import { getData } from './storageService';
 
@@ -212,6 +212,80 @@ export const inserirAgendamentoPrestador = async (dados) => {
     return response;
   } catch (error) {
     throw new Error('Erro ao inserir agendamento: ' + error.message);
+  }
+};
+
+export const excluirAgendamento = async (codigo) => {
+  try {
+    if (!codigo) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    // if(tipo == 'AgendamentoSimples'){
+    //   const response = IncluirAgendamentoPrestador(agendamento);
+    // }else if(tipo == 'AgendamentoPrestador'){
+    //   const response = IncluirAgendamentoPrestador(agendamento);
+    // }else{
+    //   const response = excluirAgendamentoEspecial(agendamento);
+    // }
+    const response = excluirAgendamentoEspecial(codigo);
+
+
+    return response;
+  } catch (error) {
+    throw new Error('Erro ao inserir agendamento: ' + error.message);
+  }
+};
+
+export const alterarAgendamentoEspecial = async (dados) => {
+  try {
+    debugger;
+    if (!dados) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    // Aguarda a obtenção do visitante
+    const visitantePromise = obterVisitante(dados.rgCpf);
+
+    // Verifica se o visitante já existe
+    let visitante = await visitantePromise;
+    if (visitante.data.codigo == 0) {
+      // Se não existe, cadastra o visitante
+      visitante = await cadastrar(dados);
+    }
+
+    const storage = getData();
+    const agendamento = {
+      codigo: dados.codigo,
+      codigoVisitante: visitante.data.codigo,
+      dataFim: dados.dataFim,
+      horaEntrada: dados.horaEntrada,
+      horaSaida: dados.horaSaida,
+      dataInicial: dados.dataInicial,
+      obs: dados.obs,
+      codigoUsuario: storage.codigo,
+      codigoEmpresa: storage.codigoEmpresa,
+      codigoFuncionario: storage.codigoFuncionario,
+      chegada: dados.chegada
+    };
+
+    // Envia a solicitação de inclusão de agendamento
+    const responsePromise = AlterarAgendamentoEspecial(agendamento);
+
+    // Aguarda a conclusão de todas as promessas
+    const [visitanteResponse, response] = await Promise.all([visitantePromise, responsePromise]);
+
+    if (visitanteResponse.status !== 200) {
+      throw new Error('Erro ao alterar visitante, entre em contato com o suporte técnico.');
+    }
+
+    if (response.status !== 200) {
+      throw new Error('Erro ao alterar agendamento, entre em contato com o suporte técnico.');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error('Erro ao alterar agendamento: ' + error.message);
   }
 };
 

@@ -7,6 +7,8 @@ import Typography from '@mui/material/Typography';
 function TipoAgendamento({ atualizarAgendamento }) {
   const [openPopup, setOpenPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
+  const [popupData, setPopupData] = useState();
+  const [popupAction, setPopupAction] = useState();
   const [popupTitle, setPopupTitle] = useState('');
   const [popupDescription, setPopupDescription] = useState('');
   const theme = useTheme();
@@ -37,10 +39,12 @@ function TipoAgendamento({ atualizarAgendamento }) {
     height: '84px'
   };
 
-  const handleOpenPopup = (title, description, type) => {
+  const handleOpenPopup = (title, description, type, data, action) => {
     setPopupTitle(title);
     setPopupType(type);
     setPopupDescription(description);
+    setPopupData(data)
+    setPopupAction(data)
     setOpenPopup(true);
   };
 
@@ -69,7 +73,7 @@ function TipoAgendamento({ atualizarAgendamento }) {
           <div style={iconContainerStyle}><UserMinus size={20} color="#72788E" /></div>
           Visitante Simples
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Especial', 'Visitante Especial')}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Especial', 'Visitante Especial', null, 'salvar')}>
           <div style={iconContainerStyle}><UsersThree size={20} color="#72788E" /></div>
           Visitante Especial
         </Button>
@@ -82,7 +86,7 @@ function TipoAgendamento({ atualizarAgendamento }) {
           Múltiplos Visitantes
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} updateTable={atualizarAgendamento} title={popupTitle} description={popupDescription} type={popupType} />
+      <Popup open={openPopup} handleClose={handleClosePopup} atualizarAgendamento={atualizarAgendamento} title={popupTitle} description={popupDescription} type={popupType} />
     </Box>
   );
 }
