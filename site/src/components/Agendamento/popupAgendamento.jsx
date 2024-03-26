@@ -12,14 +12,14 @@ function PopupDialog({ open, handleClose, atualizarAgendamento, title, descripti
   const theme = useTheme();
   const renderContent = () => {
     switch (type) {
-      case 'AgendamentoVisitante':
-        return <AgendamentoVisitante onClose={handleClose} updateTable={atualizarAgendamento} />;
+      case 'Visitante Simples':
+        return <AgendamentoVisitante onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;
       case 'Visitante Especial':
         return <AgendamentoVisitanteEspecial onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;
-      case 'AgendamentoPrestadorServico':
-          return <AgendamentoPrestador onClose={handleClose} updateTable={atualizarAgendamento} />;
-      case 'AgendamentoMassa':
-          return <AgendamentoMassa onClose={handleClose} updateTable={atualizarAgendamento} />;
+      case 'Prestador de Servico':
+          return <AgendamentoPrestador onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;
+      case 'Múltiplos Visitantes':
+          return <AgendamentoMassa onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;
       default:
         return null;
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState , useEffect } from 'react';
 import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
 import { Checkbox, Typography } from '@mui/material';
@@ -6,8 +6,8 @@ import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
 const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
+  const [values, setValues] = useState({});
   const {
-    values,
     errors,
     handleChange,
     handleValidation,
@@ -18,12 +18,19 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     'agendamento'
   );
 
+  useEffect(() => {
+    if (formData && Object.keys(formData).length > 0) {
+      setValues(formData);
+    }
+  }, [formData, setValues]);
+
   const handleFormChange = (fieldName, value) => {
+    const updatedValues = { ...values, [fieldName]: value };
+    setValues(updatedValues);
     handleChange(fieldName, value);
     const isValid = handleValidation(fieldName);
-    console.log(isValid);
-    onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange (isValid);
+    onDataChange(updatedValues);
+    onFieldValidationChange(isValid);
   };
 
   return (

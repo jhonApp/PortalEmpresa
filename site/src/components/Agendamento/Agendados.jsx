@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import ListMagnifyingGlass from '../../assets/images/icones/listmagnifyinglass.svg';
 import Typography from '@mui/material/Typography';
-import {excluirAgendamento} from '../../../service/agendamentoService';
+import { excluirAgendamentos } from '../../../service/agendamentoService';
 import PopupDialog from './popupAgendamento';
 import PopupFiltro from './popupFiltro';
 import Table from '../Table'
@@ -70,7 +70,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
         </Button>
       </Box>
       <Box display="flex" gap={2} marginTop={2}>
-        <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} hadleDelete={excluirAgendamento} PopupDialog={PopupDialog} updateTable={atualizarAgendamento}/>
+        <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} hadleDelete={excluirAgendamentos} PopupDialog={PopupDialog} updateTable={atualizarAgendamento}/>
       </Box>
       <PopupFiltro open={openPopup} handleClose={handleClosePopup} data={agendamentoData} setData={setAgendamentoData} />
     </Box>

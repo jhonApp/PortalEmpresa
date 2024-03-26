@@ -22,13 +22,11 @@ const DataRow = ({ row, columns, window, theme, hadleDelete, PopupDialog, update
 };
 
 const renderAction = (tipo, data, hadleDelete, PopupDialog, updateTable) => {
-  // Define as opções do menu com base no tipo
   const menuOptions = [
     { label: 'Visualizar', icon: <Visibility />, action: 'view' },
     { label: 'Editar', icon: <Edit />, action: 'edit' },
     { label: 'Excluir', icon: <Delete />, action: 'delete' }
   ];
-
   return (
     <div style={{ justifyContent: 'center' }}>
       <LongMenu 
