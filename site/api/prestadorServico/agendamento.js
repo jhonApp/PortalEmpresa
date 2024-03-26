@@ -65,3 +65,45 @@ export const IncluirHoraAgendamento = async (data) => {
     throw error;
   }
 };
+
+export const AlterarAgendamentoPrestador = async (data) => {
+  try {
+    if (!data) {
+      throw new Error('O valor está nulo.');
+    }
+
+    const url = `${API_URL}/alterarAgendamentoPrestador`;
+
+    const response = await axios.post(url, data, {
+      validateStatus: status => status < 500,
+    });
+
+    if (response.status != 200) {
+      throw new Error(response.data);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const excluirAgendamentoPrestador = async (codigo) => {
+  try {
+    if (!codigo) {
+      throw new Error('O código está nulo.');
+    }
+
+    const url = `${API_URL}/deleteAgendamentoPrestador?codigo=${codigo}`;
+
+    const response = await axios.delete(url);
+
+    if (response.status !== 200) {
+      throw new Error(response.data);
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

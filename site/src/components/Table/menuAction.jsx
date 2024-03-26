@@ -26,7 +26,6 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
   };
 
   const handleAction = (action, title) => {
-    // Define o título com base na ação
     let dialogTitle = '';
     switch (action) {
       case 'view':
@@ -58,8 +57,8 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
       setLoading(true);
 
       if (!codigo) return;
-
-      await onDelete(codigo);
+      console.log(data.tipo);
+      await onDelete(codigo, data.tipo);
       showSuccessToast("Excluído com sucesso!");
       updateTable();
       setLoading(false);
@@ -116,7 +115,7 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
       />
       <AlertDialog 
         dialogOpen={dialogDeleteOpen}
-        handleClose={() => setDialogDeleteOpen(false)} // Aqui deve ser setDialogDeleteOpen(false)
+        handleClose={() => setDialogDeleteOpen(false)}
         handleDelete={() => { 
           handleDelete(data.codigo); 
         }}

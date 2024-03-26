@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Formulario from './formulario';
 import FormularioAgendamento from './formularioAgendamento';
 import Stepper from '../../stepper';
 import Progress from '../../../Utils/LoadingProgress';
-import { inserirAgendamentoPrestador } from '../../../../service/agendamentoService';
+import { inserirAgendamentoPrestador, alterarAgendamentoPrestador } from '../../../../service/agendamentoService';
+import dayjs from 'dayjs';
 
-function AgendamentoPrestador({ updateTable, onClose }) {
+function AgendamentoPrestador({ onClose, updateTable, data, action }) {
   const [formData, setFormData] = useState({});
   const [invalidFields, setInvalidFields] = useState({});
   const steps = ['Dados Visitante', 'Dados Agendamento'];
   const [loading, setLoading] = useState(false);
+  const [createFunction, setCreateFunction] = useState(null);
+
+  useEffect(() => {
+    if (data) {
+      const dataCopy = { ...data };
+  
+      const fieldsToConvert = {
+        dataInicial: 'YYYY-MM-DD',
+        dataFim: 'YYYY-MM-DD',
+        horaEntrada: 'HH:mm',
+        horaSaida: 'HH:mm'
+      };
+  
+      Object.entries(fieldsToConvert).forEach(([field, format]) => {
+        if (dataCopy[field]) {
+          if (field.includes('hora')) {
+            const [hours, minutes] = dataCopy[field].split(':');
+            dataCopy[field] = dayjs().set('hour', parseInt(hours)).set('minute', parseInt(minutes));
+          } else {
+            dataCopy[field] = dayjs(dataCopy[field], format);
+          }
+        }
+      });
+  
+      setFormData(dataCopy);
+    }
+  }, [data]);
 
   const handleLoadingChange = (isLoading) => {
     setLoading(isLoading);
@@ -23,12 +51,20 @@ function AgendamentoPrestador({ updateTable, onClose }) {
     setInvalidFields(isInvalid);
   };
 
+  useEffect(() => {
+    if (action === 'edit') {
+      setCreateFunction(() => alterarAgendamentoPrestador);
+    } else {
+      setCreateFunction(() => inserirAgendamentoPrestador);
+    }
+  }, [action]);
+
   return (
     <div>
       <Stepper
         steps={steps}
         updateTable={updateTable}
-        createData={inserirAgendamentoPrestador}
+        createFunction={createFunction}
         formData={formData}
         handleClose={onClose}
         onLoadingChange={handleLoadingChange}
