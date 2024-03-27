@@ -51,7 +51,7 @@ const renderAgendamento = (row, theme) => (
       {IconMap[row.tipo](theme)}
       <div style={{ textAlign: 'justify', width: theme.spacing(18) }}>
         <Typography variant="body1" fontSize={18} fontWeight={600}>{row.nomeCompleto}</Typography>
-        <Typography variant="caption" fontSize={15} color="textSecondary">{row.tipo}</Typography>
+        <Typography variant="caption" fontSize={14} color="textSecondary">{row.tipo}</Typography>
       </div>
     </div>
 );

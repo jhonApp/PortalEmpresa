@@ -79,9 +79,10 @@ const HorizontalLinearStepper = ({
 
   const handleSave = async () => {
     try {
-      const { errorTypes } = validateForm(formData, screenValidation);
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
+      console.log(formData)
+      // const { errorTypes } = validateForm(formData, screenValidation);
+      // const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
+      if (!invalidFields) {
         showErrorToast('Por favor, preencha os campos obrigatórios');
         return;
       }

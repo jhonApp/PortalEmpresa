@@ -54,10 +54,15 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
 
   const handleDelete = async (codigo) => {
     try {
+      debugger
       setLoading(true);
 
-      if (!codigo) return;
-      console.log(data.tipo);
+      if (!codigo){
+        setLoading(false);
+        showErrorToast("Falha na exclusão do agendamento!");
+        return;
+      }
+      
       await onDelete(codigo, data.tipo);
       showSuccessToast("Excluído com sucesso!");
       updateTable();
@@ -117,7 +122,7 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
         dialogOpen={dialogDeleteOpen}
         handleClose={() => setDialogDeleteOpen(false)}
         handleDelete={() => { 
-          handleDelete(data.codigo); 
+          handleDelete(data.codigoAgendamento); 
         }}
       />
       <Progress isVisible={loading} />

@@ -129,7 +129,6 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               onChange={(e) => handleFormChange('servico', e.target.value)}
             />
           </FormRow>
-          
         </Column>
       </FormContainer>
       <FormRow style={{ display: 'flex', alignItems: 'center', marginTop: 10, marginBottom: 30 }}>

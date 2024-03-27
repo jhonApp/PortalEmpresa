@@ -16,7 +16,7 @@ function PopupDialog({ open, handleClose, atualizarAgendamento, title, descripti
         return <AgendamentoVisitante onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;
       case 'Visitante Especial':
         return <AgendamentoVisitanteEspecial onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;
-      case 'Prestador de Servico':
+      case 'Prestador de Serviço':
           return <AgendamentoPrestador onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;
       case 'Múltiplos Visitantes':
           return <AgendamentoMassa onClose={handleClose} updateTable={atualizarAgendamento} data={data} action={action}/>;

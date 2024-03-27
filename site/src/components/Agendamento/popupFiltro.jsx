@@ -16,10 +16,10 @@ function PopupDialog({ open, handleClose, data, setData }) {
   const theme = useTheme();
   const [locale, setLocale] = useState('pt-br');
   const [formData, setFormData] = useState({
-    userName: '',
-    userDoc: '',
-    dtValid: null,
-    dtEnd: null,
+    nomeCompleto: '',
+    rgCpf: '',
+    dataInicial: null,
+    dataFim: null,
     status: '',
     tipo: ''
   });
@@ -31,10 +31,10 @@ function PopupDialog({ open, handleClose, data, setData }) {
   useEffect(() => {
     if (!open) {
       setFormData({
-        userName: '',
-        userDoc: '',
-        dtValid: null,
-        dtEnd: null,
+        nomeCompleto: '',
+        rgCpf: '',
+        dataInicial: null,
+        dataFim: null,
         status: '',
         tipo: ''
       });
@@ -83,9 +83,9 @@ function PopupDialog({ open, handleClose, data, setData }) {
                             margin="normal"
                             type="text"
                             autoComplete="off"
-                            value={formData.userName}
-                            onChange={(e) => handleFormChange('userName', e.target.value)}
-                            onBlur={(e) => handleFormChange('userName', e.target.value)}
+                            value={formData.nomeCompleto}
+                            onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
+                            onBlur={(e) => handleFormChange('nomeCompleto', e.target.value)}
                         />
                     </FormRow>
                     {/*Data Inicial*/}

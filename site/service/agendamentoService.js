@@ -1,34 +1,39 @@
-import { obterVisitante, cadastrar } from '../api/visitante';
+import { obterVisitante, cadastrar, alterar } from '../api/visitante';
 import { IncluirAgendamento, obterAgendamento, excluirAgendamento, AlterarAgendamento } from '../api/visitanteSimples/agendamento';
 import { IncluirAgendamentoEspecial, AlterarAgendamentoEspecial, obterAgendamentoEspecial, excluirAgendamentoEspecial } from '../api/visitanteEspecial/agendamento';
 import { IncluirAgendamentoPrestador, AlterarAgendamentoPrestador, obterAgendamentoPrestador, excluirAgendamentoPrestador } from '../api/prestadorServico/agendamento';
 import { getData } from './storageService';
 
-
-// AGENDAMENTO SIMPLES
-export const inserirAgendamento = async (dados) => {
+const processarAgendamento = async (dados, inserirFuncao, alterarFuncao) => {
   try {
+    debugger
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
 
-    // Aguarda a obtenção do visitante
-    const visitantePromise = obterVisitante(dados.rgCpf);
+    // Obter o visitante
+    const visitanteResponse = await obterVisitante(dados.rgCpf);
+    let visitante = visitanteResponse.data;
 
-    // Verifica se o visitante já existe
-    let visitante = await visitantePromise;
-    if (visitante.data.codigo == 0) {
-      // Se não existe, cadastra o visitante
+    // Verificar se o visitante já existe
+    if (visitante.codigo == 0) {
+      // Se não existe, cadastrar o visitante
       visitante = await cadastrar(dados);
+      dados.codigoVisitante = visitante.data.codigo;
+    } else {
+      // Se existe, alterar o visitante
+      dados.codigoVisitante = visitanteResponse.data.codigo;
+      visitante = await alterar(dados);
     }
 
     const storage = getData();
     const agendamento = {
-      codigoVisitante: visitante.data.codigo,
+      codigo: dados.codigoAgendamento,
+      codigoVisitante: dados.codigoVisitante,
       dataFim: dados.dataFim,
+      dataInicial: dados.dataInicial,
       horaEntrada: dados.horaEntrada,
       horaSaida: dados.horaSaida,
-      dataInicial: dados.dataInicial,
       obs: dados.obs,
       codigoUsuario: storage.codigo,
       codigoEmpresa: storage.codigoEmpresa,
@@ -36,81 +41,32 @@ export const inserirAgendamento = async (dados) => {
       chegada: dados.chegada
     };
 
-    // Envia a solicitação de inclusão de agendamento
-    const responsePromise = IncluirAgendamento(agendamento);
+    // Enviar a solicitação de inclusão ou alteração de agendamento
+    const responsePromise = inserirFuncao ? inserirFuncao(agendamento) : alterarFuncao(agendamento);
 
-    // Aguarda a conclusão de todas as promessas
-    const [visitanteResponse, response] = await Promise.all([visitantePromise, responsePromise]);
-
-    if (visitanteResponse.status !== 200) {
-      throw new Error('Erro ao inserir visitante, entre em contato com o suporte técnico.');
-    }
+    // Aguardar a conclusão de todas as promessas
+    const response = await responsePromise;
 
     if (response.status !== 200) {
-      throw new Error('Erro ao inserir agendamento, entre em contato com o suporte técnico.');
+      throw new Error('Erro ao processar agendamento, entre em contato com o suporte técnico.');
     }
 
     return response;
   } catch (error) {
-    throw new Error('Erro ao inserir agendamento: ' + error.message);
+    throw new Error('Erro ao processar agendamento: ' + error.message);
   }
 };
 
+export const inserirAgendamento = async (dados) => {
+  return processarAgendamento(dados, IncluirAgendamento, null);
+};
+
 export const alterarAgendamento = async (dados) => {
-  try {
-    debugger;
-    if (!dados) {
-      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
-    }
-
-    // Aguarda a obtenção do visitante
-    const visitantePromise = obterVisitante(dados.rgCpf);
-
-    // Verifica se o visitante já existe
-    let visitante = await visitantePromise;
-    if (visitante.data.codigo == 0) {
-      // Se não existe, cadastra o visitante
-      visitante = await cadastrar(dados);
-    }
-
-    const storage = getData();
-    const agendamento = {
-      codigo: dados.codigo,
-      codigoVisitante: visitante.data.codigo,
-      dataFim: dados.dataFim,
-      horaEntrada: dados.horaEntrada,
-      horaSaida: dados.horaSaida,
-      dataInicial: dados.dataInicial,
-      obs: dados.obs,
-      codigoUsuario: storage.codigo,
-      codigoEmpresa: storage.codigoEmpresa,
-      codigoFuncionario: storage.codigoFuncionario,
-      chegada: dados.chegada
-    };
-
-    // Envia a solicitação de inclusão de agendamento
-    const responsePromise = AlterarAgendamento(agendamento);
-
-    // Aguarda a conclusão de todas as promessas
-    const [visitanteResponse, response] = await Promise.all([visitantePromise, responsePromise]);
-
-    if (visitanteResponse.status !== 200) {
-      throw new Error('Erro ao alterar visitante, entre em contato com o suporte técnico.');
-    }
-
-    if (response.status !== 200) {
-      throw new Error('Erro ao alterar agendamento, entre em contato com o suporte técnico.');
-    }
-
-    return response;
-  } catch (error) {
-    throw new Error('Erro ao alterar agendamento: ' + error.message);
-  }
+  return processarAgendamento(dados, null, AlterarAgendamento);
 };
 
 export const excluirAgendamentos = async (codigo, tipo) => {
   try {
-    debugger
     if (!codigo || !tipo) {
       throw new Error('Os valores estão nulos. Por favor, entre em contato com o suporte.');
     }
@@ -135,213 +91,20 @@ export const excluirAgendamentos = async (codigo, tipo) => {
   }
 };
 
-// AGENDAMENTO ESPECIAL
-export const alterarAgendamentoEspecial = async (dados) => {
-  try {
-    debugger;
-    if (!dados) {
-      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
-    }
-
-    // Aguarda a obtenção do visitante
-    const visitantePromise = obterVisitante(dados.rgCpf);
-
-    // Verifica se o visitante já existe
-    let visitante = await visitantePromise;
-    if (visitante.data.codigo == 0) {
-      // Se não existe, cadastra o visitante
-      visitante = await cadastrar(dados);
-    }
-
-    const storage = getData();
-    const agendamento = {
-      codigo: dados.codigo,
-      codigoVisitante: visitante.data.codigo,
-      dataFim: dados.dataFim,
-      horaEntrada: dados.horaEntrada,
-      horaSaida: dados.horaSaida,
-      dataInicial: dados.dataInicial,
-      obs: dados.obs,
-      codigoUsuario: storage.codigo,
-      codigoEmpresa: storage.codigoEmpresa,
-      codigoFuncionario: storage.codigoFuncionario,
-      chegada: dados.chegada
-    };
-
-    // Envia a solicitação de inclusão de agendamento
-    const responsePromise = AlterarAgendamentoEspecial(agendamento);
-
-    // Aguarda a conclusão de todas as promessas
-    const [visitanteResponse, response] = await Promise.all([visitantePromise, responsePromise]);
-
-    if (visitanteResponse.status !== 200) {
-      throw new Error('Erro ao alterar visitante, entre em contato com o suporte técnico.');
-    }
-
-    if (response.status !== 200) {
-      throw new Error('Erro ao alterar agendamento, entre em contato com o suporte técnico.');
-    }
-
-    return response;
-  } catch (error) {
-    throw new Error('Erro ao alterar agendamento: ' + error.message);
-  }
-};
-
 export const inserirAgendamentoEspecial = async (dados) => {
-  try {
-    debugger
-    if (!dados) {
-      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
-    }
-
-    // Aguarda a obtenção do visitante
-    const visitantePromise = obterVisitante(dados.rgCpf);
-
-    // Verifica se o visitante já existe
-    let visitante = await visitantePromise;
-    if (visitante.data.codigo == 0) {
-      // Se não existe, cadastra o visitante
-      visitante = await cadastrar(dados);
-    }
-
-    const storage = getData();
-    const agendamento = {
-      codigoVisitante: visitante.data.codigo,
-      dataFim: dados.dataFim,
-      horaEntrada: dados.horaEntrada,
-      horaSaida: dados.horaSaida,
-      dataInicial: dados.dataInicial,
-      obs: dados.obs,
-      codigoUsuario: storage.codigo,
-      codigoEmpresa: storage.codigoEmpresa,
-      codigoFuncionario: storage.codigoFuncionario,
-      chegada: dados.chegada
-    };
-
-    // Envia a solicitação de inclusão de agendamento
-    const responsePromise = IncluirAgendamentoEspecial(agendamento);
-
-    // Aguarda a conclusão de todas as promessas
-    const [visitanteResponse, response] = await Promise.all([visitantePromise, responsePromise]);
-
-    if (visitanteResponse.status !== 200) {
-      throw new Error('Erro ao inserir visitante, entre em contato com o suporte técnico.');
-    }
-
-    if (response.status !== 200) {
-      throw new Error('Erro ao inserir agendamento, entre em contato com o suporte técnico.');
-    }
-
-    return response;
-  } catch (error) {
-    throw new Error('Erro ao inserir agendamento: ' + error.message);
-  }
+  return processarAgendamento(dados, IncluirAgendamentoEspecial, null);
 };
 
+export const alterarAgendamentoEspecial = async (dados) => {
+  return processarAgendamento(dados, null, AlterarAgendamentoEspecial);
+};
 
-//  AGENDAMENTO PRESTADOR
 export const inserirAgendamentoPrestador = async (dados) => {
-  try {
-    
-    if (!dados) {
-      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
-    }
-
-    // Aguarda a obtenção do visitante
-    const visitantePromise = obterVisitante(dados.rgCpf);
-
-    // Verifica se o visitante já existe
-    let visitante = await visitantePromise;
-    if (visitante.data.codigo == 0) {
-      // Se não existe, cadastra o visitante
-      visitante = await cadastrar(dados);
-    }
-
-    const storage = getData();
-    const agendamento = {
-      codigoVisitante: visitante.data.codigo,
-      dataFim: dados.dataFim,
-      horaEntrada: dados.horaEntrada,
-      horaSaida: dados.horaSaida,
-      dataInicial: dados.dataInicial,
-      obs: dados.obs,
-      codigoUsuario: storage.codigo,
-      codigoEmpresa: storage.codigoEmpresa,
-      codigoFuncionario: storage.codigoFuncionario,
-      chegada: dados.chegada
-    };
-
-    // Envia a solicitação de inclusão de agendamento
-    const responsePromise = IncluirAgendamentoPrestador(agendamento);
-
-    // Aguarda a conclusão de todas as promessas
-    const [visitanteResponse, response] = await Promise.all([visitantePromise, responsePromise]);
-
-    if (visitanteResponse.status !== 200) {
-      throw new Error('Erro ao inserir visitante, entre em contato com o suporte técnico.');
-    }
-
-    if (response.status !== 200) {
-      throw new Error('Erro ao inserir agendamento, entre em contato com o suporte técnico.');
-    }
-
-    return response;
-  } catch (error) {
-    throw new Error('Erro ao inserir agendamento: ' + error.message);
-  }
+  return processarAgendamento(dados, IncluirAgendamentoPrestador, null);
 };
 
 export const alterarAgendamentoPrestador = async (dados) => {
-  try {
-    debugger;
-    if (!dados) {
-      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
-    }
-
-    // Aguarda a obtenção do visitante
-    const visitantePromise = obterVisitante(dados.rgCpf);
-
-    // Verifica se o visitante já existe
-    let visitante = await visitantePromise;
-    if (visitante.data.codigo == 0) {
-      // Se não existe, cadastra o visitante
-      visitante = await cadastrar(dados);
-    }
-
-    const storage = getData();
-    const agendamento = {
-      codigo: dados.codigo,
-      codigoVisitante: visitante.data.codigo,
-      dataFim: dados.dataFim,
-      horaEntrada: dados.horaEntrada,
-      horaSaida: dados.horaSaida,
-      dataInicial: dados.dataInicial,
-      obs: dados.obs,
-      codigoUsuario: storage.codigo,
-      codigoEmpresa: storage.codigoEmpresa,
-      codigoFuncionario: storage.codigoFuncionario,
-      chegada: dados.chegada
-    };
-
-    // Envia a solicitação de inclusão de agendamento
-    const responsePromise = AlterarAgendamentoPrestador(agendamento);
-
-    // Aguarda a conclusão de todas as promessas
-    const [visitanteResponse, response] = await Promise.all([visitantePromise, responsePromise]);
-
-    if (visitanteResponse.status !== 200) {
-      throw new Error('Erro ao alterar visitante, entre em contato com o suporte técnico.');
-    }
-
-    if (response.status !== 200) {
-      throw new Error('Erro ao alterar agendamento, entre em contato com o suporte técnico.');
-    }
-
-    return response;
-  } catch (error) {
-    throw new Error('Erro ao alterar agendamento: ' + error.message);
-  }
+  return processarAgendamento(dados, null, AlterarAgendamentoPrestador);
 };
 
 //  AGENDAMENTO MASSA

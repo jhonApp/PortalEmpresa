@@ -82,6 +82,7 @@ const screensValidations = {
     dataInicial: true,
     dataFim: true,
     horaEntrada: true,
+    horaSaida: true,
   },
   agendamento: {
     rgCpf: true,

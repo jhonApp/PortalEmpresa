@@ -70,6 +70,7 @@ function AgendamentoPrestador({ onClose, updateTable, data, action }) {
         onLoadingChange={handleLoadingChange}
         invalidFields={invalidFields}
         screenValidation={"agendamento"}
+        action={action}
         renderStepContent={(step) => {
           switch (step) {
             case 0:
