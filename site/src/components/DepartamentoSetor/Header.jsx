@@ -27,6 +27,7 @@ function Header({ atualizarDepartamento, atualizarSetor }) {
     display: 'flex',
     justifyContent: 'flex-start',
     padding: '17px',
+    fontSize: '20px',
     borderRadius: '10px',
     backgroundColor: 'transparent',
     fontWeight: 'bold',
@@ -60,8 +61,8 @@ function Header({ atualizarDepartamento, atualizarSetor }) {
       style={{ borderRadius: '10px' }}
       component={Paper}
     >
-      <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Configuração de Departamento ou Setor</Typography>
-      <Typography marginTop={-1} variant="subtitle1" component="h6">Selecione a opção que deseja configurar</Typography>
+      <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Configuração de Departamento ou Setor</Typography>
+      <Typography marginTop={-1} variant="subtitle1" style={{ fontSize: '16px' }} component="h6">Selecione a opção que deseja configurar</Typography>
       <Box display="flex" gap={2} marginTop={2}>
         <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Departamentos', 'Insira o nome e clique no botão a seguir para incluir um novo departamento', 'Departamento')}>
           <div style={iconContainerStyle}><Briefcase size={20} color="#000" /></div>

@@ -15,7 +15,7 @@ const formControlStyle = {
 };
 
 const labelStyle = {
-  fontSize: '14px',
+  fontSize: '16px',
   fontWeight: 600
 };
 
@@ -54,10 +54,6 @@ function SecaoDepartamentoSetor({ setorData, departamentoData, loading, setLoadi
       } else if (!secaoSelecionada && setorSelecionada) {
         showWarningToast("Por favor, selecione um departamento.");
       } else {
-        // Nenhum departamento e setor selecionado
-        // Aqui você pode lidar com isso de acordo com seus requisitos
-        // Por exemplo, você pode exibir uma mensagem ou realizar alguma outra ação
-        //showWarningToast("Por favor, selecione um departamento e um setor.");
       }
     } catch (error) {
       showErrorToast(error.message);
@@ -81,7 +77,7 @@ function SecaoDepartamentoSetor({ setorData, departamentoData, loading, setLoadi
       <Box display="flex">
         {/* Departamento */}
         <Box style={{ height: 'auto' }}>
-          <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Departamento</Typography>
+          <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Departamento</Typography>
           <FormControl component={Paper} sx={formControlStyle}>
             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group" value={secaoSelecionada} onChange={handleRadioChange}>
               {departamentoData.map((departamento, index) => (
@@ -95,7 +91,7 @@ function SecaoDepartamentoSetor({ setorData, departamentoData, loading, setLoadi
         </div>
         {/* Setor */}
         <Box marginLeft={2}>
-          <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Setor</Typography>
+          <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Setor</Typography>
           <FormControl component={Paper} sx={formControlStyle}>
             <FormGroup>
               {setorData.map((setor, index) => (

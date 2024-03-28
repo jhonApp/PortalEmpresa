@@ -34,8 +34,7 @@ function PopupDialog({ open, handleClose, updateDepartamento, updateSetor, title
             padding: '30px',
             boxShadow: 'none',
             overflowY: 'auto',
-            height: 'auto', 
-            
+            height: 'auto'
           }}
         >
           <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0), fontSize: 24 }}>{title}</Typography>

@@ -15,10 +15,11 @@ function Header({ atualizarCargo }) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '50%',
+    borderRadius: '15px',
     backgroundColor: 'lightgray',
     padding: theme.spacing(1),
-    height: '20px',
+    height: '40px',
+    width: '40px',
     marginRight: theme.spacing(1),
   };
 
@@ -26,12 +27,14 @@ function Header({ atualizarCargo }) {
     display: 'flex',
     justifyContent: 'flex-start',
     padding: '17px',
+    fontSize: '20px',
     borderRadius: '10px',
     backgroundColor: 'transparent',
     fontWeight: 'bold',
     color: 'black',
     textTransform: 'none',
-    width: theme.spacing(29)
+    width: '300px',
+    height: '84px'
   };
 
   const handleOpenPopup = (title, description, type) => {
@@ -55,12 +58,11 @@ function Header({ atualizarCargo }) {
       display="flex"
       backgroundColor="#FAFAFA"
       flexDirection="column"
-      height={theme.spacing(20)}
       style={{ borderRadius: '10px' }}
       component={Paper}
     >
-      <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Configuração de Departamento ou Setor</Typography>
-      <Typography marginTop={-1} variant="subtitle1" component="h6">Selecione a opção que deseja configurar</Typography>
+      <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Configuração de Departamento ou Setor</Typography>
+      <Typography marginTop={-1} variant="subtitle1" style={{ fontSize: '16px' }} component="h6">Selecione a opção que deseja configurar</Typography>
       <Box display="flex" gap={2} marginTop={2}>
         <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Cargos', 'Insira o nome e clique no botão a seguir para incluir um novo cargo', 'Cargo')}>
           <div style={iconContainerStyle}><Briefcase size={20} color="#000" /></div>
