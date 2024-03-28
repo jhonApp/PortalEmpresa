@@ -1,4 +1,4 @@
-import { obterSetor,incluirSetor,excluirSetor } from "../api/setor";
+import { obterSetor,incluirSetor,excluirSetor,updateSetor } from "../api/setor";
 import { getData } from './storageService';
 
 export const inserirSetor = async (dados) => {
@@ -61,4 +61,30 @@ export const listarSetor = async () => {
       setLoading(false);
       setValid(false);
     }
+};
+
+export const alterarSetor = async (dados) => {
+  try {
+    if (!dados) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    const storage = getData();
+    var setorDto = {
+      CodigoEmpresa: storage.codigoEmpresa,
+      CodigoUsuario: storage.codigo,
+      Nome: dados.nome,
+      Codigo: dados.codigo
+    }
+
+    const response = await updateSetor(setorDto);
+
+    if (response.status !== 200) {
+      throw new Error('Erro ao alterar setor, entre em contato com o suporte técnico.');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error('Erro ao alterar setor: ' + error.message);
+  }
 };
