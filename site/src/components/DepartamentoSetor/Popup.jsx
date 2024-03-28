@@ -21,11 +21,11 @@ function PopupDialog({ open, handleClose, updateDepartamento, updateSetor, title
   };
   
   return (
-    <Dialog open={open} onClose={handleClose} >
+    <Dialog open={open} onClose={handleClose} maxWidth="none">
       <DialogActions sx={{position: 'absolute', marginRight: 0, top: 16, right: 0}}>
         <Button onClick={handleClose}><XCircle size={28} color="#FF0B0B"></XCircle></Button>
       </DialogActions>
-      <DialogContent style={{ padding: '0px' }} >
+      <DialogContent style={{ padding: '0px', maxWidth: 'none' }} >
         <Paper
           style={{
             backgroundColor: '#FAFAFA',
@@ -35,10 +35,11 @@ function PopupDialog({ open, handleClose, updateDepartamento, updateSetor, title
             boxShadow: 'none',
             overflowY: 'auto',
             height: 'auto', 
+            
           }}
         >
-          <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0) }}>{title}</Typography>
-          <Typography variant="h3" style={{ marginBottom: theme.spacing(2), fontSize: 13 }}>{description}</Typography>
+          <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', marginBottom: theme.spacing(0), fontSize: 24 }}>{title}</Typography>
+          <Typography variant="h3" style={{ marginBottom: theme.spacing(2), fontSize: 14 }}>{description}</Typography>
           {renderContent()}
         </Paper>
       </DialogContent>

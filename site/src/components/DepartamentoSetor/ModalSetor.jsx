@@ -16,6 +16,8 @@ const ModalSetor = ({ updateSetor }) => {
   const [setores, setSetor] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [codigoSetor, setCodigoSetor] = useState(null);
+  const [formMode, setFormMode] = useState('incluir');
+  const nomeInputRef = useRef(null);
 
   const handleLoadingChange = (isLoading) => {
     setLoading(isLoading);
@@ -29,7 +31,6 @@ const ModalSetor = ({ updateSetor }) => {
   const fetchData = async () => {
     try {
       handleLoadingChange(true);
-
       const listaSetores = await listarSetor();
       setSetor(listaSetores);
       handleLoadingChange(false);
@@ -93,6 +94,7 @@ const ModalSetor = ({ updateSetor }) => {
         try{
             await inserirSetor(formData);
             showSuccessToast("Criado com sucesso!");
+            values.nome = '';
             fetchData();
             updateSetor();
         } catch (e) {
@@ -106,6 +108,49 @@ const ModalSetor = ({ updateSetor }) => {
       handleLoadingChange(false);
       showErrorToast(error.message);
     }
+  };
+
+  const handleUpdate = (departamento) => {
+    setFormMode('alterar');
+    handleChange('nome', departamento.nome);
+    const { nome, codigo } = departamento;
+    setFormData({ ...formData, nome, codigo });
+  }; 
+
+  const handleAlterar = async () => {
+    try {
+      handleLoadingChange(true);
+
+      const { errorTypes } = validateForm(formData, 'setor');
+      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
+      if (hasErrors) {
+        showErrorToast('Por favor, preencha os campos obrigatórios');
+        return;
+      }
+
+      await handleSubmit(async () => {        
+        try{
+            await alterarDepartamento(formData);
+            showSuccessToast("Alterado com sucesso!");
+            values.nome = '';
+            fetchData();
+            updateDepartamento();
+        } catch (e) {
+            handleLoadingChange(false);
+            showErrorToast(e.message);
+        }
+      });
+      handleLoadingChange(false);
+
+    } catch (error) {
+      handleLoadingChange(false);
+      showErrorToast(error.message);
+    }
+  };
+
+  const handleCancel = () => {
+    setFormMode('incluir');
+    values.nome = '';
   };
 
   return (

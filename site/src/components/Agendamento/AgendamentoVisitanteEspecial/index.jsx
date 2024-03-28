@@ -11,7 +11,7 @@ function AgendamentoVisitanteEspecial({ onClose, updateTable, data, action }) {
   const [invalidFields, setInvalidFields] = useState({});
   const [loading, setLoading] = useState(false);
   const [createFunction, setCreateFunction] = useState(null);
-
+  console.log(action)
   useEffect(() => {
     if (data) {
       const dataCopy = { ...data };

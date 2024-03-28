@@ -15,10 +15,11 @@ function Header({ atualizarDepartamento, atualizarSetor }) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '50%',
+    borderRadius: '15px',
     backgroundColor: 'lightgray',
     padding: theme.spacing(1),
-    height: '20px',
+    height: '40px',
+    width: '40px',
     marginRight: theme.spacing(1),
   };
 
@@ -31,7 +32,8 @@ function Header({ atualizarDepartamento, atualizarSetor }) {
     fontWeight: 'bold',
     color: 'black',
     textTransform: 'none',
-    width: theme.spacing(29)
+    width: '300px',
+    height: '84px'
   };
 
   const handleOpenPopup = (title, description, type) => {
@@ -55,7 +57,6 @@ function Header({ atualizarDepartamento, atualizarSetor }) {
       display="flex"
       backgroundColor="#FAFAFA"
       flexDirection="column"
-      height={theme.spacing(20)}
       style={{ borderRadius: '10px' }}
       component={Paper}
     >

@@ -46,7 +46,7 @@ const StyledPaper = styled(Paper)({
     textAlign: 'center',
     boxShadow: 'none',
     marginTop: '20px',
-    width: 620,
+    width: 710,
     height: 290,
 });
 

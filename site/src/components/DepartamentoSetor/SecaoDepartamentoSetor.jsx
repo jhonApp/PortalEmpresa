@@ -4,18 +4,18 @@ import Checkbox from '@mui/material/Checkbox';
 import { X } from 'phosphor-react';
 import { inserirSecao } from '../../../service/secaoService';
 import { showSuccessToast, showErrorToast, showWarningToast } from '../../Utils/Notification';
+import { height } from '@mui/system';
 
 const formControlStyle = {
   padding: '10px',
-  height: '200px',
-  width: '200px',
+  width: '300px',
   marginTop: '5px',
-  borderRadius: '10px',
+  borderRadius: '20px',
   backgroundColor: '#FAFAFA'
 };
 
 const labelStyle = {
-  fontSize: '13px',
+  fontSize: '14px',
   fontWeight: 600
 };
 
@@ -80,7 +80,7 @@ function SecaoDepartamentoSetor({ setorData, departamentoData, loading, setLoadi
     >
       <Box display="flex">
         {/* Departamento */}
-        <Box>
+        <Box style={{ height: 'auto' }}>
           <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Departamento</Typography>
           <FormControl component={Paper} sx={formControlStyle}>
             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group" value={secaoSelecionada} onChange={handleRadioChange}>
