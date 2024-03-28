@@ -1,4 +1,4 @@
-import { obterDepartamento, incluirDepartamento, excluirDepartamento } from "../api/departamento";
+import { obterDepartamento, incluirDepartamento, excluirDepartamento, updateDepartamento } from "../api/departamento";
 import { getData } from './storageService';
 
 export const inserirDepartamento = async (dados) => {
@@ -62,4 +62,30 @@ export const listarDepartamentos = async () => {
       setLoading(false);
       setValid(false);
     }
+};
+
+export const alterarDepartamento = async (dados) => {
+  try {
+    if (!dados) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    const storage = getData();
+    var departamentoDto = {
+      CodigoEmpresa: storage.codigoEmpresa,
+      CodigoUsuario: storage.codigo,
+      Nome: dados.nome,
+      Codigo: dados.codigo
+    }
+
+    const response = await updateDepartamento(departamentoDto);
+
+    if (response.status !== 200) {
+      throw new Error('Erro ao alterar departamento, entre em contato com o suporte técnico.');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error('Erro ao alterar departamento: ' + error.message);
+  }
 };

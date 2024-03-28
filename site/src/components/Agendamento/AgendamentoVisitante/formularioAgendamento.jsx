@@ -20,6 +20,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
     errors,
     handleChange,
     handleValidation,
+    renderErrorMessage
   } = useForm(
     formData,
     validateForm,
@@ -31,10 +32,19 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
   };
 
   const handleFormChange = (fieldName, value) => {
-    handleChange(fieldName, value);
+    let updatedValue = value;
+  
+    // Verificar se o campo é telefone e se o valor é válido
+    if (fieldName === 'horaEntrada' || fieldName === 'horaSaida') {
+      updatedValue = dayjs(value, "HH:mm").format('HH:mm');
+    }
+  
+    const updatedValues = { ...values, [fieldName]: updatedValue };
+    handleChange(fieldName, updatedValue);
     const isValid = handleValidation(fieldName);
-    onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange (isValid);
+    console.log(isValid)
+    onDataChange(updatedValues);
+    onFieldValidationChange(isValid);
   };
 
   const handleCheckboxChange = (e) => {
@@ -62,6 +72,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
                 onBlur={() => handleValidation('dataInicial')}
               />
+              {renderErrorMessage('dataInicial')}
             </FormRow>
             <FormRow>
               <StyledTimePicker
@@ -78,6 +89,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 onChange={(e) => handleFormChange('horaEntrada', e)}
                 onBlur={() => handleValidation('horaEntrada')}
               />
+              {renderErrorMessage('horaEntrada')}
             </FormRow>
           </Column>
           <Column>
@@ -96,6 +108,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 onChange={(e) => handleFormChange('horaSaida', e)}
                 onBlur={() => handleValidation('horaSaida')}
               />
+              {renderErrorMessage('horaSaida')}
             </FormRow>
             <FormRow>
               <StyledDatePicker
@@ -111,6 +124,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 onChange={(e) => handleFormChange('dataFim', e)}
                 onBlur={() => handleValidation('dataFim')}
               />
+              {renderErrorMessage('dataFim')}
             </FormRow>
           </Column>
         </FormContainer>
