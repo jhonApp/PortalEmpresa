@@ -7,15 +7,14 @@ import { showSuccessToast, showErrorToast, showWarningToast } from '../../Utils/
 
 const formControlStyle = {
   padding: '10px',
-  height: '200px',
-  width: '200px',
+  width: '300px',
   marginTop: '5px',
-  borderRadius: '10px',
+  borderRadius: '20px',
   backgroundColor: '#FAFAFA'
 };
 
 const labelStyle = {
-  fontSize: '13px',
+  fontSize: '16px',
   fontWeight: 600
 };
 
@@ -61,10 +60,6 @@ function SecaoCargo({ setorData, departamentoData, cargoData, loading, setLoadin
       } else if (!departamentoSelecionado && setorSelecionado) {
         showWarningToast("Por favor, selecione um departamento.");
       } else {
-        // Nenhum departamento e setor selecionado
-        // Aqui você pode lidar com isso de acordo com seus requisitos
-        // Por exemplo, você pode exibir uma mensagem ou realizar alguma outra ação
-        //showWarningToast("Por favor, selecione um departamento e um setor.");
       }
     } catch (error) {
       showErrorToast(error.message);
@@ -88,7 +83,7 @@ function SecaoCargo({ setorData, departamentoData, cargoData, loading, setLoadin
       <Box display="flex">
         {/* Departamento */}
         <Box>
-          <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Departamento</Typography>
+          <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Departamento</Typography>
           <FormControl component={Paper} sx={formControlStyle}>
             <RadioGroup aria-labelledby="deoartamento-radio-buttons-group-label" name="departamento-radio-buttons-group" value={departamentoSelecionado} onChange={handleRadioChange}>
               {departamentoData.map((departamento, index) => (

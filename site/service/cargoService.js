@@ -1,4 +1,4 @@
-import { obterCargo, incluirCargo, excluirCargo } from "../api/cargo";
+import { obterCargo, incluirCargo, excluirCargo, updateCargo } from "../api/cargo";
 import { getData } from './storageService';
 
 export const inserirCargo = async (dados) => {
@@ -45,7 +45,7 @@ export const deleteCargo = async (codigoCargo) => {
 
     return response;
   } catch (error) {
-    throw new Error('Erro ao inserir cargo: ' + error.message);
+    throw new Error('Erro ao excluir cargo: ' + error.message);
   }
 };
   
@@ -61,4 +61,30 @@ export const listarCargo = async () => {
       setLoading(false);
       setValid(false);
     }
+};
+
+export const alterarCargo = async (dados) => {
+  try {
+    if (!dados) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    const storage = getData();
+    var cargoDto = {
+      CodigoEmpresa: storage.codigoEmpresa,
+      CodigoUsuario: storage.codigo,
+      Nome: dados.nome,
+      Codigo: dados.codigo
+    }
+
+    const response = await updateCargo(cargoDto);
+
+    if (response.status !== 200) {
+      throw new Error('Erro ao alterar setor, entre em contato com o suporte técnico.');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error('Erro ao alterar setor: ' + error.message);
+  }
 };
