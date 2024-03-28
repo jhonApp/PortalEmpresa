@@ -18,7 +18,7 @@ function TipoAgendamento({ atualizarAgendamento }) {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '15px',
-    backgroundColor: 'lightgray',
+    backgroundColor: '#BCC0CF',
     padding: theme.spacing(1),
     height: '40px',
     width: '40px',

@@ -25,6 +25,7 @@ export const obterFuncionario = async (codigoEmpresa, status) => {
 
 export const inserirFuncionario = async (data, foto) => {
   try {
+    debugger;
     if (!data) {
       throw new Error('O valor está nulo.');
     }

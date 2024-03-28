@@ -27,7 +27,7 @@ const StyledButtonSecundaryFiltro = styled(Button)({
 });
 
 const StyledButtonPrimary = styled(Button)({
-  backgroundColor: 'black',
+  backgroundColor: '#171E36',
   color: 'white',
   padding: '10px 20px',
   fontSize: '14px',

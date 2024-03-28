@@ -77,3 +77,26 @@ export const excluirCartao = async (codigoCartao, codigoEmpresa) => {
     throw error;
   }
 };
+
+export const updateCartao = async (data) => {
+  try {
+    
+    if (!data) {
+      throw new Error('O valor está nulo.');
+    }
+
+    const url = `${API_URL}/alterarCartao`;
+
+    const response = await axios.post(url, data, {
+      validateStatus: status => status < 500,
+    });
+
+    if (response.status != 200) {
+      throw new Error(response.data);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
