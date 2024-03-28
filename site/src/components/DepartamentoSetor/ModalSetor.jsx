@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyledTextField, StyledPaper, FormContainer, FormRow } from '../../Utils/StyledForm';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
 import { Box, Card, CardContent, IconButton, Typography } from '@mui/material';
 import { PencilSimple, TrashSimple } from 'phosphor-react';
-import { StyledButtonPrimary } from '../../Utils/StyledButton';
+import { StyledButtonPrimary, StyledButtonSecundary } from '../../Utils/StyledButton';
 import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
-import { inserirSetor, listarSetor, deleteSetor } from '../../../service/setorService';
+import { inserirSetor, listarSetor, deleteSetor, alterarSetor } from '../../../service/setorService';
 
 const ModalSetor = ({ updateSetor }) => {
   const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ const ModalSetor = ({ updateSetor }) => {
     try {
       handleLoadingChange(true);
 
-      const { errorTypes } = validateForm(formData, 'departamento');
+      const { errorTypes } = validateForm(formData, 'setor');
       const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
       if (hasErrors) {
         showErrorToast('Por favor, preencha os campos obrigatórios');
@@ -110,10 +110,10 @@ const ModalSetor = ({ updateSetor }) => {
     }
   };
 
-  const handleUpdate = (departamento) => {
+  const handleUpdate = (setor) => {
     setFormMode('alterar');
-    handleChange('nome', departamento.nome);
-    const { nome, codigo } = departamento;
+    handleChange('nome', setor.nome);
+    const { nome, codigo } = setor;
     setFormData({ ...formData, nome, codigo });
   }; 
 
@@ -130,11 +130,11 @@ const ModalSetor = ({ updateSetor }) => {
 
       await handleSubmit(async () => {        
         try{
-            await alterarDepartamento(formData);
+            await alterarSetor(formData);
             showSuccessToast("Alterado com sucesso!");
             values.nome = '';
             fetchData();
-            updateDepartamento();
+            updateSetor();
         } catch (e) {
             handleLoadingChange(false);
             showErrorToast(e.message);
@@ -153,6 +153,8 @@ const ModalSetor = ({ updateSetor }) => {
     values.nome = '';
   };
 
+  const handleSubmitButtonLabel = formMode === 'incluir' ? 'Incluir' : 'Alterar';
+
   return (
     <StyledPaper sx={{ background: '#FAFAFA' }} elevation={1}>
       <FormContainer>
@@ -166,6 +168,7 @@ const ModalSetor = ({ updateSetor }) => {
               type="text"
               autoComplete="off"
               name="nome"
+              inputRef={nomeInputRef}
               error={errors.nome}
               value={values.nome}
               onChange={(e) => {
@@ -174,11 +177,15 @@ const ModalSetor = ({ updateSetor }) => {
               }}
               onBlur={handleValidation}
             />
-            {renderErrorMessage('nome')}
           </div>
-          <StyledButtonPrimary variant="contained" color="primary" onClick={handleSave} style={{ marginLeft: '10px', marginTop: '10px' }}>
-            Incluir
+          <StyledButtonPrimary variant="contained" color="primary" onClick={formMode === 'incluir' ? handleSave : handleAlterar} style={{ marginLeft: '10px', marginTop: '10px' }}>
+            {handleSubmitButtonLabel}
           </StyledButtonPrimary>
+          {formMode === 'alterar' ? (
+            <StyledButtonSecundary variant="contained" color="primary" onClick={handleCancel} style={{ marginLeft: '10px', marginTop: '10px' }}>
+              Cancelar
+            </StyledButtonSecundary>
+          ) : null}
         </FormRow>
       </FormContainer>
       <div>
@@ -195,7 +202,7 @@ const ModalSetor = ({ updateSetor }) => {
               </CardContent>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pr: 1}}>
-                  <IconButton aria-label="play/pause" >
+                  <IconButton aria-label="play/pause" onClick={() => handleUpdate(setor)}>
                     <PencilSimple size={20} color="#676767" />
                   </IconButton>
                   <IconButton aria-label="play/pause" onClick={() => handleClickOpen(setor.codigo)} >
