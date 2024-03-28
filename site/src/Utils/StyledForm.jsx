@@ -14,10 +14,10 @@ const StyledTextField = styled(TextField)({
   },
   '& .MuiInputLabel-root': {
     fontSize: '1.1rem',
-    top: '-2px'
+    top: '-6px'
   },
   '& .MuiOutlinedInput-input': {
-    padding: '17px',
+    padding: '12px',
   },
 });
 
@@ -32,13 +32,13 @@ const StyledSelectField = styled(Select)({
     },
     '& .MuiInputLabel-root': {
       fontSize: '0.9rem',
-      top: '-2px'
+      top: '-6px'
     },
     '& .MuiOutlinedInput-input': {
       padding: '17px',
     },
     '& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input': {
-        fontSize: '14px',
+        fontSize: '12px',
     }
 });
 
@@ -46,8 +46,8 @@ const StyledPaper = styled(Paper)({
     textAlign: 'center',
     boxShadow: 'none',
     marginTop: '20px',
-    width: 710,
-    height: 290,
+    width: 640,
+    height: 400,
 });
 
 const StyledPaperFiltro = styled(Paper)({

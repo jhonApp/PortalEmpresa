@@ -65,7 +65,7 @@ export const cadastrarFuncionario = async (dados) => {
         NumeroTelefone: dados.telefone,
       }
     };
-
+    debugger
     const foto = dados.file ? base64Valid(dados.file) : "";
 
     // Envia a solicitação de inserção do funcionário

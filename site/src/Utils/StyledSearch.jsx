@@ -3,7 +3,8 @@ import InputBase from '@mui/material/InputBase';
 
 const Search = styled('div')({
     position: 'relative',
-    borderRadius: 30, // Você pode definir o borderRadius diretamente
+    borderRadius: 30,
+    height: '42px',
     backgroundColor: '#EBEAEF',
     marginRight: 16,
     marginTop: 5,
@@ -33,9 +34,9 @@ const StyledInputBase = styled(InputBase)({
     fontSize: '14px',
     paddingLeft: 'calc(1em + 32px)',
     transition: 'width 300ms',
-    width: '240px',
+    width: '300px',
     '@media (min-width: 960px)': {
-      width: '200px',
+      width: '240px',
     },
   },
 });

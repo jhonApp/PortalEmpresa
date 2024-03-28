@@ -52,7 +52,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
         sx={{
           backgroundColor: 'transparent',
           borderBottom: '1px solid #BCC0CF',
-          '& .MuiAccordion-region': { height: expanded ? 'auto' : 0 },
+          '& .MuiAccordion-region': { height: expanded ? '330px' : 0 },
           '& .MuiAccordionDetails-root': { display: expanded ? 'block' : 'none', backgroundColor: 'transparent', },
         }}
       >

@@ -58,7 +58,6 @@ function Header({ atualizaCartao }) {
       display="flex"
       backgroundColor="#FAFAFA"
       flexDirection="column"
-      height={theme.spacing(20)}
       style={{ borderRadius: '10px' }}
       component={Paper}
     >

@@ -5,9 +5,10 @@ import useForm from './Formulario/useForm';
 import { validateForm } from './Formulario/validation';
 import PropTypes from 'prop-types';
 import { showSuccessToast, showErrorToast } from '../Utils/Notification';
+import { StyledStepper } from '../Utils/StyledDialog';
 
 const StyledButtonPrimary = styled(Button)({
-  backgroundColor: 'black',
+  backgroundColor: '#171E36',
   color: 'white',
   padding: '10px',
   fontSize: '14px',
@@ -145,7 +146,7 @@ const HorizontalLinearStepper = ({
 
   return (
     <Box sx={{ width: '100%', background: '#FAFAFA' }}>
-      <Stepper alternativeLabel activeStep={activeStep}>
+      <StyledStepper alternativeLabel activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -160,7 +161,7 @@ const HorizontalLinearStepper = ({
             </Step>
           );
         })}
-      </Stepper>
+      </StyledStepper>
       <Box sx={{ width: '100%' }}>
         {renderStepContent(activeStep)}
         {activeStep === steps.length - 1 && (

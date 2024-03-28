@@ -22,8 +22,8 @@ function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
     borderRadius: '40%',
     backgroundColor: 'lightgray',
     padding: theme.spacing(1),
-    height: 'auto',
-    width: '20px',
+    height: '40px',
+    width: '40px',
     marginRight: theme.spacing(1),
   };
 
@@ -79,7 +79,7 @@ function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
     >
       <Box display="flex" gap={2} flexDirection={'column'}>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Cartões Vinculados</Typography>
+          <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Cartões Vinculados</Typography>
           <Search>
               <SearchIconWrapper>
                 <IconButton>
@@ -106,10 +106,10 @@ function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
                     <CardContent sx={{ flex: '1 0 auto', p: '10px', display: 'flex', alignItems: 'center' }} >
                       <div style={iconContainerStyle}><CreditCard size={20} color="#000" /></div>
                       <div style={{ marginLeft: theme.spacing(1), display:'flex', flexDirection:'column' }}>
-                        <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 16 }}>
+                        <Typography variant="h6" component="h7" style={{ fontWeight: 600, fontSize: 18 }}>
                           {cartoesFiltrados[index].codigoCartao}
                         </Typography>
-                        <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 12, maxWidth: 100 }}>
+                        <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 16, maxWidth: 240 }}>
                           {cartoesFiltrados[index].nomeUsuario}
                         </Typography>
                       </div>
@@ -117,7 +117,7 @@ function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pr: 1}}>
                         <IconButton aria-label="play/pause" onClick={() => handleClickOpen(cartoesFiltrados[index].codigoCartao)} >
-                          <TrashSimple size={20} color="#FF0B0B"/>
+                          <TrashSimple size={24} color="#FF0B0B"/>
                         </IconButton>
                       </Box>
                     </Box>
