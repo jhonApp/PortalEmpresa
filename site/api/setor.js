@@ -62,7 +62,7 @@ export const excluirSetor = async (codigoSetor) => {
     }
 
     const url = `${API_URL}/excluirSetor?codigoSetor=${codigoSetor}`;
-    
+
     const response = await axios.delete(url, codigoSetor, {
       validateStatus: status => status < 500,
     });

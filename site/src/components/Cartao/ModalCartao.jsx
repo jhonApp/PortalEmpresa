@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyledTextField, StyledPaper, FormContainer, FormRow } from '../../Utils/StyledForm';
+import { StyledTextField, StyledPaper, FormContainer, FormRow, BootstrapInput } from '../../Utils/StyledForm';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
-import { Box, Card, CardContent, IconButton, Typography } from '@mui/material';
+import { Box, Card, CardContent, IconButton, Typography, InputLabel } from '@mui/material';
+import { StyledBox } from '../../Utils/StyledDialog';
+import { StyledCard, StyledCardContent, StyledCardBox, StyledIconButton } from '../../Utils/StyledCard';
+import TextWithEllipsis from '../../Utils/Helpers';
 import { PencilSimple, TrashSimple, MagnifyingGlass, Circle } from 'phosphor-react';
 import { StyledButtonPrimary, StyledButtonSecundary } from '../../Utils/StyledButton';
 import { Search, SearchIconWrapper, StyledInputBase } from '../../Utils/StyledSearch';
@@ -11,7 +14,7 @@ import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
 import { inserirCartao, listarCartao, deleteCartao, alterarCartao } from '../../../service/cartaoService';
 
-const ModalCargo = ({ atualizaCartao }) => {
+const ModalCartao = ({ atualizaCartao }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [cartoes, setCartoes] = useState([]);
@@ -20,7 +23,7 @@ const ModalCargo = ({ atualizaCartao }) => {
   const [digitado, setDigitado] = useState('');
   const [cartoesFiltrados, setCartoesFiltrados] = useState([]);
   const [formMode, setFormMode] = useState('incluir');
-  const nomeInputRef = useRef(null);
+  const numeroInputRef = useRef(null);
 
 
   const handleLoadingChange = (isLoading) => {
@@ -96,17 +99,18 @@ const ModalCargo = ({ atualizaCartao }) => {
   const handleUpdate = (cartao) => {
     setFormMode('alterar');
     handleChange('numero', cartao.codigoCartao);
+    const { codigoCartao } = cartao;
     setFormData({ ...formData, codigoCartao });
   };
 
   const handleAlterar = async () => {
     try {
       handleLoadingChange(true);
-
       const { errorTypes } = validateForm(formData, 'cartao');
       const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
       if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
+        showErrorToast('Por favor, preencha o campo obrigatório ou realize a alteração conforme esperado.');
+        handleLoadingChange(false);
         return;
       }
 
@@ -116,6 +120,7 @@ const ModalCargo = ({ atualizaCartao }) => {
             showSuccessToast("Alterado com sucesso!");
             values.numero = '';
             fetchData();
+            setFormMode('incluir');
             atualizaCartao();
         } catch (e) {
             handleLoadingChange(false);
@@ -138,6 +143,7 @@ const ModalCargo = ({ atualizaCartao }) => {
       const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
       if (hasErrors) {
         showErrorToast('Por favor, preencha os campos obrigatórios');
+        handleLoadingChange(false);
         return;
       }
 
@@ -169,19 +175,19 @@ const ModalCargo = ({ atualizaCartao }) => {
   const handleSubmitButtonLabel = formMode === 'incluir' ? 'Incluir' : 'Alterar';
 
   return (
-    <StyledPaper sx={{ background: '#FAFAFA' }} elevation={1}>
+    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 450 }} elevation={1}>
       <FormContainer>
-        <FormRow style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ width: '50%' }}>
-            <StyledTextField
-              label="Número *"
-              variant="outlined"
-              fullWidth
-              margin="normal"
+        <FormRow style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+          <div>
+            <InputLabel shrink htmlFor="bootstrap-input" sx={{ fontSize: 20, color:'#000', fontWeight: 600, textAlign: 'start'}}>
+              Numero *
+            </InputLabel>
+            <BootstrapInput 
+              id="bootstrap-input"
               type="text"
               autoComplete="off"
               name="numero"
-              inputRef={nomeInputRef}
+              inputRef={numeroInputRef}
               error={errors.numero}
               value={values.numero}
               onChange={(e) => {
@@ -190,20 +196,19 @@ const ModalCargo = ({ atualizaCartao }) => {
               }}
               onBlur={handleValidation}
             />
-            {renderErrorMessage('numero')}
           </div>
-          <StyledButtonPrimary variant="contained" color="primary" onClick={formMode === 'incluir' ? handleSave : handleAlterar} style={{ marginLeft: '10px', marginTop: '10px' }}>
+          <StyledButtonPrimary variant="contained" color="primary" onClick={formMode === 'incluir' ? handleSave : handleAlterar} style={{ width: 145, height: 40, marginLeft: '10px', marginTop: '20px' }}>
             {handleSubmitButtonLabel}
           </StyledButtonPrimary>
           {formMode === 'alterar' ? (
-            <StyledButtonSecundary variant="contained" color="primary" onClick={handleCancel} style={{ marginLeft: '10px', marginTop: '10px' }}>
+            <StyledButtonSecundary variant="contained" color="primary" onClick={handleCancel} style={{ width: 145, height: 40, marginLeft: '10px', marginTop: '20px' }}>
               Cancelar
             </StyledButtonSecundary>
           ) : null}
         </FormRow>
       </FormContainer>
       <div>
-        <Typography variant="h6" component="h7" style={{ display: 'flex', fontWeight: '600', fontSize: 24, textAlign: 'end', alignItems: 'flex-start', marginTop: 5 }}>
+        <Typography variant="h6" component="h2" style={{ display: 'flex', fontWeight: '600', fontSize: 24, textAlign: 'end', alignItems: 'flex-start', marginTop: 5 }}>
           Cartões Cadastrados
         </Typography>
         <div style={{ display: 'flex' }}>
@@ -220,10 +225,10 @@ const ModalCargo = ({ atualizaCartao }) => {
               onChange={(e) => handleSearch(e.target.value)}
             />
           </Search>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginTop: '-10px' }}>
-            <Box sx={{ background: '#E2F0E8', width: 'auto', height: 'auto', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <Circle size={16} color="#007423" weight="fill" style={{ marginRight: '8px' }} />
-              <Typography variant="h6" component="h7" style={{ fontSize: 14, color: '#007423' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '-10px' }}>
+            <Box sx={{ background: '#E2F0E8', width: '100%', height: 'auto', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '8px' }}>
+              <Circle size={16} color="#007423" weight="fill" />
+              <Typography variant="h6" component="h7" style={{ fontSize: 14, color: '#007423', marginLeft: '8px', marginRight: '17px' }}>
                 Cartão Livre
               </Typography>
             </Box>
@@ -234,33 +239,30 @@ const ModalCargo = ({ atualizaCartao }) => {
               </Typography>
             </Box>
           </div>
+
         </div>
         {cartoesFiltrados.length === 0 && (
           <Typography style={{ marginTop: '50px' }}>Nenhum resultado encontrado</Typography>
         )}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+        <StyledBox sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: '30px' }}>
           {cartoesFiltrados.map((cartao, index) => (
-            <Box key={index} sx={{ width: 'calc(50% - 10px)', mt: 2 }}>
-              <Card sx={{ display: 'flex', height: 45, borderRadius: 10, backgroundColor: cartao.status === 'A' ? '#D6EADF' : '#FBE4E4', border: cartao.status === 'A' ? '1px solid #D6EADF' : '1px solid #FBE4E4' }}>
-                <CardContent sx={{ flex: '1 0 auto', p: '10px' }} >
-                  <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 18 }}>
-                    {cartao.codigoCartao}
-                  </Typography>
-                </CardContent>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pr: 1}}>
-                    <IconButton aria-label="play/pause" onClick={() => handleUpdate(cartao)}>
-                      <PencilSimple size={20} color="#676767"  />
-                    </IconButton>
-                    <IconButton aria-label="play/pause" onClick={() => handleClickOpen(cartao.codigoCartao)} >
-                      <TrashSimple size={20} color="#FF0B0B"/>
-                    </IconButton>
-                  </Box>
-                </Box>
-              </Card>
-            </Box>
+            <StyledCard key={index} sx={{ boxShadow: 'none', backgroundColor: cartao.status === 'A' ? '#D6EADF' : '#FBE4E4', border: cartao.status === 'A' ? '1px solid #D6EADF' : '1px solid #FBE4E4' }}>
+              <StyledCardContent>
+                <TextWithEllipsis text={cartao.codigoCartao} maxLength={10} valueWeigth={600} />
+              </StyledCardContent>
+              <StyledCardBox>
+                <StyledIconButton>
+                  <IconButton onClick={() => handleUpdate(cartao)}>
+                    <PencilSimple size={20} color="#676767" />
+                  </IconButton>
+                  <IconButton onClick={() => handleClickOpen(cartao.codigoCartao)} >
+                    <TrashSimple size={20} color="#FF0B0B"/>
+                  </IconButton>
+                </StyledIconButton>
+              </StyledCardBox>
+            </StyledCard>
           ))}
-        </Box>
+        </StyledBox>
       </div>
       <AlertDialog dialogOpen={open} handleClose={() => setOpen(false)} handleDelete={handleDelete}/>
       <Progress isVisible={loading} />
@@ -268,4 +270,4 @@ const ModalCargo = ({ atualizaCartao }) => {
   );
 };
 
-export default ModalCargo;
+export default ModalCartao;

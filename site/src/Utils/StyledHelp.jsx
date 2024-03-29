@@ -6,6 +6,7 @@ const textEllipsis = css`
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
+    font-family: Roboto;
   }
 `;
 

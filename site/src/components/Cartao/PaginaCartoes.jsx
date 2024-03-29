@@ -3,8 +3,9 @@ import { Box, Paper, Card, CardContent, Typography, IconButton, useTheme } from 
 import { MagnifyingGlass } from 'phosphor-react';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { Search, SearchIconWrapper, StyledInputBase } from '../../Utils/StyledSearch';
-import { PencilSimple, TrashSimple, CreditCard } from 'phosphor-react';
+import { TrashSimple, CreditCard } from 'phosphor-react';
 import { deleteCartao } from '../../../service/cartaoService';
+import TextWithEllipsis from '../../Utils/Helpers';
 import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
 
@@ -109,9 +110,7 @@ function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
                         <Typography variant="h6" component="h7" style={{ fontWeight: 600, fontSize: 18 }}>
                           {cartoesFiltrados[index].codigoCartao}
                         </Typography>
-                        <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 16, maxWidth: 240 }}>
-                          {cartoesFiltrados[index].nomeUsuario}
-                        </Typography>
+                        <TextWithEllipsis text={cartoesFiltrados[index].nomeUsuario} maxLength={18} valueWeigth={400}/>
                       </div>
                     </CardContent>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
