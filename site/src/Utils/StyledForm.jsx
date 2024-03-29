@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Paper, TextField, Select, FormControl, FormControlLabel } from '@mui/material';
+import { Paper, TextField, Select, FormControl, FormControlLabel, InputBase } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
@@ -14,7 +14,8 @@ const StyledTextField = styled(TextField)({
   },
   '& .MuiInputLabel-root': {
     fontSize: '1.1rem',
-    top: '-6px'
+    top: '-16px',
+    background: 'transparent'
   },
   '& .MuiOutlinedInput-input': {
     padding: '12px',
@@ -46,8 +47,8 @@ const StyledPaper = styled(Paper)({
     textAlign: 'center',
     boxShadow: 'none',
     marginTop: '20px',
-    width: 640,
-    height: 400,
+    maxWidth: 640,
+    height: 280,
 });
 
 const StyledPaperFiltro = styled(Paper)({
@@ -127,4 +128,37 @@ const FormSection = styled('div')({
     marginBottom: (theme) => theme.spacing(2),
 });
 
-export { StyledFormControlLabel, FormControlSelect, StyledPaperFiltro, StyledTextField, StyledSelectField, StyledPaper, FormContainer, Column, StyledDatePicker, FormColumn, FormSection, FormRow, StyledTimePicker };
+const BootstrapInput = styled(InputBase)({
+    'label + &': {
+      marginTop: '-5px'
+    },
+    '& .MuiInputBase-input': {
+      borderRadius: 4,
+      position: 'relative',
+      backgroundColor: '#EBEAEF',
+      border: '1px solid',
+      borderColor: '#C4C7D4',
+      fontSize: '16px',
+      width: '250px',
+      padding: '10px 12px',
+      transition: 'border-color 0.3s, background-color 0.3s, box-shadow 0.3s', // Defina as transições conforme necessário
+      fontFamily: [
+        '-apple-system',
+        'BlinkMacSystemFont',
+        '"Segoe UI"',
+        'Roboto',
+        '"Helvetica Neue"',
+        'Arial',
+        'sans-serif',
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(','),
+      '&:focus': {
+        boxShadow: '#007bff 0 0 0 0.06rem', // Cor da sombra quando em foco
+        borderColor: '#C4C7D4', // Cor da borda quando em foco
+      },
+    },
+  });
+
+export { BootstrapInput, StyledFormControlLabel, FormControlSelect, StyledPaperFiltro, StyledTextField, StyledSelectField, StyledPaper, FormContainer, Column, StyledDatePicker, FormColumn, FormSection, FormRow, StyledTimePicker };

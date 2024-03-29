@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import Popup from './popupAgendamento';
+import PopupDialog from '../dialog';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import { UserMinus, UsersThree, IdentificationCard, UsersFour } from 'phosphor-react';
+import AgendamentoVisitante from './AgendamentoVisitante';
+import AgendamentoVisitanteEspecial from './AgendamentoVisitanteEspecial';
+import AgendamentoPrestador from './AgendamentoPrestador';
+import AgendamentoMassa from './AgendamentoMassa';
 import Typography from '@mui/material/Typography';
 
 function TipoAgendamento({ atualizarAgendamento }) {
@@ -44,12 +48,27 @@ function TipoAgendamento({ atualizarAgendamento }) {
     setPopupType(type);
     setPopupDescription(description);
     setPopupData(data)
-    setPopupAction(data)
+    setPopupAction(action)
     setOpenPopup(true);
   };
 
   const handleClosePopup = () => {
     setOpenPopup(false);
+  };
+
+  const renderContent = () => {
+    switch (popupType) {
+      case 'Visitante Simples':
+        return <AgendamentoVisitante onClose={handleClosePopup} updateTable={atualizarAgendamento} data={popupData} action={popupAction}/>;
+      case 'Visitante Especial':
+        return <AgendamentoVisitanteEspecial onClose={handleClosePopup} updateTable={atualizarAgendamento} data={popupData} action={popupAction}/>;
+      case 'Prestador de Serviço':
+        return <AgendamentoPrestador onClose={handleClosePopup} updateTable={atualizarAgendamento} data={popupData} action={popupAction}/>;
+      case 'Múltiplos Visitantes':
+        return <AgendamentoMassa onClose={handleClosePopup} updateTable={atualizarAgendamento} data={popupData} action={popupAction}/>;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -86,7 +105,7 @@ function TipoAgendamento({ atualizarAgendamento }) {
           Múltiplos Visitantes
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} atualizarAgendamento={atualizarAgendamento} title={popupTitle} description={popupDescription} type={popupType} />
+      <PopupDialog open={openPopup} handleClose={handleClosePopup} atualizarAgendamento={atualizarAgendamento} title={popupTitle} description={popupDescription} renderContent={renderContent} />
     </Box>
   );
 }

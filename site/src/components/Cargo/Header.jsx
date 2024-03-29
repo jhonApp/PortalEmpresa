@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Popup from './Popup';
-import OfficeChair from '../../assets/images/icones/officechair.svg';
+import PopupDialog from '../dialog';
 import { Box, Paper, Button, useTheme, Typography } from '@mui/material';
 import { Briefcase } from 'phosphor-react';
+import Cargo from './ModalCargo'
 
 function Header({ atualizarCargo }) {
   const [openPopup, setOpenPopup] = useState(false);
@@ -48,6 +48,15 @@ function Header({ atualizarCargo }) {
     setOpenPopup(false);
   };
 
+  const renderContent = () => {
+    switch (popupType) {
+      case 'Cargo':
+        return <Cargo onClose={handleClosePopup} updateCargo={atualizarCargo} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Box
       gap={1}
@@ -69,7 +78,7 @@ function Header({ atualizarCargo }) {
           Cargo
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} updateCargo={atualizarCargo} title={popupTitle} description={popupDescription} type={popupType} />
+      <PopupDialog open={openPopup} handleClose={handleClosePopup} title={popupTitle} description={popupDescription} renderContent={renderContent} />
     </Box>
   );
 }

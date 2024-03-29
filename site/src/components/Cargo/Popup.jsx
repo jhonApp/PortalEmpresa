@@ -1,9 +1,10 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Cargo from './ModalCargo'
-import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '@mui/material';
+import { DialogContent, DialogActions , Button, Paper, useTheme } from '@mui/material';
 import { XCircle } from 'phosphor-react';
 import { StyledButtonPrimary } from '../../Utils/StyledButton';
+import { StyledDialog } from '../../Utils/StyledDialog';
 
 function PopupDialog({ open, handleClose, updateCargo, title, description, type }) {
   const theme = useTheme();
@@ -18,7 +19,7 @@ function PopupDialog({ open, handleClose, updateCargo, title, description, type 
   };
   
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="none">
+    <StyledDialog open={open} onClose={handleClose}>
       <DialogActions sx={{position: 'absolute', marginRight: 0, top: 16, right: 0}}>
         <Button onClick={handleClose}><XCircle size={28} color="#FF0B0B"></XCircle></Button>
       </DialogActions>
@@ -40,9 +41,9 @@ function PopupDialog({ open, handleClose, updateCargo, title, description, type 
         </Paper>
       </DialogContent>
       <DialogActions sx={{ backgroundColor: '#FAFAFA' }}>
-        <StyledButtonPrimary autoFocus onClick={handleClose}> Cancelar </StyledButtonPrimary>
+        <StyledButtonPrimary autoFocus onClick={handleClose}> Fechar </StyledButtonPrimary>
       </DialogActions>
-    </Dialog>
+    </StyledDialog>
   );
 }
 
