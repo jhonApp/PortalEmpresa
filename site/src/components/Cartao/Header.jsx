@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Popup from './Popup';
-import OfficeChair from '../../assets/images/icones/officechair.svg';
+import Cartao from './ModalCartao'
+import PopupDialog from '../dialog';
 import { Box, Paper, Button, useTheme, Typography } from '@mui/material';
 import { Briefcase } from 'phosphor-react';
 
@@ -48,6 +49,15 @@ function Header({ atualizaCartao }) {
     setOpenPopup(false);
   };
 
+  const renderContent = () => {
+    switch (popupType) {
+      case 'Cartao':
+        return <Cartao onClose={handleClosePopup} atualizaCartao={atualizaCartao} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Box
       gap={1}
@@ -69,7 +79,8 @@ function Header({ atualizaCartao }) {
           Cartão
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} atualizaCartao={atualizaCartao} title={popupTitle} description={popupDescription} type={popupType} />
+      {/* <Popup open={openPopup} handleClose={handleClosePopup} atualizaCartao={atualizaCartao} title={popupTitle} description={popupDescription} type={popupType} /> */}
+      <PopupDialog open={openPopup} handleClose={handleClosePopup} title={popupTitle} description={popupDescription} renderContent={renderContent} />
     </Box>
   );
 }

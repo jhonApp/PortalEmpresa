@@ -161,7 +161,7 @@ const ModalCargo = ({ updateCargo }) => {
   const handleSubmitButtonLabel = formMode === 'incluir' ? 'Incluir' : 'Alterar';
 
   return (
-    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 370 }} elevation={100}>
+    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 370 }} elevation={1}>
       <FormContainer>
         <FormRow style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
           <div>
@@ -196,11 +196,11 @@ const ModalCargo = ({ updateCargo }) => {
       <Typography variant="h7" component="h2" style={{ display: 'flex', fontWeight: '600', fontSize: 24, textAlign: 'end', alignItems: 'flex-start', marginTop: 5 }}>
         Cargos Cadastrados
       </Typography>
-      <StyledBox >
+      <StyledBox>
         {cargos.map((cargo, index) => (
           <StyledCard key={index}>
             <StyledCardContent>
-              <TextWithEllipsis text={cargo.nome} maxLength={10} />
+              <TextWithEllipsis text={cargo.nome} maxLength={10} valueWeigth={600}/>
             </StyledCardContent>
             <StyledCardBox>
               <StyledIconButton>

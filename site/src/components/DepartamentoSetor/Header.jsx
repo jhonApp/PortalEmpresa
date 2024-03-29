@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import Popup from './Popup';
+import Departamento from './ModalDepartamento';
+import Setor from './ModalSetor';
+import PopupDialog from '../dialog';
 import OfficeChair from '../../assets/images/icones/officechair.svg';
 import { Box, Paper, Button, useTheme, Typography } from '@mui/material';
 import { Briefcase } from 'phosphor-react';
@@ -48,6 +50,17 @@ function Header({ atualizarDepartamento, atualizarSetor }) {
     setOpenPopup(false);
   };
 
+  const renderContent = () => {
+    switch (popupType) {
+      case 'Departamento':
+        return <Departamento onClose={handleClosePopup} updateDepartamento={atualizarDepartamento} />;
+      case 'Setor':
+        return <Setor onClose={handleClosePopup} updateSetor={atualizarSetor} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Box
       gap={1}
@@ -73,7 +86,7 @@ function Header({ atualizarDepartamento, atualizarSetor }) {
           Setor
         </Button>
       </Box>
-      <Popup open={openPopup} handleClose={handleClosePopup} updateDepartamento={atualizarDepartamento} updateSetor={atualizarSetor} title={popupTitle} description={popupDescription} type={popupType} />
+      <PopupDialog open={openPopup} handleClose={handleClosePopup} title={popupTitle} description={popupDescription} renderContent={renderContent} />
     </Box>
   );
 }

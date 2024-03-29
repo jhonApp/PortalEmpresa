@@ -13,7 +13,7 @@ const Search = styled('div')({
     '@media (min-width: 600px)': {
       marginLeft: 0,
       width: '250px',
-      height: '35px'
+      height: '42px'
     },
 });
   
@@ -30,8 +30,9 @@ const SearchIconWrapper = styled('div')({
 const StyledInputBase = styled(InputBase)({
   color: 'inherit',
   '& .MuiInputBase-input': {
-    padding: '7px',
-    fontSize: '14px',
+    padding: '6px',
+    marginTop: '3px',
+    fontSize: '15px',
     paddingLeft: 'calc(1em + 32px)',
     transition: 'width 300ms',
     width: '300px',
