@@ -86,7 +86,7 @@ function Header({ atualizarDepartamento, atualizarSetor }) {
           Setor
         </Button>
       </Box>
-      <PopupDialog open={openPopup} handleClose={handleClosePopup} title={popupTitle} description={popupDescription} renderContent={renderContent} />
+      <PopupDialog open={openPopup} handleClose={handleClosePopup} title={popupTitle} description={popupDescription} renderContent={renderContent} visible={true}/>
     </Box>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState , useEffect } from 'react';
-import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
+import { StyledTextField, StyledPaper, FormContainer, Column, FormRow, BootstrapInput } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
-import { Checkbox, Typography } from '@mui/material';
+import { Checkbox, Typography, InputLabel } from '@mui/material';
 import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
@@ -25,6 +25,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
   }, [formData, setValues]);
 
   const handleFormChange = (fieldName, value) => {
+    console.log(formData)
     const updatedValues = { ...values, [fieldName]: value };
     setValues(updatedValues);
     handleChange(fieldName, value);
@@ -37,54 +38,75 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
       <FormContainer>
         <Column>
+          {/* RgCPF */}
           <FormRow>
-            <StyledTextField
-              label="RG ou CPF *"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              type="number"
-              autoComplete="off"
-              error={errors.rgCpf}
-              value={values.rgCpf || ''}
-              onChange={(e) => handleFormChange('rgCpf', e.target.value)}
-              onBlur={(e) => handleFormChange('rgCpf', e.target.value)}
-
-            />
-            {renderErrorMessage('rgCpf')}
+              <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                RG ou CPF *
+              </InputLabel>
+              <BootstrapInput 
+                id="rgCpf-input"
+                type="number"
+                autoComplete="off"
+                error={errors.rgCpf}
+                value={values.rgCpf || ''}
+                onChange={(e) => handleFormChange('rgCpf', e.target.value)}
+                onBlur={(e) => handleFormChange('rgCpf', e.target.value)} />
+              {renderErrorMessage('rgCpf')}
           </FormRow>
+          {/* Email */}
           <FormRow>
-            <StyledTextField
-              label="Nome Completo *"
-              variant="outlined"
-              fullWidth
-              margin="normal"
+              <InputLabel shrink htmlFor="email-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                Email *
+              </InputLabel>
+              <BootstrapInput 
+                id="email-input"
+                type="text"
+                autoComplete="off"
+                error={errors.email}
+                value={values.email || ''}
+                onChange={(e) => { handleFormChange('email', e.target.value); }}
+                onBlur={(e) => handleFormChange('email', e.target.value)}
+              />
+            {renderErrorMessage('email')}
+          </FormRow>
+          {/* Empresa */}
+          <FormRow>
+            <InputLabel shrink htmlFor="empresa-input" sx={{ fontSize: 20, color:'#666666', fontWeight: 600, textAlign: 'start'}}>
+              Empresa
+            </InputLabel>
+            <BootstrapInput 
+              id="empresa-input"
               type="text"
               autoComplete="off"
+              name="empresa"
+              disabled
+              error={errors.empresa}
+              value={values.empresa || ''}
+              onChange={(e) => { handleFormChange('empresa', e.target.value) }}
+              onBlur={(e) => handleFormChange('empresa', e.target.value)}
+            />
+            {renderErrorMessage('empresa')}
+          </FormRow>
+        </Column>
+        <Column>
+          {/* Nome Completo */}
+          <FormRow>
+            <InputLabel shrink htmlFor="nome-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+              Nome Completo *
+            </InputLabel>
+            <BootstrapInput 
+              id="nome-input"
+              type="text"
+              autoComplete="off"
+              name="nomeCompleto"
               error={errors.nomeCompleto}
               value={values.nomeCompleto || ''}
-              onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
+              onChange={(e) => { handleFormChange('nomeCompleto', e.target.value) }}
               onBlur={(e) => handleFormChange('nomeCompleto', e.target.value)}
             />
             {renderErrorMessage('nomeCompleto')}
           </FormRow>
-          <FormRow>
-            <StyledTextField
-              label="Email *"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              type="text"
-              autoComplete="off"
-              error={errors.email}
-              value={values.email || ''}
-              onChange={(e) => handleFormChange('email', e.target.value)}
-              onBlur={(e) => handleFormChange('email', e.target.value)}
-            />
-            {renderErrorMessage('email')}
-          </FormRow>
-        </Column>
-        <Column>
+          {/* telefone */}
           <FormRow>
             <InputMask
               mask="(99) 99999-9999"
@@ -92,42 +114,43 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               value={values.telefone || ''}
               onChange={(e) => handleFormChange('telefone', e.target.value)}
             >
-              {() => <StyledTextField
-                label="Telefone"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                autoComplete="off"
-                type="text"
-                error={errors.telefone}
-              />}
+              {() => (
+                <div>
+                  <InputLabel shrink htmlFor="tel-input" sx={{ fontSize: 20, color:'#000', fontWeight: 600, textAlign: 'start'}}>
+                    Telefone
+                  </InputLabel>
+                  <BootstrapInput 
+                    id="tel-input"
+                    type="text"
+                    autoComplete="off"
+                    name="telefone"
+                    error={errors.telefone}
+                    value={values.telefone || ''}
+                    onChange={(e) => { handleFormChange('telefone', e.target.value) }}
+                    onBlur={(e) => { handleFormChange('telefone', e.target.value) }}
+                  />
+                  {renderErrorMessage('telefone')}
+                </div>
+              )}
             </InputMask>
           </FormRow>
+          {/* Serviço */}
           <FormRow>
-            <StyledTextField
-              label="Empresa"
-              variant="outlined"
-              fullWidth
-              margin="normal"
+            <InputLabel shrink htmlFor="servico-input" sx={{ fontSize: 20, color:'#666666', fontWeight: 600, textAlign: 'start'}}>
+              Serviço
+            </InputLabel>
+            <BootstrapInput 
+              id="servico-input"
               type="text"
               autoComplete="off"
-              error={errors.empresa}
-              value={values.empresa || ''}
-              onChange={(e) => handleFormChange('empresa', e.target.value)}
-            />
-          </FormRow>
-          <FormRow>
-            <StyledTextField
-              label="Serviço"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              type="text"
-              autoComplete="off"
+              disabled
+              name="servico"
               error={errors.servico}
               value={values.servico || ''}
-              onChange={(e) => handleFormChange('servico', e.target.value)}
+              onChange={(e) => { handleFormChange('servico', e.target.value) }}
+              onBlur={(e) => { handleFormChange('servico', e.target.value) }}
             />
+            {renderErrorMessage('servico')}
           </FormRow>
         </Column>
       </FormContainer>

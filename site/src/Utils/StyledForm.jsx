@@ -8,6 +8,7 @@ const StyledTextField = styled(TextField)({
   background: '#EBEAEF',
   width: '100%',
   marginBottom: 5,
+  marginTop: 0,
   '& .MuiOutlinedInput-root': {
     borderRadius: '4px',
     fontSize: '15px',
@@ -68,7 +69,7 @@ const Column = styled('div')({ width: '100%' });
 
 const FormRow = styled('div')({
     width: '100%',
-    marginBottom: (theme) => theme.spacing(2),
+    marginBottom: '8px',
 });
 
 const StyledFormControlLabel = styled(FormControlLabel)({
@@ -81,30 +82,28 @@ const FormControlSelect = styled(FormControl)({
 });
 
 const StyledDatePicker = styled(DatePicker)({
-    borderRadius: '4px',
-    background: '#EBEAEF',
-    marginBottom: 5,
-    width: '100%',
-    marginTop: '16px',
-    '& .MuiOutlinedInput-root': {
-        borderRadius: '4px',
-        fontSize: '15px',
-    },
-    '& .MuiInputLabel-root': {
-        fontSize: '1.1rem',
-        top: '-2px'
-    },
-    '& .MuiOutlinedInput-input': {
-        padding: '14px',
-        width: '100%',
-    },
+  borderRadius: '4px',
+  background: '#EBEAEF',
+  marginBottom: 5,
+  width: '100%',
+  '& .MuiOutlinedInput-root': {
+      borderRadius: '4px',
+      fontSize: '15px',
+  },
+  '& .MuiInputLabel-root': {
+      fontSize: '1.1rem',
+      top: '-2px'
+  },
+  '& .MuiOutlinedInput-input': {
+      padding: '14px',
+      width: '100%',
+  },
 });
 
 const StyledTimePicker = styled(TimePicker)({
     borderRadius: '4px',
     background: '#EBEAEF',
     marginBottom: 5,
-    marginTop: '16px',
     width: '100%',
     '& .MuiOutlinedInput-root': {
         borderRadius: '4px',
@@ -130,7 +129,8 @@ const FormSection = styled('div')({
 
 const BootstrapInput = styled(InputBase)({
     'label + &': {
-      marginTop: '-5px'
+      marginTop: '-5px',
+      
     },
     '& .MuiInputBase-input': {
       borderRadius: 4,
@@ -138,6 +138,7 @@ const BootstrapInput = styled(InputBase)({
       backgroundColor: '#EBEAEF',
       border: '1px solid',
       borderColor: '#C4C7D4',
+      left: '-4px',
       fontSize: '16px',
       width: '250px',
       padding: '10px 12px',
