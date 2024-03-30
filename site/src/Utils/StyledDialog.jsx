@@ -13,7 +13,7 @@ const StyledCard = styled(Card)({
 const StyledDialog = styled(Dialog)({
   '& .MuiDialog-paper': {
     borderRadius: '15px !important',
-    width: '710px !important',
+    minWidth: '650px',
     backgroundColor: '#FAFAFA'
   }
 });
@@ -25,17 +25,17 @@ const StyledBox = styled(Box)({
   overflowY: 'scroll',
   height: '250px',
   marginTop: '10px',
-  scrollbarWidth: 'thin', // Para navegadores que suportam o estilo da barra de rolagem
-  scrollbarColor: '#999 #f4f4f4', // Para navegadores que suportam a cor da barra de rolagem
+  scrollbarWidth: 'thin',
+  scrollbarColor: '#999 #f4f4f4',
   '&::-webkit-scrollbar': {
-    width: '8px', // Largura da barra de rolagem em navegadores WebKit
+    width: '8px',
   },
   '&::-webkit-scrollbar-track': {
-    backgroundColor: '#f4f4f4', // Cor de fundo da área de rolagem em navegadores WebKit
+    backgroundColor: '#f4f4f4',
   },
   '&::-webkit-scrollbar-thumb': {
-    backgroundColor: '#999', // Cor da barra de rolagem em navegadores WebKit
-    borderRadius: '4px', // Borda da barra de rolagem em navegadores WebKit
+    backgroundColor: '#999',
+    borderRadius: '4px',
   },
   '& .css-3ekr5r': {
     maxHeight: '250px',
@@ -44,6 +44,10 @@ const StyledBox = styled(Box)({
 
 const StyledStepper = styled(Stepper)`
   .MuiStepIcon-root.Mui-active {
+    color: #BCC0CF;
+  }
+
+  .MuiStepIcon-root.Mui-completed {
     color: #BCC0CF;
   }
 `;

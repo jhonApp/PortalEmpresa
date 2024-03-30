@@ -165,7 +165,7 @@ const HorizontalLinearStepper = ({
       <Box sx={{ width: '100%' }}>
         {renderStepContent(activeStep)}
         {activeStep === steps.length - 1 && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
             <Button onClick={handleBack} sx={{ marginRight: '180px', color: 'black' }}>Voltar</Button>
             <StyledButtonSecundary onClick={handleCancel}>Cancelar</StyledButtonSecundary>
             {action !== 'view' && action !== 'edit' && (
@@ -177,7 +177,8 @@ const HorizontalLinearStepper = ({
           </Box>
         )}
         {activeStep !== steps.length - 1 && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
+            <StyledButtonSecundary sx={{ marginRight: '5px' }} onClick={handleCancel}>Cancelar</StyledButtonSecundary>
             <StyledButtonPrimary onClick={handleNext}>Próximo</StyledButtonPrimary>
           </Box>
         )}

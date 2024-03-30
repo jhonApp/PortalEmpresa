@@ -110,7 +110,7 @@ function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
                         <Typography variant="h6" component="h7" style={{ fontWeight: 600, fontSize: 18 }}>
                           {cartoesFiltrados[index].codigoCartao}
                         </Typography>
-                        <TextWithEllipsis text={cartoesFiltrados[index].nomeUsuario} maxLength={18} valueWeigth={400}/>
+                        <TextWithEllipsis text={cartoesFiltrados[index].nomeUsuario} maxLength={15} valueWeigth={400}/>
                       </div>
                     </CardContent>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>

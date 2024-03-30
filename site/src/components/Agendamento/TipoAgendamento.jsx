@@ -105,7 +105,7 @@ function TipoAgendamento({ atualizarAgendamento }) {
           Múltiplos Visitantes
         </Button>
       </Box>
-      <PopupDialog open={openPopup} handleClose={handleClosePopup} atualizarAgendamento={atualizarAgendamento} title={popupTitle} description={popupDescription} renderContent={renderContent} />
+      <PopupDialog open={openPopup} handleClose={handleClosePopup} atualizarAgendamento={atualizarAgendamento} title={popupTitle} description={popupDescription} renderContent={renderContent} visible={false}/>
     </Box>
   );
 }

@@ -79,8 +79,7 @@ function Header({ atualizaCartao }) {
           Cartão
         </Button>
       </Box>
-      {/* <Popup open={openPopup} handleClose={handleClosePopup} atualizaCartao={atualizaCartao} title={popupTitle} description={popupDescription} type={popupType} /> */}
-      <PopupDialog open={openPopup} handleClose={handleClosePopup} title={popupTitle} description={popupDescription} renderContent={renderContent} />
+      <PopupDialog open={openPopup} handleClose={handleClosePopup} title={popupTitle} description={popupDescription} renderContent={renderContent} visible={true}/>
     </Box>
   );
 }

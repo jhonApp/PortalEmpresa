@@ -5,7 +5,7 @@ import { XCircle } from 'phosphor-react';
 import { StyledDialog } from '../Utils/StyledDialog';
 import { StyledButtonPrimary } from '../Utils/StyledButton';
 
-function PopupDialog({ open, handleClose, title, description, renderContent }) {
+function PopupDialog({ open, handleClose, title, description, renderContent, visible }) {
   const theme = useTheme();
 
   return (
@@ -30,9 +30,11 @@ function PopupDialog({ open, handleClose, title, description, renderContent }) {
           {renderContent()}
         </Paper>
       </DialogContent>
-      <DialogActions sx={{ backgroundColor: '#FAFAFA', m: '20px' }}>
-        <StyledButtonPrimary autoFocus onClick={handleClose}> Fechar </StyledButtonPrimary>
-      </DialogActions>
+      {visible && (
+        <DialogActions sx={{ backgroundColor: '#FAFAFA', m: '20px' }}>
+          <StyledButtonPrimary autoFocus onClick={handleClose}> Fechar </StyledButtonPrimary>
+        </DialogActions>
+      )}
     </StyledDialog>
   );
 }

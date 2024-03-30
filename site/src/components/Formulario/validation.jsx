@@ -78,6 +78,10 @@ const validateForm = (values, currentScreen) => {
 
 
 const screensValidations = {
+  agendamentoSimples2: {
+    dataInicial: true,
+    horaEntrada: true,
+  },
   agendamento2: {
     dataInicial: true,
     dataFim: true,
