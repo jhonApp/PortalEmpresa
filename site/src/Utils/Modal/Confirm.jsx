@@ -5,12 +5,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { CheckCircle } from 'phosphor-react';
-import { StyledButtonSucess } from '../../Utils/StyledButton';
+import { Info } from 'phosphor-react';
+import { StyledButtonConfirm } from '../../Utils/StyledButton';
 
-export default function AlertDialogSucess({ dialogOpen, handleClose, handleFunction }) {
+export default function AlertDialogConfirm({ dialogOpen, handleClose, handleFunction }) {
   
-  const handleConfirmSucess = () => {
+  const handleConfirm = () => {
     handleClose();
     handleFunction();
   };
@@ -30,21 +30,22 @@ export default function AlertDialogSucess({ dialogOpen, handleClose, handleFunct
           },
         }}
       >
-        <DialogTitle id="alert-dialog-title" sx={{ backgroundColor: '#E2F0E8', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', pt: '90px' }}>
+        <DialogTitle id="alert-dialog-title" sx={{ backgroundColor: '#E8F3FC', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', pt: '90px' }}>
           <div style={{ marginBottom: '10px' }}>
-            <CheckCircle size={80} color="#007423" />
+            <Info size={80} color="#228BE6" />
           </div>
-          <div style={{ fontWeight: 'bold' }}>
-            <span style={{ color: '#007423', fontSize: '24px' }}>Sucesso</span>
+          <div style={{ fontWeight: 'bold', fontSize:'24px', color: '#228BE6' }}>
+            Tem certeza?
           </div>
         </DialogTitle>
 
-        <DialogContent sx={{ backgroundColor: '#E2F0E8', textAlign: 'center' }}>
+        <DialogContent sx={{ backgroundColor: '#E8F3FC', textAlign: 'center' }}>
           <DialogContentText id="alert-dialog-description" sx={{ fontSize: 16, color: '#474747', pb: '20px', width: '80%', margin:'0 auto' }}>
-            Seu convidado(s) receberá um e-mail com as instruções para a confirmação de presença e conclusão das informações.
+            Confirmar a visualização do comunicado?
           </DialogContentText>
-          <DialogActions sx={{ backgroundColor: '#E2F0E8', justifyContent: 'center' }}>
-            <StyledButtonSucess onClick={handleConfirmSucess} autoFocus> Finalizar </StyledButtonSucess>
+          <DialogActions sx={{ backgroundColor: '#E8F3FC', justifyContent: 'center' }}>
+            <Button sx={{ color: '#525151', borderRadius: '50px' }} onClick={handleClose}>Não</Button>
+            <StyledButtonConfirm onClick={handleConfirm} autoFocus> Sim </StyledButtonConfirm>
           </DialogActions>
         </DialogContent>
       </Dialog>

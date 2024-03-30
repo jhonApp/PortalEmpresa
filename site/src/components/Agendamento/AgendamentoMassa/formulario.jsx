@@ -35,10 +35,11 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '50%',
-    backgroundColor: 'lightgray',
+    borderRadius: '15px',
+    backgroundColor: '#BCC0CF',
     padding: theme.spacing(1),
-    height: '20px',
+    height: '40px',
+    width: '40px',
     marginRight: theme.spacing(1),
   };
 
@@ -59,11 +60,12 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     padding: '10px',
     borderRadius: '5px',
     backgroundColor: '#DDDCE2',
-    fontSize: '13px',
+    fontSize: '14px',
     fontWeight: 'bold',
     color: 'black',
     display: 'flex',
-    justifyContent: 'space-evenly',
+    gap: '10px',
+    justifyContent: 'flex-start',
     textTransform: 'none',
     boxShadow: 'none',
     width: '100%'
@@ -121,7 +123,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             value="agendamentoVisitante"
             onChange={() => handleToggleButtonChange('agendamentoVisitante')}
           >          
-          <div style={iconContainerStyle}><UserMinus size={20} color="#000" /></div>
+          <div style={iconContainerStyle}><UserMinus size={20} color="#72788E" /></div>
           Visitante Especial
         </ToggleButton>
         <ToggleButton
@@ -131,7 +133,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             value="agendamentoPrestador"
             onChange={() => handleToggleButtonChange('agendamentoPrestador')}
           >          
-          <div style={iconContainerStyle}><UsersThree size={20} color="#000" /></div>
+          <div style={iconContainerStyle}><UsersThree size={20} color="#72788E" /></div>
           Prestador de Serviço
         </ToggleButton>
       </Box>
@@ -148,7 +150,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
           <Input type="file" id="file-input" sx={{ display: 'none' }} onChange={handleFileChange} />
           <label htmlFor="file-input">
             <Button component="span" style={buttonFileStyle} variant="contained">
-              <FileCsv size={25} color="#000" />
+              <FileCsv size={25} color="#000"/>
               Clique aqui para selecionar o excel
             </Button>
           </label>

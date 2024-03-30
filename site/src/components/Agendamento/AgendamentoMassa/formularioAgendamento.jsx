@@ -4,6 +4,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Typography from '@mui/material/Typography';
 import { StyledDatePicker, StyledTimePicker, StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import dayjs from 'dayjs';
+import { InputLabel } from '@mui/material';
 import 'dayjs/locale/pt-br';
 import Checkbox from '@mui/material/Checkbox';
 import { validateForm } from '../../Formulario/validation';
@@ -20,6 +21,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
     errors,
     handleChange,
     handleValidation,
+    renderErrorMessage
   } = useForm(
     formData,
     validateForm,
@@ -49,24 +51,31 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
       <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
         <FormContainer>
           <Column>
+            {/* Data Inicial */}
             <FormRow>
+              <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                  Data Inicial *
+              </InputLabel>
               <StyledDatePicker
-                label="Data Inicial *"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type="date"
-                name="dataInicial"
-                minDate={today}
-                error={errors.dataInicial}
-                value={values.dataInicial || null}
-                onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
-                onBlur={() => handleValidation('dataInicial')}
-              />
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  type="date"
+                  name="dataInicial"
+                  minDate={today}
+                  error={errors.dataInicial}
+                  value={values.dataInicial || null}
+                  onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
+                  onBlur={() => handleValidation('dataInicial')}
+                />
+                {renderErrorMessage('dataInicial')}
             </FormRow>
+            {/* Data Fim */}
             <FormRow>
+              <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                Data Fim
+              </InputLabel>
               <StyledDatePicker
-                label="Data Fim *"
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -78,12 +87,16 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 onChange={(e) => handleFormChange('dataFim', e)}
                 onBlur={() => handleValidation('dataFim')}
               />
+              {renderErrorMessage('dataFim')}
             </FormRow>
           </Column>
           <Column>
+            {/* Hora Entrada */}
             <FormRow>
+              <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                  Hora de Entrada *
+              </InputLabel>
               <StyledTimePicker
-                label="Hora de Entrada *"
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -96,8 +109,13 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 onChange={(e) => handleFormChange('horaEntrada', e)}
                 onBlur={() => handleValidation('horaEntrada')}
               />
+              {renderErrorMessage('horaEntrada')}
             </FormRow>
+            {/* Hora de Saída */}
             <FormRow>
+              <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                Hora de Saída
+              </InputLabel>
               <StyledTimePicker
                 label="Hora de Saída"
                 variant="outlined"
@@ -112,12 +130,16 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 onChange={(e) => handleFormChange('horaSaida', e)}
                 onBlur={() => handleValidation('horaSaida')}
               />
+              {renderErrorMessage('horaSaida')}
             </FormRow>
           </Column>
         </FormContainer>
+        {/* Observação */}
         <FormRow>
+          <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+            Observação
+          </InputLabel>
           <StyledTextField
-            label="Observação"
             variant="outlined"
             fullWidth
             margin="normal"
@@ -130,21 +152,22 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
             onBlur={() => handleValidation('obs')}
           />
         </FormRow>
+        {/* Chegada */}
         <FormRow style={{ display: 'flex', alignItems: 'center', marginTop: 10, marginBottom: 30 }}>
             <Checkbox
               sx={{
                   padding: '0px 0px 0px 0px !important',
                   '& .MuiSvgIcon-root': { color: '#C4C7D4' }
               }}
-              checked={values.concordaTermo || false}
-              error={errors.concordaTermo}
+              checked={values.chegada || false}
+              error={errors.chegada}
               onChange={(e) => {
-                values.concordaTermo = e.target.checked;
-                handleFormChange('concordaTermo', e.target.checked);
+                values.chegada = e.target.checked;
+                handleFormChange('chegada', e.target.checked);
               }}
               inputProps={{ 'aria-label': 'primary checkbox' }}   
             />
-            <Typography sx ={{marginLeft: 1, fontSize: 14}}>Comunicar a empresa quando o visitante chegar</Typography>
+            <Typography sx ={{marginLeft: 1, fontSize: 14, fontWeight: 600}}>Comunicar a empresa quando o visitante chegar</Typography>
         </FormRow>
       </StyledPaper>
     </LocalizationProvider>

@@ -140,7 +140,7 @@ const BootstrapInput = styled(InputBase)({
       borderColor: '#C4C7D4',
       left: '-4px',
       fontSize: '16px',
-      width: '250px',
+      width: '280px',
       padding: '10px 12px',
       transition: 'border-color 0.3s, background-color 0.3s, box-shadow 0.3s', // Defina as transições conforme necessário
       fontFamily: [

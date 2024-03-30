@@ -13,7 +13,7 @@ const StyledCard = styled(Card)({
 const StyledDialog = styled(Dialog)({
   '& .MuiDialog-paper': {
     borderRadius: '15px !important',
-    minWidth: '650px',
+    minWidth: '700px',
     backgroundColor: '#FAFAFA'
   }
 });

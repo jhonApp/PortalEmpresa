@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Typography from '@mui/material/Typography';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { StyledDatePicker, StyledTimePicker, StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import dayjs from 'dayjs';
 import { InputLabel } from '@mui/material';
@@ -178,7 +177,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
               }}
               inputProps={{ 'aria-label': 'primary checkbox' }}   
             />
-            <Typography sx ={{marginLeft: 1, fontSize: 14}}>Comunicar a empresa quando o visitante chegar</Typography>
+            <Typography sx ={{marginLeft: 1, fontSize: 14, fontWeight: 600}}>Comunicar a empresa quando o visitante chegar</Typography>
         </FormRow>
       </StyledPaper>
     </LocalizationProvider>
