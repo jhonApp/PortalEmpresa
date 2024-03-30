@@ -55,6 +55,20 @@ const StyledButtonSecundary = styled(Button)({
   },
 });
 
+const StyledButtonConfirm = styled(Button)({
+  backgroundColor: '#228BE6',
+  color: 'white',
+  padding: '10px',
+  fontSize: '14px',
+  marginLeft: 15,
+  height: '50px',
+  borderRadius: '50px',
+  width: '180px',
+  '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+});
+
 const StyledButtonDelete = styled(Button)({
   backgroundColor: '#FF0B0B',
   color: 'white',
@@ -69,4 +83,18 @@ const StyledButtonDelete = styled(Button)({
   },
 });
 
-export { StyledButtonPrimary, StyledButtonSecundary, StyledButtonDelete, StyledButtonPrimaryFiltro, StyledButtonSecundaryFiltro };
+const StyledButtonSucess = styled(Button)({
+  backgroundColor: '#007423',
+  color: 'white',
+  padding: '10px',
+  fontSize: '14px',
+  marginLeft: 15,
+  height: '50px',
+  borderRadius: '50px',
+  width: '180px',
+  '&:hover': {
+    backgroundColor: 'rgba(0, 116, 35, 0.6)',
+  },
+});
+
+export { StyledButtonConfirm, StyledButtonSucess, StyledButtonPrimary, StyledButtonSecundary, StyledButtonDelete, StyledButtonPrimaryFiltro, StyledButtonSecundaryFiltro };

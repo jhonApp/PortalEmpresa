@@ -1,7 +1,7 @@
 import React, { useState , useEffect } from 'react';
-import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
+import { StyledTextField, StyledPaper, FormContainer, Column, FormRow, BootstrapInput } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
-import { Checkbox, Typography } from '@mui/material';
+import { Checkbox, Typography, InputLabel } from '@mui/material';
 import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
@@ -37,9 +37,12 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
     <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
       <FormContainer>
         <Column>
+          {/* RG ou CPF */}
           <FormRow>
+            <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                RG ou CPF *
+            </InputLabel>
             <StyledTextField
-              label="RG ou CPF *"
               variant="outlined"
               fullWidth
               margin="normal"
@@ -53,24 +56,12 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
             />
             {renderErrorMessage('rgCpf')}
           </FormRow>
+          {/* Email */}
           <FormRow>
+            <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+              Email *
+            </InputLabel>
             <StyledTextField
-              label="Nome Completo *"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              type="text"
-              autoComplete="off"
-              error={errors.nomeCompleto}
-              value={values.nomeCompleto || ''}
-              onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
-              onBlur={(e) => handleFormChange('nomeCompleto', e.target.value)}
-            />
-            {renderErrorMessage('nomeCompleto')}
-          </FormRow>
-          <FormRow>
-            <StyledTextField
-              label="Email *"
               variant="outlined"
               fullWidth
               margin="normal"
@@ -83,29 +74,12 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
             />
             {renderErrorMessage('email')}
           </FormRow>
-        </Column>
-        <Column>
+          {/* Empresa */}
           <FormRow>
-            <InputMask
-              mask="(99) 99999-9999"
-              maskChar=" "
-              value={values.telefone || ''}
-              onChange={(e) => handleFormChange('telefone', e.target.value)}
-            >
-              {() => <StyledTextField
-                label="Telefone"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                autoComplete="off"
-                type="text"
-                error={errors.telefone}
-              />}
-            </InputMask>
-          </FormRow>
-          <FormRow>
+            <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+              Empresa
+            </InputLabel>
             <StyledTextField
-              label="Empresa"
               variant="outlined"
               fullWidth
               margin="normal"
@@ -116,9 +90,56 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
               onChange={(e) => handleFormChange('empresa', e.target.value)}
             />
           </FormRow>
+        </Column>
+        <Column>
+          {/* Nome Completo */}
           <FormRow>
+            <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+              Nome Completo *
+            </InputLabel>
             <StyledTextField
-              label="Serviço"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              type="text"
+              autoComplete="off"
+              error={errors.nomeCompleto}
+              value={values.nomeCompleto || ''}
+              onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
+              onBlur={(e) => handleFormChange('nomeCompleto', e.target.value)}
+            />
+            {renderErrorMessage('nomeCompleto')}
+          </FormRow>
+          {/* Telefone */}
+          <FormRow>
+            <InputMask
+              mask="(99) 99999-9999"
+              maskChar=" "
+              value={values.telefone || ''}
+              onChange={(e) => handleFormChange('telefone', e.target.value)}
+            >
+              {() => 
+              <div>
+                <InputLabel shrink htmlFor="tel-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                  Telefone
+                </InputLabel>
+                <StyledTextField
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  autoComplete="off"
+                  type="text"
+                  error={errors.telefone}
+                />
+              </div>}
+            </InputMask>
+          </FormRow>
+          {/* Serviço */}
+          <FormRow>
+            <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+              Serviço *
+            </InputLabel>
+            <StyledTextField
               variant="outlined"
               fullWidth
               margin="normal"
@@ -129,9 +150,9 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
               onChange={(e) => handleFormChange('servico', e.target.value)}
             />
           </FormRow>
-          
         </Column>
       </FormContainer>
+      {/* Confirmação */}
       <FormRow style={{ display: 'flex', alignItems: 'center', marginTop: 10, marginBottom: 30 }}>
         <Checkbox
           sx={{

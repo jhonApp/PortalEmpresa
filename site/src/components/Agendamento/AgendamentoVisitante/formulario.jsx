@@ -38,12 +38,12 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
       <FormContainer>
         <Column>
-          {/* RgCPF */}
+          {/* RgCpf */}
           <FormRow>
-              <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+              <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
                 RG ou CPF *
               </InputLabel>
-              <BootstrapInput 
+              <StyledTextField 
                 id="rgCpf-input"
                 type="number"
                 autoComplete="off"
@@ -58,7 +58,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               <InputLabel shrink htmlFor="email-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
                 Email *
               </InputLabel>
-              <BootstrapInput 
+              <StyledTextField 
                 id="email-input"
                 type="text"
                 autoComplete="off"
@@ -74,7 +74,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             <InputLabel shrink htmlFor="empresa-input" sx={{ fontSize: 20, color:'#666666', fontWeight: 600, textAlign: 'start'}}>
               Empresa
             </InputLabel>
-            <BootstrapInput 
+            <StyledTextField 
               id="empresa-input"
               type="text"
               autoComplete="off"
@@ -94,7 +94,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             <InputLabel shrink htmlFor="nome-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
               Nome Completo *
             </InputLabel>
-            <BootstrapInput 
+            <StyledTextField 
               id="nome-input"
               type="text"
               autoComplete="off"
@@ -116,10 +116,10 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             >
               {() => (
                 <div>
-                  <InputLabel shrink htmlFor="tel-input" sx={{ fontSize: 20, color:'#000', fontWeight: 600, textAlign: 'start'}}>
+                  <InputLabel shrink htmlFor="tel-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
                     Telefone
                   </InputLabel>
-                  <BootstrapInput 
+                  <StyledTextField 
                     id="tel-input"
                     type="text"
                     autoComplete="off"
@@ -139,7 +139,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             <InputLabel shrink htmlFor="servico-input" sx={{ fontSize: 20, color:'#666666', fontWeight: 600, textAlign: 'start'}}>
               Serviço
             </InputLabel>
-            <BootstrapInput 
+            <StyledTextField 
               id="servico-input"
               type="text"
               autoComplete="off"
@@ -154,6 +154,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
           </FormRow>
         </Column>
       </FormContainer>
+      {/* Chegada */}
       <FormRow style={{ display: 'flex', alignItems: 'center', marginTop: 10, marginBottom: 30 }}>
         <Checkbox
           sx={{

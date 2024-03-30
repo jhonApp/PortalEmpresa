@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Stepper, Step, StepLabel, Button } from '@mui/material';
+import { Box, Step, StepLabel, Button } from '@mui/material';
 import { styled } from '@mui/system';
 import useForm from './Formulario/useForm';
 import { validateForm } from './Formulario/validation';
 import PropTypes from 'prop-types';
 import { showSuccessToast, showErrorToast } from '../Utils/Notification';
 import { StyledStepper } from '../Utils/StyledDialog';
+import AlertDialogSucess from '../Utils/Modal/Sucess';
+import AlertDialogCancel from '../Utils/Modal/Cancel';
 
 const StyledButtonPrimary = styled(Button)({
   backgroundColor: '#171E36',
@@ -50,6 +52,8 @@ const HorizontalLinearStepper = ({
 }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
+  const [open, setOpen] = React.useState(false);
+  const [openCancel, setOpenCancel] = React.useState(false);
   const { handleSubmit, clearMessage } = useForm();
 
   const handleBack = () => {
@@ -57,7 +61,7 @@ const HorizontalLinearStepper = ({
   };
 
   const handleCancel = () => {
-    handleClose(false);
+    setOpenCancel(true);
   };
 
   const handleNext = () => {
@@ -92,10 +96,11 @@ const HorizontalLinearStepper = ({
       await handleSubmit(async () => {        
         try{
             await createFunction(formData);
-            showSuccessToast("Criado com sucesso!");
+            // showSuccessToast("Criado com sucesso!");
             updateTable();
             setActiveStep(0);
-            handleClose(false);
+            // handleClose(false);
+            setOpen(true);
         } catch (e) {
             onLoadingChange(false);
             showErrorToast(e.message);
@@ -183,6 +188,8 @@ const HorizontalLinearStepper = ({
           </Box>
         )}
       </Box>
+      <AlertDialogSucess dialogOpen={open} handleClose={() => setOpen(false)} handleFunction={() => handleClose(false)}/>
+      <AlertDialogCancel dialogOpen={openCancel} handleClose={() => setOpenCancel(false)} handleFunction={() => handleClose(false)} />
     </Box>
   );
 };
