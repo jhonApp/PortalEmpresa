@@ -34,3 +34,31 @@ export const StyledIconButton = styled(Box)({
   alignItems: 'center',
   padding: 10,
 });
+
+export const StyledCardSecao = styled(Card)({
+  backgroundColor: '#FAFAFA',
+  display: 'flex',
+  width: '300px',
+  height: '369px',
+  overflowY: 'auto',
+  borderRadius: '20px',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+  scrollbarWidth: 'thin',
+  scrollbarColor: '#999 #f4f4f4',
+  '&::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: '#f4f4f4',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#999',
+    borderRadius: '4px',
+  },
+  '& .css-3ekr5r': {
+    maxHeight: '250px',
+  },
+  '& .css-h4y409-MuiList-root': {
+    width: '100%'
+  }
+});
