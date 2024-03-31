@@ -55,7 +55,7 @@ const StyledPaper = styled(Paper)({
 const StyledPaperFiltro = styled(Paper)({
     textAlign: 'center',
     boxShadow: 'none',
-    marginTop: '20px',
+    marginTop: '10px',
     width: '300px',
 });
 

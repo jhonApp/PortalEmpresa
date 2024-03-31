@@ -16,15 +16,12 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
   const [dialogDeleteOpen, setDialogDeleteOpen] = useState(false);
   const [dialogConfig, setDialogConfig] = useState({ title: '', action: '' });
   const [loading, setLoading] = useState(false);
-  console.log("to sendo chamado no menuAction")
 
   const handleClick = (event) => {
-    console.log("handleClick called");
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
-    console.log("handleClose called");
     setAnchorEl(null);
   };
 
