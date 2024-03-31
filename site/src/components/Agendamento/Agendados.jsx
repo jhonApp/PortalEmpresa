@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import { excluirAgendamentos } from '../../../service/agendamentoService';
 import PopupManager from '../popupManager';
 import PopupFiltro from './popupFiltro';
+import TemporaryDrawer from './drawerFilter';
 import Table from '../Table'
 
 function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, isValid, setValid, atualizarAgendamento}) {
@@ -46,7 +47,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
   };
 
   const handleClosePopup = () => {
-    setOpenPopup(false);
+    setOpenPopup(false); 
   };
 
   return (
@@ -72,7 +73,8 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
       <Box display="flex" gap={2} marginTop={2}>
         <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} hadleDelete={excluirAgendamentos} PopupManager={PopupManager} updateTable={atualizarAgendamento}/>
       </Box>
-      <PopupFiltro open={openPopup} handleClose={handleClosePopup} data={agendamentoData} setData={setAgendamentoData} />
+      <TemporaryDrawer open={openPopup} handleClose={handleClosePopup} data={agendamentoData} setData={setAgendamentoData} />
+      {/* <PopupFiltro open={openPopup} handleClose={handleClosePopup} data={agendamentoData} setData={setAgendamentoData} /> */}
     </Box>
   );
 }
