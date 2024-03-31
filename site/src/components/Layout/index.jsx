@@ -6,7 +6,6 @@ import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, ChevronRight as Chevr
 import { CaretLeft, CaretDown, SignOut, House, CalendarPlus, Nut, File, MagnifyingGlass, Factory, Briefcase, CreditCard, IdentificationCard, MapPin, ChatCenteredText  } from 'phosphor-react';
 import portalIconSVG from '../../assets/images/icones/Portal Empresa II.svg';
 import { getData } from '../../../service/storageService';
-
 const drawerWidth = 240;
 
 const LogoContainer = styled('div')({
@@ -126,6 +125,7 @@ export default function MiniDrawer({ children }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [title, setTitle] = useState('Dashboard');
   const memoizedTitle = useMemo(() => title, [title]);
+  console.log("Index")
 
   const handleDrawerOpen = () => {
     setOpen(true);

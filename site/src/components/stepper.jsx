@@ -55,7 +55,7 @@ const HorizontalLinearStepper = ({
   const [open, setOpen] = React.useState(false);
   const [openCancel, setOpenCancel] = React.useState(false);
   const { handleSubmit, clearMessage } = useForm();
-
+  console.log("Estou no stepper")
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };

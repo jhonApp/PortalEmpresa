@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import { TableRow, TableCell, Typography } from '@mui/material';
 
 const DataRow = ({ row, columns, window, theme, hadleDelete, PopupDialog, updateTable }) => {
-    return (
+  return (
       <TableRow hover role="checkbox" tabIndex={-1}>
         {columns.map((column) => (
           <TableCell style={{ fontSize:'15px' }} key={column.id} align={column.align}>

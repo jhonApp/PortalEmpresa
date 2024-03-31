@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
-import PopupDialog from '../dialog';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import { UserMinus, UsersThree, IdentificationCard, UsersFour } from 'phosphor-react';
-import AgendamentoVisitante from './AgendamentoVisitante';
-import AgendamentoVisitanteEspecial from './AgendamentoVisitanteEspecial';
-import AgendamentoPrestador from './AgendamentoPrestador';
-import AgendamentoMassa from './AgendamentoMassa';
+import PopupManager from '../popupManager';
+
 import Typography from '@mui/material/Typography';
 
 function TipoAgendamento({ atualizarAgendamento }) {
-  const [openPopup, setOpenPopup] = useState(false);
+  const theme = useTheme();
+  const [open, setOpen] = useState(false);
   const [popupType, setPopupType] = useState('');
-  const [popupData, setPopupData] = useState();
-  const [popupAction, setPopupAction] = useState();
   const [popupTitle, setPopupTitle] = useState('');
   const [popupDescription, setPopupDescription] = useState('');
-  const theme = useTheme();
+  const [popupAction, setPopupAction] = useState('');
+  const [popupData, setPopupData] = useState('');
 
   const iconContainerStyle = {
     display: 'flex',
@@ -43,32 +40,17 @@ function TipoAgendamento({ atualizarAgendamento }) {
     height: '84px'
   };
 
-  const handleOpenPopup = (title, description, type, data, action) => {
-    setPopupTitle(title);
+  const handleOpenPopup = (type, data, action, title, description) => {
+    setOpen(true);
     setPopupType(type);
+    setPopupTitle(title);
     setPopupDescription(description);
-    setPopupData(data)
-    setPopupAction(action)
-    setOpenPopup(true);
+    setPopupAction(action);
+    setPopupData(data);
   };
 
   const handleClosePopup = () => {
-    setOpenPopup(false);
-  };
-
-  const renderContent = () => {
-    switch (popupType) {
-      case 'Visitante Simples':
-        return <AgendamentoVisitante onClose={handleClosePopup} updateTable={atualizarAgendamento} data={popupData} action={popupAction}/>;
-      case 'Visitante Especial':
-        return <AgendamentoVisitanteEspecial onClose={handleClosePopup} updateTable={atualizarAgendamento} data={popupData} action={popupAction}/>;
-      case 'Prestador de Serviço':
-        return <AgendamentoPrestador onClose={handleClosePopup} updateTable={atualizarAgendamento} data={popupData} action={popupAction}/>;
-      case 'Múltiplos Visitantes':
-        return <AgendamentoMassa onClose={handleClosePopup} updateTable={atualizarAgendamento} data={popupData} action={popupAction}/>;
-      default:
-        return null;
-    }
+    setOpen(false);
   };
 
   return (
@@ -88,24 +70,34 @@ function TipoAgendamento({ atualizarAgendamento }) {
       <Typography variant="h5" component="h1" style={{  fontWeight: 'bold' }}>Novo Agendamento</Typography>
       <Typography marginTop={-1} variant="subtitle1" component="h5">Selecione o tipo de agendamento que deseja realizar.</Typography>
       <Box display="flex" gap={2} marginTop={2}>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Simples', 'Visitante Simples', null, 'salvar')}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Visitante Simples', null, 'salvar','Novo Agendamento', 'Visitante Simples')}>
           <div style={iconContainerStyle}><UserMinus size={20} color="#72788E" /></div>
           Visitante Simples
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Visitante Especial', 'Visitante Especial', null, 'salvar')}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Visitante Especial', null, 'salvar', 'Novo Agendamento', 'Visitante Especial')}>
           <div style={iconContainerStyle}><UsersThree size={20} color="#72788E" /></div>
           Visitante Especial
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Prestador de Serviço', 'Prestador de Serviço', null, 'salvar')}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Prestador de Serviço', null, 'salvar', 'Novo Agendamento', 'Prestador de Serviço')}>
           <div style={iconContainerStyle}><IdentificationCard size={20} color="#72788E" /></div>
           Prestador de Serviço
         </Button>
-        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Novo Agendamento', 'Múltiplos Visitantes', 'Múltiplos Visitantes', null, 'salvar')}>
+        <Button style={{ ...buttonStyle }} variant="contained" onClick={() => handleOpenPopup('Múltiplos Visitantes', null, 'salvar', 'Novo Agendamento', 'Múltiplos Visitantes')}>
           <div style={iconContainerStyle}><UsersFour size={20} color="#72788E" /></div>
           Múltiplos Visitantes
         </Button>
       </Box>
-      <PopupDialog open={openPopup} handleClose={handleClosePopup} atualizarAgendamento={atualizarAgendamento} title={popupTitle} description={popupDescription} renderContent={renderContent} visible={false}/>
+
+      <PopupManager 
+        open={open}
+        handleClose={handleClosePopup}
+        type={popupType}
+        data={popupData}
+        action={popupAction}
+        title={popupTitle}
+        description={popupDescription}
+        atualizaLista={atualizarAgendamento}
+      />
     </Box>
   );
 }

@@ -16,12 +16,15 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
   const [dialogDeleteOpen, setDialogDeleteOpen] = useState(false);
   const [dialogConfig, setDialogConfig] = useState({ title: '', action: '' });
   const [loading, setLoading] = useState(false);
+  console.log("to sendo chamado no menuAction")
 
   const handleClick = (event) => {
+    console.log("handleClick called");
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => { 
+  const handleClose = () => {
+    console.log("handleClose called");
     setAnchorEl(null);
   };
 
@@ -54,7 +57,6 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
 
   const handleDelete = async (codigo) => {
     try {
-      debugger
       setLoading(true);
 
       if (!codigo){
@@ -73,8 +75,6 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
       showErrorToast(error.message);
     }
   };
-  
-
   return (
     <div>
       <IconButton
@@ -109,15 +109,18 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
           </MenuItem>
         ))}
       </Menu>
-      <PopupDialogComponent
-        open={dialogOpen} 
-        handleClose={() => setDialogOpen(false)} 
-        title={dialogConfig.title} 
-        description={dialogConfig.description} 
-        type={data.tipo}
-        data={data}
-        action={dialogConfig.action}
-      />
+      {dialogConfig.action && (
+        <PopupDialogComponent
+          open={dialogOpen} 
+          handleClose={() => setDialogOpen(false)}
+          type={data.tipo}
+          data={data}
+          action={dialogConfig.action}
+          title={dialogConfig.title} 
+          description={dialogConfig.description}
+          updateTable={updateTable}
+        />
+      )}
       <AlertDialog 
         dialogOpen={dialogDeleteOpen}
         handleClose={() => setDialogDeleteOpen(false)}

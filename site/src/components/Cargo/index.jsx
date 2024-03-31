@@ -11,6 +11,7 @@ function Cargo() {
   const [isValid, setValid] = useState(true);
 
   const atualizaDepartamento = async () => {
+    console.log("Departamento")
     try {
       await listarDepartamento(setDepartamentoData, setLoading, setValid);
     } catch (error) {

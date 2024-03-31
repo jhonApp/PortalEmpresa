@@ -38,7 +38,7 @@ export default function CustomTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const theme = useTheme();
-
+  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -64,7 +64,7 @@ export default function CustomTable(props) {
     return props.data
       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
       .map((row, index) => (
-        <DataRow key={index} row={row} columns={props.columns} window={props.window} theme={theme} hadleDelete={props.hadleDelete} PopupDialog={props.PopupDialog} updateTable={props.updateTable}/>
+        <DataRow key={index} row={row} columns={props.columns} window={props.window} theme={theme} hadleDelete={props.hadleDelete} PopupDialog={props.PopupManager} updateTable={props.updateTable}/>
       ));
   };
 

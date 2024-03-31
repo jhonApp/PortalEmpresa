@@ -7,7 +7,6 @@ import { StyledButtonPrimary } from '../Utils/StyledButton';
 
 function PopupDialog({ open, handleClose, title, description, renderContent, visible }) {
   const theme = useTheme();
-
   return (
     <StyledDialog open={open} onClose={handleClose}>
       <DialogActions sx={{ position: 'absolute', marginRight: 0, top: 16, right: 0 }}>
