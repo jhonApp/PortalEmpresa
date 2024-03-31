@@ -44,7 +44,7 @@ export default function AlertDialogCancel({ dialogOpen, handleClose, handleFunct
             Quando cancelar a operação, todos os dados informados serão perdidos e as alterações não vão ser salvas.
           </DialogContentText>
           <DialogActions sx={{ backgroundColor: '#ffe5e5', justifyContent: 'center' }}>
-            <Button sx={{ color: '#525151', borderRadius: '50px' }} onClick={handleClose}>Não</Button>
+            <Button sx={{ color: '#525151', borderRadius: '50px', width: '180px', height: '50px'}} onClick={handleClose}>Não</Button>
             <StyledButtonDelete onClick={handleConfirmCancel} autoFocus> Sim </StyledButtonDelete>
           </DialogActions>
         </DialogContent>

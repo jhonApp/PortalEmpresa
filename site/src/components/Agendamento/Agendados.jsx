@@ -3,7 +3,7 @@ import { Box, Paper, Button, useTheme } from '@mui/material';
 import ListMagnifyingGlass from '../../assets/images/icones/listmagnifyinglass.svg';
 import Typography from '@mui/material/Typography';
 import { excluirAgendamentos } from '../../../service/agendamentoService';
-import PopupDialog from './popupAgendamento';
+import PopupManager from '../popupManager';
 import PopupFiltro from './popupFiltro';
 import Table from '../Table'
 
@@ -19,7 +19,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
     { id: 'status', label: 'Status', width: 260, align: 'center', },
     { id: 'action', label: '', minWidth: 100, align: 'center', },
   ];
-
+  
   const buttonStyleFiltro = {
     borderRadius: '50px',
     backgroundColor: 'transparent',
@@ -70,7 +70,7 @@ function Agendados({agendamentoData, setAgendamentoData, loading, setLoading, is
         </Button>
       </Box>
       <Box display="flex" gap={2} marginTop={2}>
-        <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} hadleDelete={excluirAgendamentos} PopupDialog={PopupDialog} updateTable={atualizarAgendamento}/>
+        <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} hadleDelete={excluirAgendamentos} PopupManager={PopupManager} updateTable={atualizarAgendamento}/>
       </Box>
       <PopupFiltro open={openPopup} handleClose={handleClosePopup} data={agendamentoData} setData={setAgendamentoData} />
     </Box>

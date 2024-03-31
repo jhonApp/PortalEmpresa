@@ -126,7 +126,6 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 Hora de Saída
               </InputLabel>
               <StyledTimePicker
-                label="Hora de Saída"
                 variant="outlined"
                 fullWidth
                 disabled

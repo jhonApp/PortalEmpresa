@@ -44,7 +44,7 @@ export default function AlertDialogConfirm({ dialogOpen, handleClose, handleFunc
             Confirmar a visualização do comunicado?
           </DialogContentText>
           <DialogActions sx={{ backgroundColor: '#E8F3FC', justifyContent: 'center' }}>
-            <Button sx={{ color: '#525151', borderRadius: '50px' }} onClick={handleClose}>Não</Button>
+            <Button sx={{ color: '#525151', borderRadius: '50px', width: '180px', height: '50px'}} onClick={handleClose}>Não</Button>
             <StyledButtonConfirm onClick={handleConfirm} autoFocus> Sim </StyledButtonConfirm>
           </DialogActions>
         </DialogContent>

@@ -7,7 +7,6 @@ function Agendamento() {
   const [agendamentoData, setAgendamentoData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isValid, setValid] = useState(true);
-
   const atualizarAgendamento = async () => {
     try {
       await atualizarTabela(setAgendamentoData, setLoading, setValid);

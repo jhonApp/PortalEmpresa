@@ -32,7 +32,7 @@ export default function AlertDialog({ dialogOpen, handleClose, handleDelete }) {
       >
         <DialogTitle id="alert-dialog-title" sx={{ backgroundColor: '#ffe5e5', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', pt: '90px' }}>
           <div style={{ marginBottom: '10px' }}>
-            <XCircle size={52} color="#FF0B0B" />
+            <XCircle size={80} color="#FF0B0B" />
           </div>
           <div style={{ fontWeight: 'bold' }}>
             Tem certeza que deseja <span style={{ color: 'red' }}>excluir</span>?
@@ -40,11 +40,11 @@ export default function AlertDialog({ dialogOpen, handleClose, handleDelete }) {
         </DialogTitle>
 
         <DialogContent sx={{ backgroundColor: '#ffe5e5', textAlign: 'center' }}>
-          <DialogContentText id="alert-dialog-description" sx={{ fontSize: 14, color: '#000', pb: '20px' }}>
+          <DialogContentText id="alert-dialog-description" sx={{ fontSize: 16, color: '#474747', pb: '20px' }}>
             Quando excluir os dados não poderá ser revertidos.
           </DialogContentText>
           <DialogActions sx={{ backgroundColor: '#ffe5e5', justifyContent: 'center' }}>
-            <Button sx={{ color: '#000' }} onClick={handleClose}>Não</Button>
+            <Button sx={{ color: '#525151', borderRadius: '50px', width: '180px', height: '50px'}} onClick={handleClose}>Não</Button>
             <StyledButtonDelete onClick={handleConfirmDelete} autoFocus> Sim </StyledButtonDelete>
           </DialogActions>
         </DialogContent>

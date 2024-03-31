@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState , useLayoutEffect  } from 'react';
 import { StyledTextField, StyledPaper, FormContainer, Column, FormRow, BootstrapInput } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
 import { Checkbox, Typography, InputLabel } from '@mui/material';
@@ -17,12 +17,17 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     validateForm,
     'agendamento'
   );
+  console.log(formData)
 
-  useEffect(() => {
-    if (formData && Object.keys(formData).length > 0) {
-      setValues(formData);
-    }
-  }, [formData, setValues]);
+  // const updateValues = (newFormData) => {
+  //   setTimeout(() => {
+  //     setValues(newFormData);
+  //   }, 3);
+  // };
+  
+  // useLayoutEffect(() => {
+  //   updateValues(formData);
+  // }, [formData]);
 
   const handleFormChange = (fieldName, value) => {
     console.log(formData)
@@ -48,9 +53,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
                 type="number"
                 autoComplete="off"
                 error={errors.rgCpf}
-                value={values.rgCpf || ''}
-                onChange={(e) => handleFormChange('rgCpf', e.target.value)}
-                onBlur={(e) => handleFormChange('rgCpf', e.target.value)} />
+                value={formData.rgCpf || ''}
+                onChange={(e) => handleFormChange('rgCpf', e.target.value)} />
               {renderErrorMessage('rgCpf')}
           </FormRow>
           {/* Email */}
@@ -63,9 +67,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
                 type="text"
                 autoComplete="off"
                 error={errors.email}
-                value={values.email || ''}
+                value={formData.email || ''}
                 onChange={(e) => { handleFormChange('email', e.target.value); }}
-                onBlur={(e) => handleFormChange('email', e.target.value)}
               />
             {renderErrorMessage('email')}
           </FormRow>
@@ -81,9 +84,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               name="empresa"
               disabled
               error={errors.empresa}
-              value={values.empresa || ''}
+              value={formData.empresa || ''}
               onChange={(e) => { handleFormChange('empresa', e.target.value) }}
-              onBlur={(e) => handleFormChange('empresa', e.target.value)}
             />
             {renderErrorMessage('empresa')}
           </FormRow>
@@ -100,9 +102,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               autoComplete="off"
               name="nomeCompleto"
               error={errors.nomeCompleto}
-              value={values.nomeCompleto || ''}
+              value={formData.nomeCompleto || ''}
               onChange={(e) => { handleFormChange('nomeCompleto', e.target.value) }}
-              onBlur={(e) => handleFormChange('nomeCompleto', e.target.value)}
             />
             {renderErrorMessage('nomeCompleto')}
           </FormRow>
@@ -111,7 +112,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             <InputMask
               mask="(99) 99999-9999"
               maskChar=" "
-              value={values.telefone || ''}
+              value={formData.telefone || ''}
               onChange={(e) => handleFormChange('telefone', e.target.value)}
             >
               {() => (
@@ -125,9 +126,6 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
                     autoComplete="off"
                     name="telefone"
                     error={errors.telefone}
-                    value={values.telefone || ''}
-                    onChange={(e) => { handleFormChange('telefone', e.target.value) }}
-                    onBlur={(e) => { handleFormChange('telefone', e.target.value) }}
                   />
                   {renderErrorMessage('telefone')}
                 </div>
@@ -146,9 +144,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               disabled
               name="servico"
               error={errors.servico}
-              value={values.servico || ''}
+              value={formData.servico || ''}
               onChange={(e) => { handleFormChange('servico', e.target.value) }}
-              onBlur={(e) => { handleFormChange('servico', e.target.value) }}
             />
             {renderErrorMessage('servico')}
           </FormRow>
@@ -161,10 +158,10 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             padding: '0px 0px 0px 0px !important',
             '& .MuiSvgIcon-root': { color: '#C4C7D4' }
           }}
-          checked={values.confirmacao || false}
+          checked={formData.confirmacao || false}
           error={errors.confirmacao}
           onChange={(e) => {
-            values.confirmacao = e.target.checked;
+            formData.confirmacao = e.target.checked;
             handleFormChange('confirmacao', e.target.checked);
           }}
           inputProps={{ 'aria-label': 'primary checkbox' }}   
