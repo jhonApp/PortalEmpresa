@@ -199,20 +199,20 @@ const ModalSetor = ({ updateSetor }) => {
         <StyledBox sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
           {setores.map((setor, index) => (
             <StyledCard key={index}>
-            <StyledCardContent>
-              <TextWithEllipsis text={setor.nome} maxLength={10} valueWeigth={600} />
-            </StyledCardContent>
-            <StyledCardBox>
-              <StyledIconButton>
-                <IconButton onClick={() => handleUpdate(setor)}>
-                  <PencilSimple size={20} color="#676767" />
-                </IconButton>
-                <IconButton onClick={() => handleClickOpen(setor.codigo)} >
-                  <TrashSimple size={20} color="#FF0B0B"/>
-                </IconButton>
-              </StyledIconButton>
-            </StyledCardBox>
-          </StyledCard>
+              <StyledCardContent>
+                <TextWithEllipsis text={setor.nome} maxLength={10} valueWeigth={600} />
+              </StyledCardContent>
+              <StyledCardBox>
+                <StyledIconButton>
+                  <IconButton onClick={() => handleUpdate(setor)}>
+                    <PencilSimple size={20} color="#676767" />
+                  </IconButton>
+                  <IconButton onClick={() => handleClickOpen(setor.codigo)} >
+                    <TrashSimple size={20} color="#FF0B0B"/>
+                  </IconButton>
+                </StyledIconButton>
+              </StyledCardBox>
+            </StyledCard>
           ))}
         </StyledBox>
       </div>

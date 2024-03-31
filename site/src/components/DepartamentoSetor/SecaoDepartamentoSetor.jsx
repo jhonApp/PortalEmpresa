@@ -1,64 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Paper, Typography, Radio, RadioGroup, FormControlLabel, FormControl, FormGroup } from '@mui/material';
-import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import { Box, Paper, Typography, Radio, Checkbox } from '@mui/material';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import { X } from 'phosphor-react';
 import { inserirSecao } from '../../../service/secaoService';
-import { showSuccessToast, showErrorToast, showWarningToast } from '../../Utils/Notification';
-import { height } from '@mui/system';
+import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
+import { StyledCardSecao } from '../../Utils/StyledCard';
 
-const formControlStyle = {
-  padding: '10px',
-  width: '300px',
-  marginTop: '5px',
-  borderRadius: '20px',
-  backgroundColor: '#FAFAFA'
-};
-
-const labelStyle = {
-  fontSize: '16px',
-  fontWeight: 600
-};
-
-function SecaoDepartamentoSetor({ setorData, departamentoData, loading, setLoading, isValid, setValid }) {
-  const [secaoSelecionada, setSecaoSelecionada] = useState('');
-  const [setorSelecionada, setSetorSelecionada] = useState('');
-  const [secoesSelecionadas, setSecoesSelecionadas] = useState([]);
-  const [checkboxesHabilitados, setCheckboxesHabilitados] = useState(false);
-
-  useEffect(() => {
-    handleAssociacao();
-  }, [secaoSelecionada, setorSelecionada]);
-
-  const handleRadioChange = (event) => {
-    setSecaoSelecionada('');
-    setSecaoSelecionada(event.target.value);
+const SecaoDepartamentoSetor = ({ setorData, departamentoData }) => {
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedSubgroups, setSelectedSubgroups] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  console.log(departamentoData);
+  const handleGroupChange = (group) => {
+    setSelectedGroup(group);
+    setSelectedSubgroups([]);
   };
 
-  const handleCheckboxChange = (event) => {
-    setSetorSelecionada(event.target.value);
+  const handleSubgroupChange = (subgroup) => {
+    const isSelected = selectedSubgroups.some(sub => sub.codigo === subgroup.codigo);
+    if (isSelected) {
+      setSelectedSubgroups(selectedSubgroups.filter(sub => sub.codigo !== subgroup.codigo));
+    } else {
+      setSelectedSubgroups([...selectedSubgroups, subgroup]);
+    }
   };
 
   const handleAssociacao = async () => {
+    setLoading(true);
     try {
-      if (secaoSelecionada && setorSelecionada) {
-        const secao = { 
-          codigoDepartamento: secaoSelecionada,
-          codigoSetor: setorSelecionada,
-        };
+      const secoes = selectedSubgroups.map(subgroup => ({
+        codigoDepartamento: selectedGroup.codigo,
+        codigoSetor: subgroup.codigo,
+      }));
 
-        await inserirSecao(secao);
-        setSecoesSelecionadas([...secoesSelecionadas, secao]);
-        showSuccessToast("Associação realizada com sucesso");
-      } else if (secaoSelecionada && !setorSelecionada) {
-        showWarningToast("Por favor, selecione um setor.");
-      } else if (!secaoSelecionada && setorSelecionada) {
-        showWarningToast("Por favor, selecione um departamento.");
-      } else {
-      }
+      await Promise.all(secoes.map(secao => inserirSecao(secao)));
+      showSuccessToast("Associação realizada com sucesso");
     } catch (error) {
       showErrorToast(error.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectedSubgroups.length > 0) {
+      handleAssociacao();
+    }
+  }, [selectedSubgroups]);
 
   return (
     <Box
@@ -74,38 +66,57 @@ function SecaoDepartamentoSetor({ setorData, departamentoData, loading, setLoadi
       style={{ borderRadius: '10px' }}
       component={Paper}
     >
-      <Box display="flex">
-        {/* Departamento */}
-        <Box style={{ height: 'auto' }}>
-          <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Departamento</Typography>
-          <FormControl component={Paper} sx={formControlStyle}>
-            <RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group" value={secaoSelecionada} onChange={handleRadioChange}>
+      <Grid container spacing={2} justifyContent="start" alignItems="top">
+        <Grid item>
+          <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginLeft: '20px', marginBottom: '10px' }}>Departamento</Typography>
+          <StyledCardSecao>
+            <List>
               {departamentoData.map((departamento, index) => (
-                <FormControlLabel key={index} value={departamento.codigo} control={<Radio />} label={<Typography style={labelStyle}>{departamento.nome}</Typography>} />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </Box>
-        <div style={{ marginTop: '120px', marginLeft: '14px' }}>
-          <X size={25} />
-        </div>
-        {/* Setor */}
-        <Box marginLeft={2}>
-          <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Setor</Typography>
-          <FormControl component={Paper} sx={formControlStyle}>
-            <FormGroup>
-              {setorData.map((setor, index) => (
-                <FormControlLabel
+                <ListItemButton
                   key={index}
-                  value={setor.codigo}
-                  control={<Checkbox onChange={handleCheckboxChange} />}
-                  label={<Typography style={labelStyle}>{setor.nome}</Typography>}
-                />
+                  onClick={() => handleGroupChange(departamento)}
+                >
+                  <Radio
+                    checked={selectedGroup && selectedGroup.codigo === departamento.codigo}
+                    name="group-radio"
+                    inputProps={{ 'aria-label': departamento.nome }}
+                  />
+                  <ListItemText sx={{ fontSize: '16px', fontWeight: 600 }} primary={departamento.nome} />
+                </ListItemButton>
               ))}
-            </FormGroup>
-          </FormControl>
-        </Box>
-      </Box>
+            </List>
+          </StyledCardSecao>
+        </Grid>
+        <div style={{ marginTop: '15%', marginLeft: '14px' }}>
+          <X size={32} />
+        </div>
+        {selectedGroup && (
+          <Grid item>
+            <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginLeft: '20px', marginBottom: '10px' }}>Setores</Typography>
+            <StyledCardSecao sx={{ borderRadius: '20px', width: '300px', height: '369px', overflowY: 'auto' }}>
+              <List>
+                {setorData
+                  .filter((setor) => (
+                    !selectedGroup.codigoSetorSecao.some((codigo) => setor.codigoSetorSecao.includes(codigo))
+                  ))
+                  .map((setor, index) => (
+                    <ListItemButton
+                      key={index}
+                      onClick={() => handleSubgroupChange(setor)}
+                    >
+                      <Checkbox
+                        checked={selectedSubgroups.some(sub => sub.codigo === setor.codigo)}
+                        name="subgroup-checkbox"
+                        inputProps={{ 'aria-label': setor.nome }}
+                      />
+                      <ListItemText sx={{fontSize:'16px', fontWeight: 600 }} primary={setor.nome} />
+                    </ListItemButton>
+                  ))}
+              </List>
+            </StyledCardSecao>
+          </Grid>
+        )}
+      </Grid>
     </Box>
   );
 }

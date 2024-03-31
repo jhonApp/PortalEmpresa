@@ -58,7 +58,7 @@ export const listarDepartamentos = async () => {
       return data;
 
     } catch (error) {
-      console.error('Erro ao obter dados de agendamento:', error);
+      console.error('Erro ao obter dados de departamentos:', error);
       setLoading(false);
       setValid(false);
     }
