@@ -14,15 +14,39 @@ export const atualizarTabela = async (setFuncionarioData, setLoading, setValid, 
     }
 };
 
+const separarTelefone = (telefone) => {
+  const partes = telefone.replace(/[^\d]/g, '').match(/^(\d{2})(\d{4,5})(\d{4})$/);
+  if (partes) {
+    return {
+      ddd: partes[1],
+      numeroTelefone: partes[2] + partes[3]
+    };
+  } else {
+    return {
+      ddd: '',
+      numeroTelefone: ''
+    };
+  }
+};
+
 export const cadastrarFuncionario = async (dados) => {
   try {
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
-    // Obtenha os dados de armazenamento necessários
-    const storage = getData();
 
-    // Crie o objeto funcionário com os dados fornecidos
+    // Convertendo CPF
+    const cpf = dados.cpf.replace(/\D/g, '');
+
+    // Convertendo RG
+    const rg = dados.rg.replace(/\D/g, '');
+
+    // Convertendo CEP
+    const cep = dados.cep.replace(/\D/g, '');
+
+    const telefoneSeparado = separarTelefone(dados.telefone);
+
+    const storage = getData();
     const funcionario = {
       CodigoEmpresa: storage.codigoEmpresa,
       CodigoCargo: dados.selectedCargo,
@@ -32,10 +56,9 @@ export const cadastrarFuncionario = async (dados) => {
       File: dados.file,
       Nascimento: dados.dataNascimento,
       RecebeVisita: dados.RecebeVisita,
-      Cartao: 9450404, // Cartão fixo,  preciso verificar como obter um cartão livre
-      CPF: dados.cpf,
-      RG: dados.rg,
-      Documento: dados.rg,
+      CPF: cpf,
+      RG: rg,
+      Documento: rg,
       NomePai: dados.nomePai,
       NomeMae: dados.nomeMae,
       CodigoEstadoCivil: dados.estadoCivil,
@@ -43,7 +66,7 @@ export const cadastrarFuncionario = async (dados) => {
       Demissao: dados.demissao,
       Email: dados.email,
       FuncionarioEndereco: {
-        Cep: dados.cep,
+        Cep: cep,
         Logradouro: dados.logradouro,
         Bairro: dados.bairro,
         UF: dados.uf,
@@ -62,13 +85,16 @@ export const cadastrarFuncionario = async (dados) => {
         Feriado: dados.feriados == true? "S" : "N",
       },
       FuncionarioTelefone: {
-        NumeroTelefone: dados.telefone,
+        NumeroTelefone: telefoneSeparado.numeroTelefone,
+        DDD: telefoneSeparado.ddd
       }
     };
-    debugger
-    const foto = dados.file ? base64Valid(dados.file) : "";
 
-    // Envia a solicitação de inserção do funcionário
+    const foto = "";
+    if(dados.file != undefined || dados.file != null) {
+      foto = base64Valid(dados.file);
+    }
+
     const response = await inserirFuncionario(funcionario, foto);
 
     if (response.status !== 200) {
@@ -81,6 +107,7 @@ export const cadastrarFuncionario = async (dados) => {
     throw new Error('Erro ao inserir funcionário: ' + error.message);
   }
 };
+
 
 
 export const inserirFoto = async (data) => {

@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { StyledTextField, StyledTimePicker, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Divider from '@mui/material/Divider';
 import { Checkbox, Typography, Fade } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
+import InputLabel from '@mui/material/InputLabel';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -52,25 +54,28 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
         sx={{
           backgroundColor: 'transparent',
           borderBottom: '1px solid #BCC0CF',
-          '& .MuiAccordion-region': { height: expanded ? '330px' : 0 },
+          '& .MuiAccordion-region': { height: expanded ? '422px' : 0 },
           '& .MuiAccordionDetails-root': { display: expanded ? 'block' : 'none', backgroundColor: 'transparent', },
         }}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1-content"
+          
           id="panel1-header"
         >
-          <Typography fontWeight={600}>Configuração de Acesso</Typography>
+          <Typography fontSize={20} fontWeight={600}>Configuração de Acesso</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <FormContainer>
             <Column>
               {/*Hora Entrada*/}
               <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Horário de Entrada *
+                </InputLabel>
                 <FormRow>
                   <StyledTimePicker
-                    label="Horário de Entrada *"
                     variant="outlined"
                     fullWidth
                     margin="normal"
@@ -107,8 +112,10 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
               {/*Hora Saída*/}
               <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                 <FormRow>
+                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Horário de Saída *
+                  </InputLabel>
                   <StyledTimePicker
-                    label="Horário de Saída *"
                     variant="outlined"
                     fullWidth
                     margin="normal"
