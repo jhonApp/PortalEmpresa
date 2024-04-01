@@ -87,34 +87,36 @@ const SecaoDepartamentoSetor = ({ setorData, departamentoData }) => {
             </List>
           </StyledCardSecao>
         </Grid>
-        <div style={{ marginTop: '15%', marginLeft: '14px' }}>
-          <X size={32} />
-        </div>
         {selectedGroup && (
-          <Grid item>
-            <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginLeft: '20px', marginBottom: '10px' }}>Setores</Typography>
-            <StyledCardSecao sx={{ borderRadius: '20px', width: '300px', height: '369px', overflowY: 'auto' }}>
-              <List>
-                {setorData
-                  .filter((setor) => (
-                    !selectedGroup.codigoSetorSecao.some((codigo) => setor.codigoSetorSecao.includes(codigo))
-                  ))
-                  .map((setor, index) => (
-                    <ListItemButton
-                      key={index}
-                      onClick={() => handleSubgroupChange(setor)}
-                    >
-                      <Checkbox
-                        checked={selectedSubgroups.some(sub => sub.codigo === setor.codigo)}
-                        name="subgroup-checkbox"
-                        inputProps={{ 'aria-label': setor.nome }}
-                      />
-                      <ListItemText sx={{fontSize:'16px', fontWeight: 600 }} primary={setor.nome} />
-                    </ListItemButton>
-                  ))}
-              </List>
-            </StyledCardSecao>
-          </Grid>
+          <>
+            <div style={{ marginTop: '15%', marginLeft: '14px' }}>
+              <X size={32} />
+            </div>
+            <Grid item>
+              <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginLeft: '20px', marginBottom: '10px' }}>Setores</Typography>
+              <StyledCardSecao sx={{ borderRadius: '20px', width: '300px', height: '369px', overflowY: 'auto' }}>
+                <List>
+                  {setorData
+                    .filter((setor) => (
+                      !selectedGroup.codigoSetorSecao.some((codigo) => setor.codigoSetorSecao.includes(codigo))
+                    ))
+                    .map((setor, index) => (
+                      <ListItemButton
+                        key={index}
+                        onClick={() => handleSubgroupChange(setor)}
+                      >
+                        <Checkbox
+                          checked={selectedSubgroups.some(sub => sub.codigo === setor.codigo)}
+                          name="subgroup-checkbox"
+                          inputProps={{ 'aria-label': setor.nome }}
+                        />
+                        <ListItemText sx={{fontSize:'16px', fontWeight: 600 }} primary={setor.nome} />
+                      </ListItemButton>
+                    ))}
+                </List>
+              </StyledCardSecao>
+            </Grid>
+          </>
         )}
       </Grid>
     </Box>
