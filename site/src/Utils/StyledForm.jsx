@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Paper, TextField, Select, FormControl, FormControlLabel, InputBase } from '@mui/material';
+import { Paper, TextField, Autocomplete, FormControl, FormControlLabel, InputBase } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
@@ -23,7 +23,7 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const StyledSelectField = styled(Select)({
+const StyledSelectField = styled(Autocomplete)({
     borderRadius: '4px',
     background: '#EBEAEF',
     width: '100%',

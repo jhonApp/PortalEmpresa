@@ -5,13 +5,13 @@ import Typography from '@mui/material/Typography';
 
 function BotaoTipoFuncionario({ iconContainerStyle, buttonStyle, quantidade, descricao }) {
   return (
-    <Button style={{ ...buttonStyle }} variant="contained">
+    <Box style={{ ...buttonStyle }} variant="contained">
       <div style={iconContainerStyle}><ListBullets size={20} color="#000" /></div>
       <div display="flex">
         <Typography variant="h6" component="h1" style={{ fontWeight: 'bold', fontSize: 24, textAlign: 'justify' }}>{quantidade}</Typography>
         <Typography variant="h6" component="h1" style={{ fontWeight: 'semi-bold', fontSize: 13, marginTop: '-6px' }}>{descricao}</Typography>
       </div>
-    </Button>
+    </Box>
   );
 }
 
@@ -26,23 +26,27 @@ function TipoFuncionario({ atualizarFuncionario }) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '20%',
-    backgroundColor: 'lightgray',
+    borderRadius: '20px',
+    backgroundColor: '#BCC0CF',
+    marginTop: '-5px',
     padding: theme.spacing(2),
-    height: '20px',
+    height: '60px',
+    width: '60px',
     marginRight: theme.spacing(1),
   };
 
   const buttonStyle = {
     padding: '17px',
+    display: 'flex',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
     borderRadius: '10px',
     backgroundColor: '#FAFAFA',
     fontWeight: 'bold',
     justifyContent: 'flex-start',
     color: 'black',
     textTransform: 'none',
-    width: theme.spacing(30),
-    height: theme.spacing(10)
+    width: '246px',
+    height: '84px'
   };
 
   const handleOpenPopup = (title, description, type) => {

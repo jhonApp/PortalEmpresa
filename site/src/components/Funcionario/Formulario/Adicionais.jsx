@@ -3,6 +3,7 @@ import { StyledTextField, FormContainer, Column, FormRow, StyledDatePicker  } fr
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Accordion from '@mui/material/Accordion';
+import InputLabel from '@mui/material/InputLabel';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
@@ -62,15 +63,17 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <Typography fontWeight={600}>Dados Adicionais</Typography>
+          <Typography fontSize={20} fontWeight={600}>Dados Adicionais</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <FormContainer>
             <Column>
               {/*Nome Mãe*/}
               <FormRow>
+                <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                  Nome Mãe
+                </InputLabel>
                 <StyledTextField
-                  label="Nome Mãe"
                   variant="outlined"
                   fullWidth
                   margin="normal"
@@ -86,8 +89,10 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
               {/*Admissão*/}
               <FormRow>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Admissão
+                  </InputLabel>
                   <StyledDatePicker
-                    label="Admissão"
                     variant="outlined"
                     fullWidth
                     margin="normal"
@@ -104,8 +109,10 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
             <Column>
               {/*Nome Pai*/}
               <FormRow>
+                <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                  Nome Pai
+                </InputLabel>
                 <StyledTextField
-                  label="Nome Pai"
                   variant="outlined"
                   fullWidth
                   margin="normal"
@@ -121,8 +128,10 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
               {/*Demissão*/}
               <FormRow>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Demissão
+                  </InputLabel>
                   <StyledDatePicker
-                    label="Demissão"
                     variant="outlined"
                     fullWidth
                     margin="normal"
@@ -142,8 +151,10 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
             <Column>
               {/*Estado Civil*/}
               <FormRow>
+                <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                  Estado Civil
+                </InputLabel>
                 <StyledTextField
-                  label="Estado Civil"
                   variant="outlined"
                   fullWidth
                   margin="normal"

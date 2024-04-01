@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StyledTextField, StyledSelectField, FormContainer, FormControlSelect, Column, FormRow, StyledDatePicker  } from '../../../Utils/StyledForm';
-import { Checkbox, Typography, Fade, MenuItem } from '@mui/material';
+import { Checkbox, Typography, Fade, MenuItem, TextField } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
+import InputMask from 'react-input-mask';
 import InputLabel from '@mui/material/InputLabel';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -41,7 +42,6 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
         const dataCartoes = await listarCartao();
         setCartoes(dataCartoes);
         const dataCargos = await listarCargo();
-        console.log(dataCargos);
         setCargos(dataCargos);
       } catch (error) {
         console.error('Erro ao obter condomínios:', error);
@@ -81,7 +81,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <Typography fontWeight={600}>Sobre</Typography>
+          <Typography fontSize={20} fontWeight={600}>Sobre</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
@@ -89,8 +89,10 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
               <Column>
                 {/*Nome Completo*/}
                 <FormRow>
+                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Nome Completo *
+                  </InputLabel>
                   <StyledTextField
-                    label="Nome Completo *"
                     variant="outlined"
                     fullWidth
                     margin="normal"
@@ -106,26 +108,37 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                 </FormRow>
                 {/*CPF*/}
                 <FormRow>
-                  <StyledTextField
-                    label="CPF *"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    type="number"
-                    autoComplete="off"
-                    error={errors.cpf}
-                    value={values.cpf || ''}
-                    onChange={(e) => handleFormChange('cpf', e.target.value)}
-                    onBlur={(e) => handleFormChange('cpf', e.target.value)}
-                  />
-                  {renderErrorMessage('cpf')}
+                  <InputMask
+                      mask="999.999.999-99"
+                      maskChar=" "
+                      value={values.cpf || ''}
+                      onChange={(e) => handleFormChange('cpf', e.target.value)}>
+                      {() => (
+                        <div>
+                          <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                            CPF *
+                          </InputLabel>
+                          <StyledTextField
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            type="text"
+                            autoComplete="off"
+                            error={errors.cpf}
+                          />
+                          {renderErrorMessage('cpf')}
+                        </div>
+                      )}
+                  </InputMask>
                 </FormRow>
               </Column>
               <Column>
                 {/*Data Nascimento*/}
                 <FormRow>
+                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Data Nascimento *
+                  </InputLabel>
                   <StyledDatePicker
-                    label="Data Nascimento *"
                     variant="outlined"
                     fullWidth
                     margin="normal"
@@ -140,19 +153,29 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                 </FormRow>
                 {/*RG*/}
                 <FormRow>
-                  <StyledTextField
-                    label="RG *"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    type="text"
-                    autoComplete="off"
-                    error={errors.rg}
-                    value={values.rg || ''}
-                    onChange={(e) => handleFormChange('rg', e.target.value)}
-                    onBlur={(e) => handleFormChange('rg', e.target.value)}
-                  />
-                  {renderErrorMessage('rg')}
+                  <InputMask
+                      mask="99.999.999-9"
+                      maskChar=" "
+                      value={values.rg || ''}
+                      onChange={(e) => handleFormChange('rg', e.target.value)}
+                    >
+                      {() => (
+                        <div>
+                          <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                            RG *
+                          </InputLabel>
+                          <StyledTextField
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            type="text"
+                            autoComplete="off"
+                            error={errors.rg}
+                          />
+                          {renderErrorMessage('rg')}
+                        </div>
+                      )}
+                  </InputMask>
                 </FormRow>
               </Column>
             </FormContainer>
@@ -160,8 +183,10 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
               <Column>
                 {/*Email*/}
                 <FormRow>
+                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Email *
+                  </InputLabel>
                   <StyledTextField
-                    label="Email *"
                     variant="outlined"
                     fullWidth
                     margin="normal"
@@ -174,52 +199,72 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                   />
                   {renderErrorMessage('email')}
                 </FormRow>
-                {/*Cartão*/}
-                <FormControlSelect variant="outlined" style={{ marginTop: 10 }}>
-                    <InputLabel id="cartao-label">Cartão</InputLabel>
-                    <StyledSelectField
-                      labelId="cartao-label"
+                <FormRow>
+                  {/*Cartão*/}
+                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Cartão
+                  </InputLabel>
+                  <StyledSelectField
                       label="cartão"
                       value={values.selectedCartao}
-                      onChange={(e) => handleFormChange('selectedCartao', e.target.value)}
-                      >
-                      {cartoes.map(cartao => (
-                        <MenuItem value={cartao.codigoCartao}> {cartao.codigoCartao} </MenuItem>
-                      ))}
-                    </StyledSelectField>
-                </FormControlSelect>
+                      options={cartoes.map((cartao) => cartao.codigoCartao)}
+                      onChange={(e, value) => handleFormChange('selectedCartao', value)}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label=""
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                </FormRow>
               </Column>
               <Column>
                 {/*Telefone*/}
                 <FormRow>
-                  <StyledTextField
-                    label="Telefone *"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    type="number"
-                    autoComplete="off"
-                    error={errors.telefone}
-                    value={values.telefone || ''}
-                    onChange={(e) => handleFormChange('telefone', e.target.value)}
-                    onBlur={(e) => handleFormChange('telefone', e.target.value)}
-                  />
-                  {renderErrorMessage('telefone')}
+                  <InputMask
+                      mask="(99) 99999-9999"
+                      maskChar=" "
+                      value={values.telefone || ''}
+                      onChange={(e) => handleFormChange('telefone', e.target.value)}
+                    >
+                      {() => (
+                        <div>
+                          <InputLabel shrink htmlFor="tel-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                            Telefone
+                          </InputLabel>
+                          <StyledTextField 
+                            id="tel-input"
+                            type="text"
+                            autoComplete="off"
+                            name="telefone"
+                            error={errors.telefone}
+                          />
+                          {renderErrorMessage('telefone')}
+                        </div>
+                      )}
+                  </InputMask>
                 </FormRow>
                 {/*Cargo*/}
-                <FormControlSelect variant="outlined" style={{ marginTop: 10 }}>
-                    <InputLabel id="cargo-label">Cargo</InputLabel>
-                    <StyledSelectField
-                      labelId="cargo-label"
-                      label="cargo"
-                      value={values.selectedCargo}
-                      onChange={(e) => handleFormChange('selectedCargo', e.target.value)}
-                    >
-                      {cargos.map(cargo => (
-                        <MenuItem value={cargo.codigo}> {cargo.nome} </MenuItem>
-                      ))}
-                    </StyledSelectField>
-                </FormControlSelect>
+                <FormRow>
+  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+    Cargo
+  </InputLabel>
+  <StyledSelectField
+    label="cargo"
+    value={values.selectedCargo}
+    options={cargos.map((cargo) => ({ label: `${cargo.nome}`, value: cargo.codigo }))}
+    onChange={(event, newValue) => handleFormChange('selectedCargo', newValue)}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label=""
+        variant="outlined"
+      />
+    )}
+  />
+</FormRow>
+
               </Column>
             </FormContainer>
             <FormContainer>
