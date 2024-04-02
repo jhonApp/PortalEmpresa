@@ -11,7 +11,6 @@ app.get('/url/:empresaId', async (req, res) => {
   try {
     const url = await data.getEmpresaURL(empresaId);
     res.json({ url });
-    console.log(url);
   } catch (err) {
     console.error('Erro ao processar solicitação:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });

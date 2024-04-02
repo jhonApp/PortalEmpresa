@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { obterURL } from '../service/urlService';
 
-const API_URL = 'https://localhost:7243/setor';
+const API_URL = `${await obterURL()}setor`;
 
 export const obterSetor = async (codigoEmpresa, nome) => {
   try {
