@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { obterURL } from '../service/urlService';
+import { getData } from '../service/storageService';
 
-const API_URL = `${await obterURL()}visitante`;
+const { condominioUrl } = getData();
+const API_URL = `${condominioUrl}visitante`;
 
 export const obterVisitante = async (documento) => {
   try {

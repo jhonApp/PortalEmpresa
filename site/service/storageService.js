@@ -1,15 +1,28 @@
 
 export const getData = () =>{
-
-    // Recuperar os dados do usuário armazenados em localStorage
     const userData = localStorage.getItem('userData');
 
-    // Converter a string JSON de volta para um objeto JavaScript
+    if (userData === null) {
+        return { response: { condominioUrl: '' } };
+    }
+
     const parsedUserData = JSON.parse(userData);
 
     return parsedUserData;
 }
 
-export const createDataStorage = (response) => {
-    localStorage.setItem('userData', JSON.stringify(response.data));
+export const createDataStorage = (response, condominioUrl) => {
+    const userData = {
+        codigo: response.data.codigo,
+        userName: response.data.userName,
+        codigoEmpresa: response.data.codigoEmpresa,
+        codigoFuncionario: response.data.codigoFuncionario,
+        condominioUrl: condominioUrl
+    };
+    localStorage.setItem('userData', JSON.stringify(userData));
 }
+
+export const clearDataStorage = () => {
+    localStorage.removeItem('userData');
+}
+  
