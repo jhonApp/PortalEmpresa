@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
+import { BrowserRouter as Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { Box, Drawer as MuiDrawer, AppBar as MuiAppBar, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse } from '@mui/material';
 import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material';
 import { CaretLeft, CaretDown, SignOut, House, CalendarPlus, Nut, File, MagnifyingGlass, Factory, Briefcase, CreditCard, IdentificationCard, MapPin, ChatCenteredText  } from 'phosphor-react';
 import portalIconSVG from '../../assets/images/icones/Portal Empresa II.svg';
-import { getData } from '../../../service/storageService';
+import { getData, clearDataStorage } from '../../../service/storageService';
 const drawerWidth = 240;
 
 const LogoContainer = styled('div')({
@@ -125,6 +127,7 @@ export default function MiniDrawer({ children }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [title, setTitle] = useState('Dashboard');
   const memoizedTitle = useMemo(() => title, [title]);
+  const navigate = useNavigate();
   console.log("Index")
 
   const handleDrawerOpen = () => {
@@ -157,6 +160,11 @@ export default function MiniDrawer({ children }) {
     hadleDrawerTitle(item.text);
   };
 
+  const handleLogout = () => {
+    clearDataStorage();
+    navigate('/');
+  };
+
   const generateLink = (link) => `/${link.toLowerCase()}`;
 
   return (
@@ -176,7 +184,6 @@ export default function MiniDrawer({ children }) {
           >
             <MenuIcon />
           </IconButton>
-          
           <Typography variant="h6" noWrap component="div">
             {memoizedTitle}
           </Typography>
@@ -184,7 +191,9 @@ export default function MiniDrawer({ children }) {
             <Typography variant="h6" sx={{ fontFamily: 'Inter, sans-serif', color: '#fff', fontSize: '16px', textAlign: 'center', marginRight: '24px' }}>
               Olá, {getData().userName}
             </Typography>
-            <SignOut size={26} sx={{ marginTop: '-2px' }} />
+            <button onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+              <SignOut size={26} color='#fff' sx={{ marginTop: '-2px' }} />
+            </button>
           </FlexDiv>
 
         </Toolbar>

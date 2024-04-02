@@ -13,3 +13,8 @@ export const getData = () =>{
 export const createDataStorage = (response) => {
     localStorage.setItem('userData', JSON.stringify(response.data));
 }
+
+export const clearDataStorage = () => {
+    localStorage.removeItem('userData');
+}
+  

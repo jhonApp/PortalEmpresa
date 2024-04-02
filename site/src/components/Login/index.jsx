@@ -6,18 +6,16 @@ import LoginForm from './loginForm';
 
 const StyledGrid = styled(Box)({
   display: 'grid',
-  gridTemplateColumns: '0.9fr 1fr',
+  gridTemplateColumns: '1.6fr 1fr',
   gap: '16px',
   justifyContent: 'center',
   alignItems: 'center',
   height: '100vh',
-  marginTop: '8vh',
-  marginLeft: '14vh',
-
-  // Adicionando regras de mídia para larguras de tela menores
+  margin: '0',
+  padding: '0',
   '@media (max-width: 1000px)': {
-    gridTemplateColumns: '1fr', // Uma coluna para telas menores
-    marginLeft: '0', // Remova a margem lateral
+    gridTemplateColumns: '1fr',
+    marginLeft: '0',
   },
 });
 
@@ -25,7 +23,7 @@ const Login = () => {
   return (
     <StyledGrid>
       <Logo />
-      <LoginForm />
+      <LoginForm/>
     </StyledGrid>
   );
 };
