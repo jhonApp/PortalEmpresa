@@ -3,12 +3,12 @@ import {
   Paper,
   Typography,
   Button,
-  Select,
-  MenuItem,
+  Autocomplete,
   FormControl,
   InputLabel,
 } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import Progress from '../../Utils/LoadingProgress';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 import { autenticacao } from '../../../api/autenticacao';
@@ -23,6 +23,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
+import SelectConexao from './selectConexao';
 
 const StyledButton = styled(Button)({
   background: '#242c48',
@@ -101,6 +102,8 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [savedCredentials, setSavedCredentials] = useState(null);
+  const [listaConexao, setConexoes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => { event.preventDefault(); };
   const {
@@ -131,14 +134,15 @@ const LoginForm = () => {
 
   const handleLogin = async () => {
     await handleSubmit(async () => {
-      await autenticacao(values.email, values.password);
+      await autenticacao(values.email, values.password, values.condominio);
       if (rememberMe) {
-        setSavedCredentials({ email: values.email, password: values.password });
-        localStorage.setItem('savedCredentials', JSON.stringify({ email: values.email, password: values.password }));
+        setSavedCredentials({ email: values.email, password: values.password, condominio: values.condominio });
+        localStorage.setItem('savedCredentials', JSON.stringify({ email: values.email, password: values.password, condominio: values.condominio }));
       } else {
         setSavedCredentials(null);
         localStorage.removeItem('savedCredentials');
       }
+
       navigate('/system/');
     });
   };
@@ -153,22 +157,32 @@ const LoginForm = () => {
       setSavedCredentials(JSON.parse(storedCredentials));
       setRememberMe(true);
     }
-  }, []);
+    
+  }, []); 
 
   const handleEnterKey = (event) => {
     if (event.key === 'Enter') {
       handleLogin();
     }
   };
-
+  console.log(values);
   return (
     <StyledPaper elevation={3} style={{margin:'0 auto'}}>
       <StyledTitle variant="h2">Login</StyledTitle>
-      <Typography variant="body2" color="textSecondary" style={{ marginBottom: '10px' }}>
+      <Typography variant="body2" color="textSecondary" style={{ marginBottom: '20px' }}>
         Informe suas credenciais de acesso
       </Typography>
       
       <FormContainer>
+        {/*Condominio*/}
+        <FormSection>
+          <SelectConexao
+            label="condomínio"
+            onChange={(event, newValue) => handleChange('condominio', newValue)}
+          />
+        </FormSection>
+
+        {/*Email*/}
         <FormSection>
           <StyledTextField
             label="Email"
@@ -183,6 +197,7 @@ const LoginForm = () => {
           {renderErrorMessage('email')}
         </FormSection>
 
+        {/*Senha*/}
         <FormControl sx={{ m: 1, width: '44ch' }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Senha</InputLabel>
           <StyledTextPassword
@@ -225,8 +240,9 @@ const LoginForm = () => {
       </Typography>
 
       <Message type={messageType} message={message} onClose={handleMessageClose} />
+      <Progress isVisible={loading} />
     </StyledPaper>
-  );
+  )
 };
 
 export default LoginForm;

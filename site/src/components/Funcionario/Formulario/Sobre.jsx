@@ -247,24 +247,23 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                 </FormRow>
                 {/*Cargo*/}
                 <FormRow>
-  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-    Cargo
-  </InputLabel>
-  <StyledSelectField
-    label="cargo"
-    value={values.selectedCargo}
-    options={cargos.map((cargo) => ({ label: `${cargo.nome}`, value: cargo.codigo }))}
-    onChange={(event, newValue) => handleFormChange('selectedCargo', newValue)}
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        label=""
-        variant="outlined"
-      />
-    )}
-  />
-</FormRow>
-
+                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                    Cargo
+                  </InputLabel>
+                  <StyledSelectField
+                    label="cargo"
+                    value={values.selectedCargo}
+                    options={cargos.map((cargo) => ({ label: `${cargo.nome}`, value: cargo.codigo }))}
+                    onChange={(event, newValue) => handleFormChange('selectedCargo', newValue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label=""
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                </FormRow>
               </Column>
             </FormContainer>
             <FormContainer>

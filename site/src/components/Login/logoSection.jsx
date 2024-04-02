@@ -25,15 +25,15 @@ const StyledImageLogo = styled('img')({
 
 const StyledImage = styled('img')({
   position:'fixed',
-  marginTop: '150px',
-  height: '650px',
-  width: '650px',
+  marginTop: '125px',
+  height: '750px',
+  width: '750px',
 });
 
 const LogoSection = () => (
   <StyledImageContainer>
     <StyledImageLogo src={portalIconSVG} alt="Logo" />
-      <StyledImage src={portalLogin} alt="Logo" />
+    <StyledImage src={portalLogin} alt="Logo" />
   </StyledImageContainer>
 );
 
