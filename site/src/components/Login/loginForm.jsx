@@ -127,7 +127,7 @@ const LoginForm = () => {
       <StyledTitle variant="h2">Login Condômino</StyledTitle>
       
       <FormContainer>
-        <FormSection>
+        {/* <FormSection>
           <FormControl variant="outlined" error={errors.selectedCondominio} style={{ width: '100%' }}>
             <InputLabel id="condominio-label">Condomínio</InputLabel>
             <Select
@@ -144,7 +144,7 @@ const LoginForm = () => {
             </Select>
           </FormControl>
           {renderErrorMessage('selectedCondominio')}
-        </FormSection>
+        </FormSection> */}
         <FormSection>
           <StyledTextField
             label="Email"

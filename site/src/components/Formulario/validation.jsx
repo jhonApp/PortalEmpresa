@@ -116,7 +116,6 @@ const screensValidations = {
   },
   login: {
     password: true,
-    selectedCondominio: true,
     email: true
   }
 };
