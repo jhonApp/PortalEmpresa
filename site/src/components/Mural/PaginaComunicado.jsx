@@ -111,11 +111,12 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
               <Box key={index} sx={{ width: `calc(${100 / comunicadosPorLinha}% - 10px)`, mt: 2 }}>
                 {index < comunicadosFiltrados.length && (
                   <ComunicadoCard
-                    tipoComunicado={comunicadosFiltrados[index].tipoComunicado}
+                    tipoComunicado={comunicadosFiltrados[index].descricaoTipoComunicado}
                     mensagem={comunicadosFiltrados[index].mensagem}
                     status={comunicadosFiltrados[index].status}
                     idComunicado={comunicadosFiltrados[index].idComunicado}
                     titulo={comunicadosFiltrados[index].titulo}
+                    enquetes={comunicadosFiltrados[index].opcaoEnquete}
                   />
                 )}
               </Box>

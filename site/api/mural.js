@@ -22,42 +22,20 @@ export const obterMural = async () => {
   }
 };
 
-export const incluirCargo = async (data) => {
+export const incluirComunicado = async (formData) => {
   try {
-    if (!data) {
+    if (!formData) {
       throw new Error('O valor está nulo.');
     }
 
-    const url = `${API_URL}/incluirCargo`;
+    const url = `${API_URL}/incluirComunicado`;
 
-    const response = await axios.post(url, data, {
+    const response = await axios.post(url, formData, {
       validateStatus: status => status < 500,
     });
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(response.data);
-    }
-
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const excluirCargo = async (codigoCargo) => {
-  try {
-    if (!codigoCargo) {
-      throw new Error('O valor está nulo.');
-    }
-
-    const url = `${API_URL}/excluirCargo?codigoCargo=${codigoCargo}`;
-    
-    const response = await axios.delete(url, codigoCargo, {
-      validateStatus: status => status < 500,
-    });
-
-    if (response.status != 200) {
-      throw new Error(response.codigoCargo);
     }
 
     return response;

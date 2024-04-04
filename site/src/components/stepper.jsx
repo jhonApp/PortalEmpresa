@@ -45,9 +45,9 @@ const HorizontalLinearStepper = ({
   formData,
   handleClose,
   onLoadingChange,
-  invalidFields,
   screenValidation,
   action,
+  visibleAlert,
   renderStepContent
 }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -55,7 +55,7 @@ const HorizontalLinearStepper = ({
   const [open, setOpen] = React.useState(false);
   const [openCancel, setOpenCancel] = React.useState(false);
   const { handleSubmit, clearMessage } = useForm();
-  console.log("Estou no stepper")
+
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -90,17 +90,17 @@ const HorizontalLinearStepper = ({
         showErrorToast('Por favor, preencha os campos obrigatórios');
         return;
       }
-
+      debugger
       onLoadingChange(true);
   
       await handleSubmit(async () => {        
         try{
             await createFunction(formData);
-            // showSuccessToast("Criado com sucesso!");
+            showSuccessToast("Criado com sucesso!");
             updateTable();
             setActiveStep(0);
-            // handleClose(false);
-            setOpen(true);
+            handleClose(false);
+            setOpen(visibleAlert);
         } catch (e) {
             onLoadingChange(false);
             showErrorToast(e.message);
@@ -170,7 +170,7 @@ const HorizontalLinearStepper = ({
       <Box sx={{ width: '100%' }}>
         {renderStepContent(activeStep)}
         {activeStep === steps.length - 1 && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 5 }}>
             <Button onClick={handleBack} sx={{ marginRight: '180px', color: 'black' }}>Voltar</Button>
             <StyledButtonSecundary onClick={handleCancel}>Cancelar</StyledButtonSecundary>
             {action !== 'view' && action !== 'edit' && (
@@ -182,13 +182,13 @@ const HorizontalLinearStepper = ({
           </Box>
         )}
         {activeStep !== steps.length - 1 && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 5 }}>
             <StyledButtonSecundary sx={{ marginRight: '5px' }} onClick={handleCancel}>Cancelar</StyledButtonSecundary>
             <StyledButtonPrimary onClick={handleNext}>Próximo</StyledButtonPrimary>
           </Box>
         )}
       </Box>
-      <AlertDialogSucess dialogOpen={open} handleClose={() => setOpen(false)} handleFunction={() => handleClose(false)}/>
+      <AlertDialogSucess dialogOpen={open} handleClose={() => setOpen(false)} handleFunction={() => handleClose(false)} visibleAlert={visibleAlert}/>
       <AlertDialogCancel dialogOpen={openCancel} handleClose={() => setOpenCancel(false)} handleFunction={() => handleClose(false)} />
     </Box>
   );

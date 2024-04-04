@@ -42,6 +42,30 @@ const StyledBox = styled(Box)({
   },
 });
 
+const StyledBoxComunicado = styled(Box)({
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+  overflowY: 'scroll',
+  height: '150px',
+  marginTop: '10px',
+  scrollbarWidth: 'thin',
+  scrollbarColor: '#999 #f4f4f4',
+  '&::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: '#f4f4f4',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#999',
+    borderRadius: '4px',
+  },
+  '& .css-3ekr5r': {
+    maxHeight: '250px',
+  },
+});
+
 const StyledStepper = styled(Stepper)`
   .MuiStepIcon-root.Mui-active {
     color: #BCC0CF;
@@ -52,4 +76,4 @@ const StyledStepper = styled(Stepper)`
   }
 `;
 
-export { StyledDialog, StyledStepper, StyledBox };
+export { StyledDialog, StyledStepper, StyledBox, StyledBoxComunicado };
