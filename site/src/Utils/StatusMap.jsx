@@ -9,8 +9,8 @@ const getStatusComponent = (backgroundColor, iconElement, iconColor, labelText) 
 );
 
 export const StatusMap = {
-    'Visualizado': () => getStatusComponent('#C9E3D4', <CheckCircle size={20} color="#1C843C" />, '', 'Visualizado'),
-    'NaoVisualizado': () => getStatusComponent('#FBE4E4', <XCircle size={20} color="#FF0B0B" />, '', 'Não Visualizado'),
+    'Visualizado': () => getStatusComponent('#C9E3D4', <CheckCircle size={20} color="#1C843C" />, '#1C843C', 'Visualizado'),
+    'Não Visualizado': () => getStatusComponent('#FBE4E4', <XCircle size={20} color="#FF0B0B" />, '#FF0B0B', 'Não Visualizado'),
     'Ativo': () => getStatusComponent('#C9E3D4', <CheckCircle size={20} color="#1C843C" />, '#1C843C', 'Ativo'),
     'Autorizado': () => getStatusComponent('#C9E3D4', <CheckCircle size={20} color="#1C843C" />, '#1C843C', 'Autorizado'),
     'Inativo': () => getStatusComponent('#FBE4E4', <XCircle size={20} color="#FF0B0B" />, '#FF0B0B', 'Inativo'),

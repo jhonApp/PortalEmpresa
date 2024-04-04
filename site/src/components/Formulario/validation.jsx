@@ -78,6 +78,20 @@ const validateForm = (values, currentScreen) => {
 
 
 const screensValidations = {
+  opcaoEnquete: {
+    descricao: true
+  },
+  enquete: {
+    dataInicial: true,
+    dataFim: true,
+    titulo: true,
+  },
+  comunicado: {
+    dataInicial: true,
+    dataFim: true,
+    titulo: true,
+    obs: true,
+  },
   agendamentoSimples2: {
     dataInicial: true,
     horaEntrada: true,
