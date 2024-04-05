@@ -50,7 +50,7 @@ const routes = [
     text: 'Pesquisas',
     icon: <MagnifyingGlass size={24} />,
     subItems: [
-      { link: 'system/pesquisas', text: 'Acessos', icon: <File size={24} /> },
+      { link: 'system/acessos', text: 'Acessos', icon: <File size={24} /> },
     ],
   },
 ];
