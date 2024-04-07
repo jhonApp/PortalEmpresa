@@ -39,7 +39,7 @@ const routes = [
       { index: 4, link: 'system/cargos', text: 'Cargos', icon: <Briefcase size={24} />, tipo: 'sub' },
       { index: 5, link: 'system/cartoes', text: 'Cartões', icon: <CreditCard size={24} />, tipo: 'sub' },
       { index: 6, link: 'system/funcionarios', text: 'Funcionários', icon: <IdentificationCard size={24} />, tipo: 'sub' },
-      { index: 7, link: 'system/locaisEventos', text: 'Reserva de Espaço', icon: <MapPin size={24} />, tipo: 'sub' }
+      { index: 7, link: 'system/reservaEspacos', text: 'Reserva de Espaço', icon: <MapPin size={24} />, tipo: 'sub' }
     ],
   },
   { index: 8, link: 'system/documentos', text: 'Documentos', icon: <File size={24} /> },

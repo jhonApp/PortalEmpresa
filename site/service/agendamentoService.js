@@ -6,7 +6,7 @@ import { getData } from './storageService';
 
 const processarAgendamento = async (dados, inserirFuncao, alterarFuncao) => {
   try {
-    debugger
+    
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }

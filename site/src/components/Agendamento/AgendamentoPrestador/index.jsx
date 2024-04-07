@@ -15,7 +15,7 @@ function AgendamentoPrestador({ onClose, updateTable, data, action }) {
 
   useEffect(() => {
     if (data) {
-      debugger
+      
       const dataCopy = { ...data };
   
       const fieldsToConvert = {

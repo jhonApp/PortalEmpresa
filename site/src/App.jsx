@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import Agendamento from './components/Agendamento';
 import DepartamentoSetor from './components/DepartamentoSetor';
 import Acesso from './components/Acesso';
+import ReservaEspaco from './components/ReservaEspaco';
 import Cargo from './components/Cargo';
 import Cartao from './components/Cartao';
 import Documento from './components/Documento';
@@ -35,6 +36,7 @@ function App() {
                 <Route path="funcionarios" element={<Funcionario />} />
                 <Route path="funcionarios/novo-funcionario" element={<FormFuncionario />} />
                 <Route path="acessos" element={<Acesso />} />
+                <Route path="reservaEspacos" element={<ReservaEspaco />} />
                 <Route path="documentos" element={<Documento />} />
                 <Route path="mural" element={<Mural />} />
               </Routes>
