@@ -75,7 +75,7 @@ export const updateEspaco = async (data) => {
 
     const url = `${API_URL}/alterarEspaco`;
 
-    const response = await axios.post(url, data, {
+    const response = await axios.put(url, data, {
       validateStatus: status => status < 500,
     });
 

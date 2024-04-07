@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Espaco from './ModalEspaco'
+import Espaco from './ModalEspaco';
 import PopupDialog from '../dialog';
 import { Box, Paper, Button, useTheme, Typography } from '@mui/material';
 import { MapPin } from 'phosphor-react';
 
-function Header({ atualizaEspaco }) {
+function Header({ espacos, atualizaEspacos }) {
   const [openPopup, setOpenPopup] = useState(false);
   const [popupTitle, setPopupTitle] = useState('');
   const [popupDescription, setPopupDescription] = useState('');
@@ -47,7 +47,7 @@ function Header({ atualizaEspaco }) {
   };
 
   const renderContent = () => {
-    return <Espaco onClose={handleClosePopup} atualizaEspaco={atualizaEspaco} title={popupTitle} description={popupDescription} />;
+    return <Espaco onClose={handleClosePopup} espacos={espacos} atualizaEspaco={atualizaEspacos} title={popupTitle} description={popupDescription} />;
   };
 
   return (

@@ -15,9 +15,8 @@ import 'dayjs/locale/pt-br';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const Formulario = ({ onDataChange }) => {
+const Formulario = ({ onDataChange, data }) => {
   const [locale, setLocale] = useState('pt-br');
-  const [formData, setFormData] = useState({});
   const {
     values,
     errors,
@@ -25,11 +24,11 @@ const Formulario = ({ onDataChange }) => {
     handleValidation,
     renderErrorMessage,
   } = useForm(
-    formData,
+    data,
     validateForm,
     'espaco'
   );
-  
+
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
     handleValidation(fieldName);
@@ -37,12 +36,13 @@ const Formulario = ({ onDataChange }) => {
   };
 
   const handleFileChange = (event) => {
+    
     const file = event.target.files[0];
     if(file == null){
       showErrorToast("Não foi possível anexar o arquivo, tente novamente.")
     }
     const reader = new FileReader();
-    onDataChange({ ...formData, foto: file });
+    onDataChange({ ...data, foto: file });
     showSuccessToast("Anexado com sucesso.")
   }; 
 
@@ -64,7 +64,7 @@ const Formulario = ({ onDataChange }) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-      <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 445 }} elevation={1}>
+      <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 370 }} elevation={1}>
         <FormContainer>
           <Column>
             {/* Descrição */}

@@ -23,6 +23,28 @@ const StyledTextField = styled(TextField)({
   },
 });
 
+const StyledTextObs = styled(TextField)({
+  borderRadius: '4px',
+  background: '#EBEAEF',
+  width: '100%',
+  height: '100px',
+  marginBottom: 5,
+  marginTop: 0,
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '4px',
+    height: '100px',
+    fontSize: '15px',
+  },
+  '& .MuiInputLabel-root': {
+    fontSize: '1.1rem',
+    top: '-16px',
+    background: 'transparent'
+  },
+  '& .MuiOutlinedInput-input': {
+    padding: '12px',
+  },
+});
+
 const StyledSelectField = styled(Autocomplete)({
     borderRadius: '4px',
     background: '#EBEAEF',
@@ -162,4 +184,4 @@ const BootstrapInput = styled(InputBase)({
     },
   });
 
-export { BootstrapInput, StyledFormControlLabel, FormControlSelect, StyledPaperFiltro, StyledTextField, StyledSelectField, StyledPaper, FormContainer, Column, StyledDatePicker, FormColumn, FormSection, FormRow, StyledTimePicker };
+export { BootstrapInput, StyledTextObs, StyledFormControlLabel, FormControlSelect, StyledPaperFiltro, StyledTextField, StyledSelectField, StyledPaper, FormContainer, Column, StyledDatePicker, FormColumn, FormSection, FormRow, StyledTimePicker };

@@ -16,13 +16,14 @@ import AlertDialog from '../../Utils/Modal/Delete';
 import { inserirEspaco, listarEspaco, deleteEspaco, alterarEspaco } from '../../../service/espacoService';
 
 
-const ModalEspaco = ({ onClose, atualizaEspaco, title, description }) => {
+const ModalEspaco = ({ onClose, espacos, atualizaEspaco, title, description }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
-  const [espacos, setEspacos] = useState([]);
+  const [onUpdate, setOnUpdate] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
   const [codigoEspaco, setCodigoEspaco] = useState(null);
-  const [espacosFiltrados, setEspacoFiltrados] = useState([]);
+  const [espacosFiltrados, setEspacoFiltrados] = useState(espacos);
   const {
     values,
     errors,
@@ -35,54 +36,42 @@ const ModalEspaco = ({ onClose, atualizaEspaco, title, description }) => {
     validateForm,
     'espaco'
   );
-
-  const fetchData = async () => {
-    try {
-      handleLoadingChange(true);
-
-      const listaEspacos = await listarEspaco();
-      console.log(listaEspacos)
-      setEspacoFiltrados(listaEspacos);
-      handleLoadingChange(false);
-
-    } catch (error) {
-      handleLoadingChange(false);
-      showErrorToast('Erro ao obter lista de espaços');
-    }
+  const handleOpenPopup = () => { 
+    setOpen(true); 
+    setOnUpdate(false);
+    setFormData({});
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const handleOpenPopup = () => { setOpen(true); };
 
   const handleLoadingChange = (isLoading) => {
     setLoading(isLoading);
   };
 
   const handleClickOpen = (codigo) => {
-    setOpen(true);
+    setOpenDelete(true);
     setCodigoEspaco(codigo);
   };
 
   const handleDelete = async () => {
     try {
       handleLoadingChange(true);
-
+  
       if (!codigoEspaco) return;
-
+  
       await deleteEspaco(codigoEspaco);
+      
+      const novaLista = espacosFiltrados.filter(espaco => espaco.codigoLocal !== codigoEspaco);
+      console.log(novaLista)
+      setEspacoFiltrados(novaLista);
+  
       showSuccessToast("Espaço excluído com sucesso!");
-      fetchData();
-      atualizaEspaco();
+      handleClosePopupDelete();
+  
       handleLoadingChange(false);
     } catch (error) {
-
       handleLoadingChange(false);
       showErrorToast(error.message);
     }
-  };
+  };  
 
   const handleFormChange = (data) => {
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
@@ -91,7 +80,7 @@ const ModalEspaco = ({ onClose, atualizaEspaco, title, description }) => {
   const handleSave = async () => {
     try {
       setLoading(true);
-
+      
       const { errorTypes } = validateForm(formData, 'espaco');
       const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
       if (hasErrors) {
@@ -101,10 +90,26 @@ const ModalEspaco = ({ onClose, atualizaEspaco, title, description }) => {
 
       await handleSubmit(async () => {        
         try{
+          if(!onUpdate){
             await inserirEspaco(formData);
             showSuccessToast("Criado com sucesso!");
-            fetchData();
-            handleClosePopup();
+            setEspacoFiltrados([...espacosFiltrados, formData]); 
+
+          }else{
+            await alterarEspaco(formData);
+
+            const index = espacosFiltrados.findIndex(item => item.codigoLocal === formData.codigoLocal);
+            if (index !== -1) {
+              const updatedEspacosFiltrados = [...espacosFiltrados];
+              updatedEspacosFiltrados[index] = formData;
+              setEspacoFiltrados(updatedEspacosFiltrados); 
+
+              showSuccessToast("Alterado com sucesso!");
+
+            }
+          }
+            
+          handleClosePopup();
         } catch (e) {
           setLoading(false);
           showErrorToast(e.message);
@@ -119,14 +124,13 @@ const ModalEspaco = ({ onClose, atualizaEspaco, title, description }) => {
   };
 
   const handleUpdate = (espaco) => {
-    setFormMode('alterar');
-    handleChange('numero', espaco.codigoEspaco);
-    const { codigoEspaco } = espaco;
-    setFormData({ ...formData, codigoEspaco });
+    setOpen(true);
+    setOnUpdate(true);
+    setFormData({ ...formData, ...espaco });
   };
 
   const renderContent = () => {
-    return <Formulario onDataChange={handleFormChange} />;
+    return <Formulario onDataChange={handleFormChange} data={formData} />;
   };
 
   const renderActionButton = () => {
@@ -135,14 +139,22 @@ const ModalEspaco = ({ onClose, atualizaEspaco, title, description }) => {
         <StyledButtonSecundary autoFocus onClick={handleClosePopup}>
           Cancelar
         </StyledButtonSecundary>
-        <StyledButtonPrimary onClick={handleSave} sx={{ mr: 2 }}>
-          Salvar
-        </StyledButtonPrimary>
+        {onUpdate ? (
+          <StyledButtonPrimary onClick={handleSave} sx={{ mr: 2 }}>
+            Alterar
+          </StyledButtonPrimary>
+        ) : (
+          <StyledButtonPrimary onClick={handleSave} sx={{ mr: 2 }}>
+            Salvar
+          </StyledButtonPrimary>
+        )}
       </div>
     );
   };
+  
 
   const handleClosePopup = () => { setOpen(false); };
+  const handleClosePopupDelete = () => { setOpenDelete(false); };
 
   return (
     <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 350 }} elevation={1}>
@@ -181,7 +193,7 @@ const ModalEspaco = ({ onClose, atualizaEspaco, title, description }) => {
           ))}
         </StyledBox>
       </div>
-      <AlertDialog dialogOpen={open} handleClose={() => setOpen(false)} handleDelete={handleDelete}/>
+      <AlertDialog dialogOpen={openDelete} handleClose={() => setOpenDelete(false)} handleDelete={handleDelete}/>
       <PopupDialog open={open} handleClose={handleClosePopup} title={title} description={description} renderContent={renderContent} renderActionButton={renderActionButton} visible={false}/>
       <Progress isVisible={loading} />
     </StyledPaper>

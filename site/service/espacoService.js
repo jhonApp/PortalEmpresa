@@ -5,7 +5,7 @@ export const inserirEspaco = async (dados) => {
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
-    debugger
+    
     const formData = new FormData();
 
     // Adiciona a foto ao FormData
@@ -76,14 +76,22 @@ export const getEspaco = async (setEspacoData, setLoading, setValid) => {
 
 export const alterarEspaco = async (dados) => {
   try {
-    
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
 
     const formData = new FormData();
-    formData.append('arquivo', dados.file);
-    formData.append('espaco', dados);
+
+    if (dados.foto != null) {
+      formData.append('foto', dados.foto);
+    }
+debugger
+    const dadosSemFoto = { ...dados };
+    delete dadosSemFoto.foto;
+
+    // Converta o objeto em JSON e, em seguida, anexe-o ao FormData
+    const jsonData = JSON.stringify(dadosSemFoto);
+    formData.append('espaco', jsonData);
 
     const response = await updateEspaco(formData);
 
@@ -96,3 +104,4 @@ export const alterarEspaco = async (dados) => {
     throw new Error(error.message);
   }
 };
+
