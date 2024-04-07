@@ -78,6 +78,10 @@ const validateForm = (values, currentScreen) => {
 
 
 const screensValidations = {
+  espaco: {
+    descricao: true,
+    descricaoResumida: true
+  },
   opcaoEnquete: {
     descricao: true
   },

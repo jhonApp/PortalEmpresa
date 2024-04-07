@@ -90,7 +90,6 @@ const HorizontalLinearStepper = ({
         showErrorToast('Por favor, preencha os campos obrigatórios');
         return;
       }
-      debugger
       onLoadingChange(true);
   
       await handleSubmit(async () => {        

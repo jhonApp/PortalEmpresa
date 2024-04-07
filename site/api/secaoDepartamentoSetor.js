@@ -58,7 +58,6 @@ export const obterSecao = async (codigoEmpresa, codigoDepartamento, codigoSetor)
 
 export const incluirSecao = async (data) => {
   try {
-    debugger;
     if (!data) {
       throw new Error('O valor está nulo.');
     }

@@ -24,7 +24,6 @@ export const listarAcessos = async (periodoInicial, periodoFinal) => {
     }
 
     // Retorna os dados obtidos
-    debugger;
     return response.data;
   } catch (error) {
     throw error;

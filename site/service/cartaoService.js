@@ -79,7 +79,6 @@ export const getCartao = async (setCartaoData, setLoading, setValid) => {
 
 export const alterarCartao = async (dados) => {
   try {
-    debugger
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
