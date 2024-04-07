@@ -79,7 +79,7 @@ export default function DateCalendarServerRequest({formData}) {
     
       if (hasEventOnDay) {
         showErrorToast("Data indisponível para reserva");
-        //Está aqui se caso quererem que isso funcione 
+        //Está aqui se caso quererem que isso funcione, está pronto para aplicar
         // formData(evento);
       }
     };
