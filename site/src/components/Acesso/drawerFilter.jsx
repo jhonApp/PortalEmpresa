@@ -61,6 +61,7 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
   }, [open]);
 
   const handleSearch = () => {
+    debugger
     let filteredData = [...data]; // Criar uma cópia dos dados originais
   
     // Filtrar pelo tipo se estiver selecionado
@@ -142,7 +143,8 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                             type="text"
                             autoComplete="off"
                             value={formData.bloco}
-                            onChange={(e) => handleFormChange('blovo', e.target.value)}
+                            onChange={(e) => handleFormChange('bloco', e.target.value)}
+                            onBlur={(e) => handleFormChange('bloco', e.target.value)}
                         />
                     </FormRow>
                     {/*unidade*/}
@@ -228,16 +230,16 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                                 fullWidth
                                 margin="normal"
                                 type="date"
-                                name="dtValid"
-                                value={formData.dtValid || null}
-                                onChange={(newValue) => { handleFormChange('dtValid', newValue); }}
-                                onBlur={() => handleValidation('dtValid')}
+                                name="dataInicial"
+                                value={formData.dataInicial || null}
+                                onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
+                                onBlur={() => handleValidation('dataInicial')}
                             />
                         </LocalizationProvider>
                     </FormRow>
                 </Column>
                 <Column>
-                    {/*Data Inicial*/}
+                    {/*Data Final*/}
                     <FormRow>
                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                             <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
@@ -248,10 +250,10 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                                 fullWidth
                                 margin="normal"
                                 type="date"
-                                name="dtEnd"
-                                value={formData.dtEnd || null}
-                                onChange={(newValue) => { handleFormChange('dtEnd', newValue); }}
-                                onBlur={() => handleValidation('dtEnd')}
+                                name="dataFinal"
+                                value={formData.dataFinal || null}
+                                onChange={(newValue) => { handleFormChange('dataFinal', newValue); }}
+                                onBlur={() => handleValidation('dataFinal')}
                             />
                         </LocalizationProvider>
                     </FormRow>

@@ -15,7 +15,7 @@ function InfoAcesso({ iconContainerStyle, buttonStyle, quantidade, descricao }) 
   );
 }
 
-function TipoAcesso({ atualizarAcesso, dataAtual, dataFutura }) {
+function TipoAcesso({ acessoData, atualizarAcesso, dataAtual, dataFutura }) {
   const theme = useTheme();
 
   const iconContainerStyle = {
@@ -44,7 +44,7 @@ function TipoAcesso({ atualizarAcesso, dataAtual, dataFutura }) {
     width: '246px',
     height: '84px'
   };
-
+  console.log(acessoData)
   return (
     <Box
       gap={1}
@@ -63,7 +63,7 @@ function TipoAcesso({ atualizarAcesso, dataAtual, dataFutura }) {
         <InfoAcesso
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={0}
+          quantidade={acessoData.length}
           descricao="Todos"
         />
         <InfoAcesso
