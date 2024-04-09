@@ -23,12 +23,14 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
     const [openFilter, setOpen] = React.useState(open);
     const [locale, setLocale] = useState('pt-br');
     const [formData, setFormData] = useState({
-        nomeCompleto: '',
-        rgCpf: '',
-        dataInicial: null,
-        dataFim: null,
-        status: '',
-        tipo: ''
+      bloco: '',
+      unidade: '',
+      empresa: '',
+      nome: '',
+      rg: '',
+      dataInicial: null,
+      dataFim: null,
+      tipo: ''
     });
 
     React.useEffect(() => {
@@ -46,11 +48,13 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
   useEffect(() => {
     if (!open) {
       setFormData({
-        nomeCompleto: '',
-        rgCpf: '',
+        bloco: '',
+        unidade: '',
+        empresa: '',
+        nome: '',
+        rg: '',
         dataInicial: null,
         dataFim: null,
-        status: '',
         tipo: ''
       });
     }
@@ -59,36 +63,55 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
   const handleSearch = () => {
     let filteredData = [...data]; // Criar uma cópia dos dados originais
   
-    // Filtrar pelo status se estiver selecionado
-    if (formData.status && formData.status !== 'todos') {
-      filteredData = filteredData.filter(item => item.status === formData.status);
-    }
-  
     // Filtrar pelo tipo se estiver selecionado
     if (formData.tipo && formData.tipo !== 'todos') {
       filteredData = filteredData.filter(item => item.tipo === formData.tipo);
     }
   
     // Aplicar filtros adicionais se o campo de nome estiver preenchido
-    if (formData.nomeCompleto) {
+    if (formData.bloco) {
       filteredData = filteredData.filter(item =>
-        item.nomeCompleto.toLowerCase().includes(formData.nomeCompleto.toLowerCase())
+        item.bloco.toLowerCase().includes(formData.bloco.toLowerCase())
+      );
+    }
+
+    if (formData.unidade) {
+      filteredData = filteredData.filter(item =>
+        item.unidade.toLowerCase().includes(formData.unidade.toLowerCase())
+      );
+    }
+
+    if (formData.empresa) {
+      filteredData = filteredData.filter(item =>
+        item.empresa.toLowerCase().includes(formData.empresa.toLowerCase())
+      );
+    }
+
+    if (formData.nome) {
+      filteredData = filteredData.filter(item =>
+        item.nome.toLowerCase().includes(formData.nome.toLowerCase())
+      );
+    }
+
+    if (formData.rg) {
+      filteredData = filteredData.filter(item =>
+        item.rg.toLowerCase().includes(formData.rg.toLowerCase())
       );
     }
   
     // Aplicar filtros de datas se estiverem preenchidos
-    if (formData.dtValid && formData.dtEnd) {
+    if (formData.dataInicial && formData.dataFim) {
       filteredData = filteredData.filter(item =>
-        dayjs(item.dtValid).isSameOrAfter(dayjs(formData.dtValid), 'day') &&
-        dayjs(item.dtEnd).isSameOrBefore(dayjs(formData.dtEnd), 'day')
+        dayjs(item.dtValid).isSameOrAfter(dayjs(formData.dataInicial), 'day') &&
+        dayjs(item.dtEnd).isSameOrBefore(dayjs(formData.dataFim), 'day')
       );
-    } else if (formData.dtValid) {
+    } else if (formData.dataInicial) {
       filteredData = filteredData.filter(item =>
-        dayjs(item.dtValid).isSameOrAfter(dayjs(formData.dtValid), 'day')
+        dayjs(item.dataInicial).isSameOrAfter(dayjs(formData.dataInicial), 'day')
       );
-    } else if (formData.dtEnd) {
+    } else if (formData.dataFim) {
       filteredData = filteredData.filter(item =>
-        dayjs(item.dtEnd).isSameOrBefore(dayjs(formData.dtEnd), 'day')
+        dayjs(item.dataFim).isSameOrBefore(dayjs(formData.dataFim), 'day')
       );
     }
   
@@ -102,11 +125,60 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
   };
 
   const DrawerList = (
-    <Box sx={{ marginTop: 8, p: 2, backgroundColor: '#FAFAFA' }} role="presentation" >
+    <Box sx={{p: 2, backgroundColor: '#FAFAFA' }} role="presentation" >
       <Typography variant="h5" component="h1" style={{ fontWeight: 'bold', marginBottom: 0, borderBottom: '1px solid #CCCCCC' }}>{"Filtros"}</Typography>
         <StyledPaperFiltro sx={{background:'#FAFAFA'}} elevation={1}>
             <FormContainer>
                 <Column>
+                    {/*Bloco/Torre*/}
+                    <FormRow>
+                        <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                            Bloco/Torre
+                        </InputLabel>
+                        <StyledTextField
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            type="text"
+                            autoComplete="off"
+                            value={formData.bloco}
+                            onChange={(e) => handleFormChange('blovo', e.target.value)}
+                        />
+                    </FormRow>
+                    {/*unidade*/}
+                    <FormRow>
+                        <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                            Unidade
+                        </InputLabel>
+                        <StyledTextField
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            type="number"
+                            autoComplete="off"
+                            value={formData.unidade}
+                            onChange={(e) => handleFormChange('unidade', e.target.value)}
+                            onBlur={(e) => handleFormChange('unidade', e.target.value)}
+
+                        />
+                    </FormRow>
+                    {/*empresa*/}
+                    <FormRow>
+                        <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                            Empresa
+                        </InputLabel>
+                        <StyledTextField
+                            variant="outlined"
+                            fullWidth
+                            margin="normal"
+                            type="text"
+                            autoComplete="off"
+                            value={formData.empresa}
+                            onChange={(e) => handleFormChange('empresa', e.target.value)}
+                            onBlur={(e) => handleFormChange('empresa', e.target.value)}
+
+                        />
+                    </FormRow>
                     {/*Nome*/}
                     <FormRow>
                         <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
@@ -118,8 +190,10 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                             margin="normal"
                             type="text"
                             autoComplete="off"
-                            value={formData.nomeCompleto}
-                            onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
+                            value={formData.nome}
+                            onChange={(e) => handleFormChange('nome', e.target.value)}
+                            onBlur={(e) => handleFormChange('nome', e.target.value)}
+
                         />
                     </FormRow>
                     {/*RG*/}
@@ -131,11 +205,11 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            type="number"
+                            type="text"
                             autoComplete="off"
-                            value={formData.userDoc}
-                            onChange={(e) => handleFormChange('userDoc', e.target.value)}
-                            onBlur={(e) => handleFormChange('userDoc', e.target.value)}
+                            value={formData.rg}
+                            onChange={(e) => handleFormChange('rg', e.target.value)}
+                            onBlur={(e) => handleFormChange('rg', e.target.value)}
 
                         />
                     </FormRow>
@@ -185,15 +259,15 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
             </FormContainer>
             <FormContainer>
                 <FormControl sx={{ mt: 1 }} component="fieldset" variant="standard">
-                    <FormLabel id="status-radio" sx={{ textAlign: 'end', fontWeight: 600, mb:'10px' }} component="legend">Status</FormLabel>
+                    <FormLabel id="tipo-radio" sx={{ textAlign: 'end', fontWeight: 600, mb:'10px' }} component="legend">Tipo</FormLabel>
                     <RadioGroup
-                        aria-labelledby="status-radio"
-                        name="status-radio"
+                        aria-labelledby="tipo-radio"
+                        name="tipo-radio"
                     >
                         <StyledFormControlLabel
                             control={
-                                <Radio checked={formData.status === 'todos'} 
-                                    onChange={() => { handleFormChange('status', 'todos');  }}
+                                <Radio checked={formData.tipo === 'todos'} 
+                                    onChange={() => { handleFormChange('tipo', 'todos');  }}
                                    name="todos" 
                                 />
                             }
@@ -202,45 +276,17 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                         <StyledFormControlLabel
                             control={
                                 <Radio
-                                    checked={formData.status === 'Ativo'}
-                                    onChange={() => handleFormChange('status', 'Ativo')}
-                                    name="ativo"
+                                    checked={formData.tipo === 'funcionario'}
+                                    onChange={() => handleFormChange('tipo', 'funcionario')}
+                                    name="funcionario"
                                 />
                             }
-                            label="Ativo"
+                            label="Funcionários"
                         />
                         <StyledFormControlLabel
                             control={
-                                <Radio checked={formData.status === 'Inativo'} 
-                                   onChange={() => handleFormChange('status', 'Inativo')}
-                                   name="inativo" 
-                                />
-                            }
-                            label="Inativo"
-                        />
-                    </RadioGroup>
-                </FormControl>
-            </FormContainer>
-            <FormContainer>
-                <FormControl sx={{ mt: 1 }} component="fieldset" variant="standard">
-                    <FormLabel id="tipo-radio" sx={{ textAlign: 'end', fontWeight: 600, mb:'10px' }} component="legend">Tipo de Agendamento</FormLabel>
-                    <RadioGroup
-                        aria-labelledby="tipo-radio"
-                        name="tipo-radio"
-                    >
-                        <StyledFormControlLabel
-                            control={
-                                <Radio checked={formData.tipo === 'todos'} 
-                                   onChange={() => handleFormChange('tipo', 'todos')}
-                                   name="todos" 
-                                />
-                            }
-                            label="Todos"
-                        />
-                        <StyledFormControlLabel
-                            control={
-                                <Radio checked={formData.tipo === 'Visitante Simples'} 
-                                   onChange={() => handleFormChange('tipo', 'Visitante Simples')}
+                                <Radio checked={formData.tipo === 'visitanteSimples'} 
+                                   onChange={() => handleFormChange('tipo', 'visitanteSimples')}
                                    name="visitanteSimples" 
                                 />
                             }
@@ -248,21 +294,21 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                         />
                         <StyledFormControlLabel
                             control={
-                                <Radio checked={formData.tipo === 'Visitante Especial'} 
-                                    onChange={() => handleFormChange('tipo', 'Visitante Especial')}
-                                    name="visitanteEspecial" 
-                                />
-                            }
-                            label="Visitante Especial"
-                        />
-                        <StyledFormControlLabel
-                            control={
-                                <Radio checked={formData.tipo === 'Prestador de Serviço'} 
-                                    onChange={() => handleFormChange('tipo', 'Prestador de Serviço')}
-                                    name="prestadorServico" 
+                                <Radio checked={formData.tipo === 'prestadorServico'} 
+                                   onChange={() => handleFormChange('tipo', 'prestadorServico')}
+                                   name="prestadorServico" 
                                 />
                             }
                             label="Prestador de Serviço"
+                        />
+                        <StyledFormControlLabel
+                            control={
+                                <Radio checked={formData.tipo === 'visitanteEspecial'} 
+                                   onChange={() => handleFormChange('tipo', 'visitanteEspecial')}
+                                   name="visitanteEspecial" 
+                                />
+                            }
+                            label="Visitante Especial"
                         />
                     </RadioGroup>
                 </FormControl>

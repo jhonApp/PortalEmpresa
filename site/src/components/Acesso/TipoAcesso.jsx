@@ -63,19 +63,19 @@ function TipoAcesso({ atualizarAcesso, dataAtual, dataFutura }) {
         <InfoAcesso
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={10}
+          quantidade={0}
           descricao="Todos"
         />
         <InfoAcesso
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={8}
+          quantidade={0}
           descricao="Funcionários"
         />
         <InfoAcesso
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={1}
+          quantidade={0}
           descricao="Agendamentos"
         />
       </Box>

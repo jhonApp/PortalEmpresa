@@ -13,7 +13,7 @@ function Acesso() {
   useEffect(() => {
     const timerID = setInterval(() => {
       setDataAtual(new Date());
-    }, 86400000); // Atualizando a cada 24 horas (24 * 60 * 60 * 1000 milissegundos)
+    }, 86400000);
 
     return () => clearInterval(timerID);
   }, []);

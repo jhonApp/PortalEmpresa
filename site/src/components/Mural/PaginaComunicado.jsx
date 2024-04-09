@@ -9,13 +9,13 @@ import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
 import ComunicadoCard from '../Mural/Card';
 
-
 function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atualizaMural, setValid }) {
   const [digitado, setDigitado] = useState('');
   const [comunicadosFiltrados, setComunicadosFiltrados] = useState(muralData);
   const [comunicados, setComunicados] = useState(muralData);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
+  const [codigoCartao, setCodigoCartao] = useState(null); // Added state for codigoCartao
 
   const iconContainerStyle = {
     display: 'flex',
@@ -60,10 +60,9 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
       if (!codigoCartao) return;
       await deleteCartao(codigoCartao);
       showSuccessToast("Cartão excluído com sucesso!");
-      atualizaCartao();
+      atualizaMural();
       setLoading(false);
     } catch (error) {
-
       setLoading(false);
       showErrorToast(error.message);
     }
@@ -106,9 +105,9 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
           {comunicadosFiltrados.length === 0 && (
             <Typography style={{ marginTop: 15, textAlign: 'center' }}>Nenhum resultado encontrado</Typography>
           )}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+          <Box sx={{ overflow:'auto', height:200, display: 'flex', width: `calc(${300 / comunicadosPorLinha}% - 10px)`, flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {Array.from({ length: comunicadosPorLinhaAtual * comunicadosPorLinha }, (_, index) => (
-              <Box key={index} sx={{ width: `calc(${100 / comunicadosPorLinha}% - 10px)`, mt: 2 }}>
+              <Box key={index} sx={{width: '436px', height: '153px' , mt: 2 }}>
                 {index < comunicadosFiltrados.length && (
                   <ComunicadoCard
                     tipoComunicado={comunicadosFiltrados[index].descricaoTipoComunicado}
@@ -117,6 +116,7 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
                     idComunicado={comunicadosFiltrados[index].idComunicado}
                     titulo={comunicadosFiltrados[index].titulo}
                     enquetes={comunicadosFiltrados[index].opcaoEnquete}
+                    atualizaMural={atualizaMural}
                   />
                 )}
               </Box>

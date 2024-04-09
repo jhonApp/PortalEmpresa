@@ -71,7 +71,7 @@ const StyledPaper = styled(Paper)({
     boxShadow: 'none',
     marginTop: '20px',
     maxWidth: 640,
-    height: 280,
+    minHeight: 280,
 });
 
 const StyledPaperFiltro = styled(Paper)({

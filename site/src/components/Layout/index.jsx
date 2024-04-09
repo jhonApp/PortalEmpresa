@@ -122,7 +122,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer({ children }) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [adminOpen, setAdminOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [title, setTitle] = useState('Dashboard');
@@ -167,10 +167,11 @@ export default function MiniDrawer({ children }) {
 
   const generateLink = (link) => `/${link.toLowerCase()}`;
 
+  
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar sx={{backgroundColor: '#242C48'}} position="fixed" open={open}>
+      <AppBar sx={{backgroundColor: '#242C48', zIndex:"520"}} position="fixed" open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -198,7 +199,7 @@ export default function MiniDrawer({ children }) {
 
         </Toolbar>
       </AppBar>
-      <Drawer sx={{backgroundColor: '#FAFAFA'}} variant="permanent" open={open}>
+      <Drawer sx={{backgroundColor: '#FAFAFA', zIndex:"320"}} variant="permanent" open={open}>
         {/* Logo */}
         <DrawerHeader sx={{backgroundColor: '#242C48'}}>
           <ListItemIcon>
