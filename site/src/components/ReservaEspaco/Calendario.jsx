@@ -94,7 +94,7 @@ export default function DateCalendarServerRequest({formData}) {
         key={props.day.toString()}
         style={{ fontSize: '16px' }}
         overlap="circular"
-        badgeContent={hasEventOnDay ? '🌚' : undefined}
+        badgeContent={hasEventOnDay ? <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'red' }}></div> : undefined}
         onClick={() => handleDayClick(props.eventos.find(evento => {
           const dataEvento = dayjs(evento.dataEvento, 'YYYY-MM-DD');
           return dataEvento.isValid() && dataEvento.isSame(props.day, 'day');
