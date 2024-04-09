@@ -203,7 +203,7 @@ export default function MiniDrawer({ children }) {
         {/* Logo */}
         <DrawerHeader sx={{backgroundColor: '#242C48'}}>
           <ListItemIcon>
-              <img src={portalIconSVG} alt="Portal Icon" style={{ marginRight: '10px', width: '12vh' }} />
+              <img src={portalIconSVG} alt="Portal Icon" style={{ marginRight: '25px', width: '12vh' }} />
           </ListItemIcon>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon sx={{color: '#fff'}} /> : <ChevronLeftIcon sx={{color: '#fff'}} />}
