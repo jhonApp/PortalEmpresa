@@ -16,10 +16,10 @@ function Acessos({ acessoData, setAcessoData, loading, setLoading, isValid, setV
 
   const columns = [
     { id: 'nome', label: 'Nome', width: 100, align: 'center' },
-    { id: 'rg', label: 'RG/CPF', minWidth: 100, align: 'center' },
+    { id: 'rgCpf', label: 'RG/CPF', minWidth: 100, align: 'center' },
     { id: 'empresa', label: 'Empresa', minWidth: 100, align: 'center', },
-    { id: 'dataEntrada', label: 'Data Entrada', minWidth: 100, align: 'center', },
-    { id: 'dataSaida', label: 'Data Saída', minWidth: 100, align: 'center', },
+    { id: 'dataEntradaString', label: 'Data Entrada', minWidth: 100, align: 'center', },
+    { id: 'dataSaidaString', label: 'Data Saída', minWidth: 100, align: 'center', },
     { id: 'autorizadoPor', label: 'Autorizado Por', width: 'auto', align: 'center', }
   ];
 

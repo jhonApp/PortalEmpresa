@@ -30,7 +30,7 @@ function Acesso() {
 
   return (
     <div>
-      <TipoAcesso atualizarAcesso={atualizarAcesso} dataAtual={dataAtual} dataFutura={dataFutura}/>
+      <TipoAcesso acessoData={acessoData} atualizarAcesso={atualizarAcesso} dataAtual={dataAtual} dataFutura={dataFutura}/>
       <Acessos
         acessoData={acessoData}
         setAcessoData={setAcessoData}
