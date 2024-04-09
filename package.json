@@ -5,6 +5,7 @@
     "site": "cd site && vite --host"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "vite": "^5.2.8"
   }
 }
