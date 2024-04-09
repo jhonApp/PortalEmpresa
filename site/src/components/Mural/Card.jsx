@@ -3,9 +3,10 @@ import { Button, Card, CardContent, Typography, useTheme } from '@mui/material';
 import { Eye } from 'phosphor-react';
 import { IconMap } from '../../Utils/IconMap';
 import { StatusMap } from '../../Utils/StatusMap';
+import TextWithEllipsis from '../../Utils/Helpers';
 import Popup from './Popup';
 
-const ComunicadoCard = ({ tipoComunicado, mensagem, status, idComunicado, titulo, enquetes }) => {
+const ComunicadoCard = ({ tipoComunicado, mensagem, status, idComunicado, titulo, enquetes, atualizaMural }) => {
   const theme = useTheme();
   const [openPopup, setOpenPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
@@ -13,9 +14,8 @@ const ComunicadoCard = ({ tipoComunicado, mensagem, status, idComunicado, titulo
   const [popupTitle, setPopupTitle] = useState('');
   const [popupEnquetes, setPopupEnquetes] = useState([]);
   const [popupDescription, setPopupDescription] = useState('');
-  console.log(tipoComunicado)
+
   const handleOpenPopup = (title, sub, description, type, enquetes) => {
-    console.log("visualizado")
     setPopupTitle(title);
     setPopupSubTitle(sub)
     setPopupType(type);
@@ -57,22 +57,18 @@ const ComunicadoCard = ({ tipoComunicado, mensagem, status, idComunicado, titulo
         {/* Segunda Linha */}
         <div style={{ display: 'flex' }}>
           <div style={{ marginTop: theme.spacing(2), display:'flex', width: '100%', justifyContent: 'space-between' }}>
-            <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 16 }}>
-              {titulo}
-            </Typography>
+            <TextWithEllipsis text={titulo} maxLength={15} />
             {StatusMap[status]()}
           </div>
         </div>
         {/* Terceira Linha */}
         <div style={{ display: 'flex', width: '100%', overflow: 'hidden' }}>
           <div style={{ marginTop: theme.spacing(1), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            <Typography variant="h6" component="h7" style={{ fontWeight: 'semi-bold', fontSize: 16 }}>
-              {mensagem}
-            </Typography>
+            <TextWithEllipsis text={mensagem} maxLength={70} />
           </div>
         </div>
       </CardContent>
-      <Popup open={openPopup} handleClose={handleClosePopup} atualizaMural={null} title={popupTitle} sub={popupSubTitle} description={popupDescription} type={popupType} enquetes={popupEnquetes}/>
+      <Popup open={openPopup} handleClose={handleClosePopup} atualizaMural={atualizaMural} codigoComunicado={idComunicado} title={popupTitle} sub={popupSubTitle} description={popupDescription} type={popupType} enquetes={popupEnquetes}/>
     </Card>
   );
 };

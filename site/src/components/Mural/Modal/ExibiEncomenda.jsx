@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
-import { validateForm } from '../../Formulario/validation';
 import { Modal, Box, Typography, Link, IconButton } from '@mui/material';
+import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import { showSuccessToast, showErrorToast } from '../../../Utils/Notification';
 import { getAnexo } from '../../../../service/muralService';
-import useForm from '../../Formulario/useForm';
 import { XCircle } from 'phosphor-react';
+import { validateForm } from '../../Formulario/validation';
+import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
-const ExibiComunicado = ({ codigoComunicado, sub, description, onDataChange, onFieldValidationChange, formData }) => {
+const ExibiEncomenda = ({ codigoComunicado, sub, description, onDataChange, onFieldValidationChange, formData }) => {
   const [attachment, setAttachment] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const {
@@ -23,8 +23,13 @@ const ExibiComunicado = ({ codigoComunicado, sub, description, onDataChange, onF
     'agendamento'
   );
 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   const handleAttachmentClick = async () => {
     try {
+      debugger
       const anexo = await getAnexo(codigoComunicado);
       console.log(anexo);
 
@@ -37,10 +42,6 @@ const ExibiComunicado = ({ codigoComunicado, sub, description, onDataChange, onF
     } catch (error) {
       showErrorToast(error);
     }
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
   };
 
   return (
@@ -72,4 +73,4 @@ const ExibiComunicado = ({ codigoComunicado, sub, description, onDataChange, onF
   );
 };
 
-export default ExibiComunicado;
+export default ExibiEncomenda;

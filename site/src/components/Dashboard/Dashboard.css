@@ -1,0 +1,13 @@
+.dashboard-container {
+    position: relative; /* Estabelece um contexto de posicionamento para o popup */
+  }
+  
+  .popup {
+    position: absolute; /* Posiciona o popup de forma absoluta em relação ao contêiner pai */
+    top: 50%; /* Define a posição vertical do popup (centrado verticalmente) */
+    left: 50%; /* Define a posição horizontal do popup (centrado horizontalmente) */
+    transform: translate(-50%, -50%); /* Centraliza o popup */
+    z-index: 0;
+    /* Adicione outros estilos de dimensionamento, margens, etc., conforme necessário */
+  }
+  

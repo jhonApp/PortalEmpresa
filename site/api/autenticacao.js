@@ -8,7 +8,7 @@ export const autenticacao = async (email, password, condominioUrl) => {
     }
 
     const url = `${condominioUrl}usuario/login?email=${encodeURIComponent(email)}&senha=${encodeURIComponent(password)}&condominio=${encodeURIComponent(16)}`;
-
+    
     const response = await axios.post(url, {
       withCredentials: true,
     }, {
