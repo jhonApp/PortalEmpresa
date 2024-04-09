@@ -90,7 +90,7 @@ export const cadastrarFuncionario = async (dados) => {
       }
     };
 
-    const foto = "";
+    let foto = "";
     if(dados.file != undefined || dados.file != null) {
       foto = base64Valid(dados.file);
     }
