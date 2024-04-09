@@ -1,5 +1,6 @@
 .dashboard-container {
-    position: relative; /* Estabelece um contexto de posicionamento para o popup */
+    position: relative;
+    display: flex;
   }
   
   .popup {

@@ -204,3 +204,28 @@ export const atualizarTabela = async (setAgendamentoData, setLoading, setValid) 
     setValid(false);
   }
 };
+
+export const obeterUltimosAgendamentos = async (setAgendamentoData, setLoading, setValid) => {
+  try {
+    const storage = getData();
+    const [data1, data2, data3] = await Promise.all([
+      obterAgendamento(storage.codigoEmpresa),
+      obterAgendamentoEspecial(storage.codigoEmpresa),
+      obterAgendamentoPrestador(storage.codigoEmpresa)
+    ]);
+
+    const combinedData = [...data1, ...data2, ...data3];
+    combinedData.sort((a, b) => new Date(b.dtValid) - new Date(a.dtValid));
+
+    // Filtrar apenas os últimos 10 agendamentos
+    const ultimosAgendamentos = combinedData.slice(0, 10);
+
+    setAgendamentoData(ultimosAgendamentos);
+    setLoading(false);
+  } catch (error) {
+    console.error('Erro ao obter dados de agendamento:', error);
+    setLoading(false);
+    setValid(false);
+  }
+};
+
