@@ -1,0 +1,15 @@
+
+.Example3 {
+    max-width: 100%;
+}
+
+.Example3 .HeightItem {
+    padding: 100px;
+    color: white;
+    background-color: #8B0000; /* Substitua $dark-red pela cor desejada */
+    font-family: 'Arial', sans-serif; /* Substitua $font pela fonte desejada */
+}
+
+.Example3 .HeightItem h1 {
+    font-weight: 100;
+}

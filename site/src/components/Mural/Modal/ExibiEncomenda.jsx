@@ -6,6 +6,7 @@ import { getAnexo } from '../../../../service/muralService';
 import { XCircle } from 'phosphor-react';
 import { validateForm } from '../../Formulario/validation';
 import useForm from '../../Formulario/useForm';
+import Carousel from '../../Carousel';
 import InputMask from 'react-input-mask';
 
 const ExibiEncomenda = ({ codigoComunicado, sub, description, onDataChange, onFieldValidationChange, formData }) => {
@@ -62,11 +63,7 @@ const ExibiEncomenda = ({ codigoComunicado, sub, description, onDataChange, onFi
             <IconButton onClick={handleCloseModal} style={{ position: 'absolute', top: 0, right: 0 }}>
               <XCircle size={28} color="#FF0B0B" />
             </IconButton>
-            {attachment && attachment.contentType && attachment.contentType.startsWith('image/') ? (
-              <img src={`data:${attachment.contentType};base64,${attachment.data}`} alt="Anexo" style={{ maxWidth: '100%', maxHeight: '100%' }} />
-            ) : (
-              attachment && attachment.contentType && <embed src={`data:${attachment.contentType};base64,${attachment.data}`} type={attachment.contentType} width="100%" height="600px" />
-            )}
+            <Carousel attachment={attachment} />
           </Box>
         </Modal>
     </StyledPaper>

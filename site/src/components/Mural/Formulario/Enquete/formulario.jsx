@@ -36,14 +36,20 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if(file == null){
-      showErrorToast("Não foi possível anexar o arquivo, tente novamente.")
+    const newFiles = Array.from(event.target.files);
+  
+    if (!newFiles || newFiles.length === 0) {
+      showErrorToast("Nenhum arquivo selecionado. Por favor, selecione pelo menos um arquivo.");
+      return;
     }
-    const reader = new FileReader();
-    onDataChange({ ...formData, file: file });
-    showSuccessToast("Anexado com sucesso.")
-  }; 
+  
+    // Atualize a lista de arquivos em formData, adicionando os novos arquivos à lista existente
+    onDataChange({ ...formData, files: [...formData.files, ...newFiles] }); 
+    console.log(formData)
+    showSuccessToast(`${newFiles.length} arquivo(s) anexado(s) com sucesso.`);
+  };
+  
+  
 
   const buttonFileStyle = {
     padding: '10px',
@@ -191,7 +197,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
                   <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
                       Anexos
                   </InputLabel>                  
-                  <Input type="file" id="file-input" sx={{ display: 'none' }} onChange={handleFileChange} />
+                  <Input type="file" id="file-input" sx={{ display: 'none' }} onChange={handleFileChange} multiple />
                   <label htmlFor="file-input">
                     <Button component="span" style={buttonFileStyle} variant="contained">
                       <Export size={25} color="#000"/>

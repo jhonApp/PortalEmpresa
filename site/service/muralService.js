@@ -65,7 +65,6 @@ export const getAnexo = async (codigo) => {
 
 const processarMural = async (dados, inserirFuncao, alterarFuncao) => {
   try {
-    
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
@@ -88,7 +87,13 @@ const processarMural = async (dados, inserirFuncao, alterarFuncao) => {
     };
 
     formData.append('comunicado', JSON.stringify(comunicado));
-    formData.append('Anexo', dados.file);
+    
+    if (dados.files && dados.files.length > 0) {
+      dados.files.forEach(file => {
+        formData.append('Anexo', file);
+      });
+    }
+
     formData.append('OpcaoEnquete', JSON.stringify(dados.opcaoEnquete));
 
     const responsePromise = inserirFuncao ? inserirFuncao(formData) : alterarFuncao(formData);
