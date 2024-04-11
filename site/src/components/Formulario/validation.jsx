@@ -78,6 +78,13 @@ const validateForm = (values, currentScreen) => {
 
 
 const screensValidations = {
+  evento: {
+    codigoLocal: true,
+    descricao: true,
+    dataEvento: true,
+    horaInicio: true,
+    horaFim: true
+  },
   espaco: {
     descricao: true,
     descricaoResumida: true

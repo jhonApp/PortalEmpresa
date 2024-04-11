@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { styled } from '@mui/system';
+import { MarginTwoTone } from '@mui/icons-material';
 
 function SelectLocal({ espacos, label, onChange }) {
   const [value, setValue] = useState(null);
@@ -8,18 +9,20 @@ function SelectLocal({ espacos, label, onChange }) {
   const StyledSelectField = styled(Autocomplete)({
     background: '#EBEAEF',
     width: '100%',
-    height: '50px',
+    height: '45px',
     '& .MuiOutlinedInput-root': {
       borderRadius: '4px',
       fontSize: '15px',
-      height: '50px'
+      height: '45px'
     },
     '& .MuiInputLabel-root': {
       fontSize: '0.9rem',
+      marginTop: '-5px',
       visibility: value ? 'hidden' : 'visible',
     },
     '& .MuiOutlinedInput-input': {
       padding: '17px',
+      marginTop: '-5px',
     },
     '& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input': {
       fontSize: '12px',

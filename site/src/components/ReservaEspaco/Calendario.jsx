@@ -9,6 +9,7 @@ import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { listarEvento } from '../../../service/eventoService';
+import ModalReservas from './ModalReservas';
 import 'dayjs/locale/pt-br';
 
 dayjs.locale('pt-br');
@@ -54,11 +55,17 @@ function fakeFetch(date, { signal }) {
 }
 
 export default function DateCalendarServerRequest({formData}) {
-  const requestAbortController = React.useRef(null);
+  const [openModal, setOpenModal] = useState(false);
   const [locale, setLocale] = useState('pt-br');
   const [eventos, setEventos] = useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [highlightedDays, setHighlightedDays] = useState([1, 2, 15]);
+  const [selectedDay, setSelectedDay] = useState(null);
+
+  function handleOpenModal(day) {
+    setSelectedDay(day);
+    setOpenModal(true);
+  }
 
   function ServerDay(props) {
     const { highlightedDays = [], day, outsideCurrentMonth, eventos } = props;
@@ -71,16 +78,14 @@ export default function DateCalendarServerRequest({formData}) {
       return dataEvento.isValid() && dataEvento.isSame(day, 'day');
     });
   
-    const handleDayClick = (evento) => {
+    const handleDayClick = () => {
       const hasEventOnDay = eventos.some(evento => {
         const dataEvento = dayjs(evento.dataEvento, 'YYYY-MM-DD');
         return dataEvento.isValid() && dataEvento.isSame(day, 'day');
       });
     
       if (hasEventOnDay) {
-        showErrorToast("Data indisponível para reserva");
-        //Está aqui se caso quererem que isso funcione, está pronto para aplicar
-        // formData(evento);
+        handleOpenModal(day);
       }
     };
     
@@ -106,12 +111,19 @@ export default function DateCalendarServerRequest({formData}) {
   }
 
   useEffect(() => {
+    if (formData) {
+      setEventos(prevEventos => [...prevEventos, formData]);
+    }
+  }, [formData]);
+  
+  useEffect(() => {
+    
     const fetchData = async () => {
       const listaEventos = await listarEvento();
       setEventos(listaEventos);
       console.log(listaEventos);
     };
-  
+    
     fetchData();
   }, []);
 
@@ -164,6 +176,7 @@ export default function DateCalendarServerRequest({formData}) {
           },
         }}
       />
+      <ModalReservas open={openModal} onClose={() => setOpenModal(false)} dataEvento={selectedDay} />
     </LocalizationProvider>
   );
 }

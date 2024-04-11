@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Paper, InputLabel, Typography, useTheme, Badge } from '@mui/material';
+import { Modal, Box, Paper, InputLabel, Typography, useTheme, IconButton } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StyledButtonPrimary } from '../../Utils/StyledButton';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StyledTextField, StyledTextObs, StyledDatePicker, StyledTimePicker, FormSection, FormContainer, Column, FormRow } from '../../Utils/StyledForm';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
-import { Image } from 'phosphor-react';
-import { deleteCartao } from '../../../service/cartaoService';
+import { Image, XCircle } from 'phosphor-react';
+import Carousel from '../Carousel';
 import Progress from '../../Utils/LoadingProgress';
-import AlertDialog from '../../Utils/Modal/Delete';
 import useForm from '../Formulario/useForm';
 import { validateForm } from '../Formulario/validation';
 import SelectLocal from './selectLocal';
 import Calendario from './Calendario';
 import { inserirEvento } from '../../../service/eventoService';
+import { getFoto } from '../../../service/espacoService';
+
 
 
 import dayjs from 'dayjs';
@@ -22,14 +23,13 @@ import 'dayjs/locale/pt-br';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
+function Pagina({ espacos, loading, setLoading }) {
   const [maxPessoaChange, setMaxPessoa] = useState('');
-  const [eventoSelecionado, setEventoSelecionado] = useState(null);
+  const [attachment, setAttachment] = useState([]);
+  const [codigoLocal, setCodigoLocal] = useState('');
   const [locale, setLocale] = useState('pt-br');
-  const [codigoCartao, setCodigoCartao] = useState(null);
   const [formData, setformData] = useState([]);
-  const [open, setOpen] = React.useState(false);
-  const theme = useTheme();
+  const [openModal, setOpenModal] = useState(false);
   const {
     values,
     errors,
@@ -42,8 +42,10 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
     validateForm,
     'funcionario'
   );
-  console.log(formData)
-  console.log(values)
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
@@ -54,21 +56,10 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
   const handleSelectChange = (fieldName, newValue) => {
     handleFormChange(fieldName, newValue);
     const selectedEspaco = espacos.find((espaco) => espaco.codigoLocal === newValue);
-    if (selectedEspaco) { setMaxPessoa(selectedEspaco.maxPessoa); }
-  };
 
-  const handleDelete = async () => {
-    try {
-      setLoading(true);
-
-      if (!codigoCartao) return;
-      await deleteCartao(codigoCartao);
-      showSuccessToast('Cartão excluído com sucesso!');
-      atualizaCartao();
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      showErrorToast(error.message);
+    if (selectedEspaco) { 
+      setMaxPessoa(selectedEspaco.maxPessoa); 
+      setCodigoLocal(selectedEspaco.codigoLocal);
     }
   };
 
@@ -80,6 +71,7 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
       const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
       if (hasErrors) {
         showErrorToast('Por favor, preencha os campos obrigatórios');
+        setLoading(false);
         return;
       }
 
@@ -88,7 +80,14 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
             await inserirEvento(formData);
             showSuccessToast("Criado com sucesso!");
             // setEspacoFiltrados([...espacosFiltrados, formData]); 
-            setformData('');
+            setMaxPessoa('');
+            setformData({
+              formData: '',
+              horaInicio: '', 
+              horaFim: '',
+              maxPessoaChange: '',
+              codigoLocal: ''
+            });
         } catch (e) {
           setLoading(false);
           showErrorToast(e.message);
@@ -102,6 +101,28 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
     }
   }
 
+  const handleAttachmentClick = async () => {
+    try {
+
+      if(codigoLocal == null){
+        showErrorToast('Não foi possível obter a imagem.');
+      }
+      const foto = await getFoto(codigoLocal);
+
+      if (foto) {
+        const base64Image = `data:image/jpeg;base64,${foto}`;
+        setformData({ ...formData, file: base64Image });
+        setAttachment([base64Image]);
+        setOpenModal(true);
+        setCodigoLocal('');
+      } else {
+        showErrorToast('Erro ao obter a foto.');
+      }
+    } catch (error) {
+      showErrorToast(error.message);
+    }
+  };
+  console.log(formData)
   return (
     <Box
       gap={1}
@@ -123,11 +144,12 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
           </Typography>
         </div>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          {/* Formulario */}
           <Box style={{width: 750}}>
             <FormContainer>
               <Column>
                 {/*Local*/}
-                <FormRow style={{width: '321px'}}>
+                <FormRow style={{width: '400px'}}>
                     <InputLabel
                       shrink
                       sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
@@ -146,7 +168,7 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
               </Column>
               <Column>
                 {/*N° Máximo*/}
-                <FormRow style={{width: '260px'}}>
+                <FormRow style={{width: '263px'}}>
                   <InputLabel
                     shrink
                     sx={{ fontSize: 20, color: '#666666', fontWeight: 600, textAlign: 'start' }}
@@ -166,11 +188,9 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
               </Column>
               <Column>
                 <FormRow>
-                  <Image
-                    size={52}
-                    style={{ marginTop: '24px' }}
-                    src={formData.file ? formData.file : '/broken-image.jpg'} // Define a imagem do Avatar com base se um arquivo foi selecionado ou não
-                  />
+                  <IconButton onClick={handleAttachmentClick} color="#000" sx={{marginTop: "15px", right: "10px"}} aria-label="abrir imagem">
+                    <Image size={52} />
+                  </IconButton>
                 </FormRow>
               </Column>
             </FormContainer>
@@ -178,7 +198,7 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
               <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                 <Column>
                   {/*Resposável*/}
-                  <FormRow style={{width: '280px'}}>
+                  <FormRow style={{width: '277px'}}>
                     <InputLabel
                       shrink
                       sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
@@ -220,7 +240,6 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
                       }}
                       onBlur={() => handleValidation('dataEvento')}
                     />
-                    {renderErrorMessage('dataEvento')}
                   </FormRow>
                 </Column>
                 <Column>
@@ -241,7 +260,7 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
                       ampm={false}
                       inputFormat="HH:mm"
                       error={errors.horaInicio}
-                      value={formData.horaInicio}
+                      value={formData.horaInicio || null}
                       onChange={(e) => handleFormChange('horaInicio', e)}
                       onBlur={() => handleValidation('horaInicio')}
                     />
@@ -265,9 +284,9 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
                       ampm={false}
                       inputFormat="HH:mm"
                       error={errors.horaFim}
-                      value={values.horaFim}
+                      value={formData.horaFim || null}
                       onChange={(e) => handleFormChange('horaFim', e)}
-                      onBlur={() => handleValidation('horaFim')}
+                      onBlur={() => handleFormChange('horaFim')}
                     />
                   </FormRow>
                 </Column>
@@ -290,7 +309,7 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
                     type="text"
                     autoComplete="off"
                     error={errors.obs}
-                    value={values.obs || ''}
+                    value={formData.obs || ''}
                     onChange={(e) => handleFormChange('obs', e.target.value)}
                     onBlur={(e) => handleFormChange('obs', e.target.value)}
                   />
@@ -299,6 +318,7 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
             </FormContainer>
             <StyledButtonPrimary style={{top:'8px', float:'right'}} onClick={handleReserva}>RESERVAR</StyledButtonPrimary>
           </Box>
+          {/* Calendário */}
           <Box
             component={Paper}
             style={{
@@ -310,11 +330,18 @@ function Pagina({ espacos, loading, setLoading, atualizaEspacos }) {
             }}
             backgroundColor="#FAFAFA"
           >
-            <Calendario formData={setformData} />
+            <Calendario formData={formData} />
           </Box>
         </div>
       </Box>
-      <AlertDialog dialogOpen={open} handleClose={() => setOpen(false)} handleDelete={handleDelete} />
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '40%', height: '80%', bgcolor: 'background.paper', boxShadow: 24, p: 1, borderRadius: '20px', overflow: 'auto' }}>
+          <IconButton onClick={handleCloseModal} style={{ position: 'absolute', top: 0, right: 0 }}>
+            <XCircle size={28} color="#FF0B0B" />
+          </IconButton>
+          <Carousel attachment={attachment} />
+        </Box>
+      </Modal>
       <Progress isVisible={loading} />
     </Box>
   );

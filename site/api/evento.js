@@ -43,3 +43,21 @@ export const obterEvento = async () => {
       throw error;
     }
 };
+
+export const obterEventoDoDia = async (dataEvento) => {
+  try {
+
+    const response = await axios.get(`${API_URL}/obterEventoDoDia?dataEvento=${dataEvento}`, {
+      validateStatus: status => status < 500
+    });
+    
+    if (response.status !== 200) {
+      throw new Error(response.data);
+    }
+    
+    return response.data;
+    
+  } catch (error) {
+    throw error;
+  }
+};
