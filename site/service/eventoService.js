@@ -1,4 +1,4 @@
-import { incluirEvento, obterEvento } from "../api/evento";
+import { incluirEvento, obterEvento, obterEventoDoDia } from "../api/evento";
 import { getData } from './storageService';
 
 export const inserirEvento = async (dados) => {
@@ -27,7 +27,7 @@ export const inserirEvento = async (dados) => {
 
     return response;
   } catch (error) {
-    throw new Error('Erro ao inserir cartão: ' + error.message);
+    throw new Error(error.message);
   }
 };
   
@@ -42,18 +42,19 @@ export const listarEvento = async () => {
     }
 };
 
-// export const getEvento = async (setEventoData, setLoading, setValid) => {
-//     try {
-//       setLoading(true);
+export const getEvento = async (setEventoData, setLoading, setValid, dataEvento) => {
+    try {
+      
+      setLoading(true);
   
-//       const data = await listarEvento();
-//       setEventoData(data);
+      const data = await obterEventoDoDia(dataEvento);
+      setEventoData(data);
   
-//       setLoading(false);
-//       setValid(true);
-//     } catch (error) {
-//       console.error('Erro ao obter dados do evento: ', error);
-//       setLoading(false);
-//       setValid(false);
-//     }
-// };
+      setLoading(false);
+      setValid(true);
+    } catch (error) {
+      console.error('Erro ao obter dados do evento: ', error);
+      setLoading(false);
+      setValid(false);
+    }
+};

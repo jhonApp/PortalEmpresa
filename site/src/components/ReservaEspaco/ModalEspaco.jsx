@@ -16,7 +16,7 @@ import AlertDialog from '../../Utils/Modal/Delete';
 import { inserirEspaco, listarEspaco, deleteEspaco, alterarEspaco } from '../../../service/espacoService';
 
 
-const ModalEspaco = ({ onClose, espacos, atualizaEspaco, title, description }) => {
+const ModalEspaco = ({ onClose, espacos, atualizaEspacos, title, description }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [onUpdate, setOnUpdate] = useState(false);
@@ -54,8 +54,12 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspaco, title, description }) =
   const handleDelete = async () => {
     try {
       handleLoadingChange(true);
-  
-      if (!codigoEspaco) return;
+      
+      if (!codigoEspaco){
+        showErrorToast("Houve erro ao realizar a exclusão.");
+        handleLoadingChange(false);
+        return;
+      } 
   
       await deleteEspaco(codigoEspaco);
       
@@ -65,7 +69,7 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspaco, title, description }) =
   
       showSuccessToast("Espaço excluído com sucesso!");
       handleClosePopupDelete();
-  
+      atualizaEspacos();
       handleLoadingChange(false);
     } catch (error) {
       handleLoadingChange(false);
@@ -91,9 +95,14 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspaco, title, description }) =
       await handleSubmit(async () => {        
         try{
           if(!onUpdate){
-            await inserirEspaco(formData);
+            const codigo = await inserirEspaco(formData);
+            
             showSuccessToast("Criado com sucesso!");
-            setEspacoFiltrados([...espacosFiltrados, formData]); 
+            setEspacoFiltrados(prevEspacos => [
+              ...prevEspacos,
+              { ...formData, codigoLocal: codigo }
+            ]);
+            atualizaEspacos();
 
           }else{
             await alterarEspaco(formData);
@@ -105,8 +114,8 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspaco, title, description }) =
               setEspacoFiltrados(updatedEspacosFiltrados); 
 
               showSuccessToast("Alterado com sucesso!");
-
             }
+            atualizaEspacos();
           }
             
           handleClosePopup();
@@ -173,7 +182,7 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspaco, title, description }) =
         {espacosFiltrados.length === 0 && (
           <Typography style={{ marginTop: '50px' }}>Nenhum resultado encontrado</Typography>
         )}
-        <StyledBox sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: '30px' }}>
+        <StyledBox>
           {espacosFiltrados.map((espaco, index) => (
             <StyledCard key={index}>
               <StyledCardContent>

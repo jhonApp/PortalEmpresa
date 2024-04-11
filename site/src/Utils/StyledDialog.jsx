@@ -23,7 +23,7 @@ const StyledBox = styled(Box)({
   flexWrap: 'wrap',
   justifyContent: 'space-between',
   overflowY: 'scroll',
-  height: '200px',
+  maxHeight: '200px',
   marginTop: '10px',
   scrollbarWidth: 'thin',
   scrollbarColor: '#999 #f4f4f4',

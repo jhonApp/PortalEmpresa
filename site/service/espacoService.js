@@ -1,4 +1,4 @@
-import { obterEspaco, incluirEspaco, excluirEspaco, updateEspaco } from "../api/espaco";
+import { obterEspaco, incluirEspaco, excluirEspaco, updateEspaco, obterFoto } from "../api/espaco";
 
 export const inserirEspaco = async (dados) => {
   try {
@@ -22,7 +22,7 @@ export const inserirEspaco = async (dados) => {
       throw new Error('Erro ao inserir espaço, entre em contato com o suporte técnico.');
     }
 
-    return response;
+    return response.data;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -42,7 +42,7 @@ export const deleteEspaco = async (codigo) => {
 
     return response;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error('Erro: ' + error.response.data);
   }
 };
   
@@ -85,7 +85,7 @@ export const alterarEspaco = async (dados) => {
     if (dados.foto != null) {
       formData.append('foto', dados.foto);
     }
-debugger
+
     const dadosSemFoto = { ...dados };
     delete dadosSemFoto.foto;
 
@@ -102,6 +102,17 @@ debugger
     return response;
   } catch (error) {
     throw new Error(error.message);
+  }
+};
+
+export const getFoto = async (codigo) => {
+  try {
+      
+    const data = await obterFoto(codigo);
+    
+    return data.foto;
+  } catch (error) {
+    throw error;
   }
 };
 

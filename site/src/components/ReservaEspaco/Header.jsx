@@ -47,7 +47,7 @@ function Header({ espacos, atualizaEspacos }) {
   };
 
   const renderContent = () => {
-    return <Espaco onClose={handleClosePopup} espacos={espacos} atualizaEspaco={atualizaEspacos} title={popupTitle} description={popupDescription} />;
+    return <Espaco onClose={handleClosePopup} espacos={espacos} atualizaEspacos={atualizaEspacos} title={popupTitle} description={popupDescription} />;
   };
 
   return (

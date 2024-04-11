@@ -17,6 +17,7 @@ const today = dayjs();
 
 const Formulario = ({ onDataChange, data }) => {
   const [locale, setLocale] = useState('pt-br');
+  const [nomeArquivo, setNomeArquivo] = useState('');
   const {
     values,
     errors,
@@ -36,15 +37,25 @@ const Formulario = ({ onDataChange, data }) => {
   };
 
   const handleFileChange = (event) => {
-    
     const file = event.target.files[0];
-    if(file == null){
-      showErrorToast("Não foi possível anexar o arquivo, tente novamente.")
+    if (file == null) {
+      showErrorToast("Não foi possível anexar o arquivo, tente novamente.");
+      return;
     }
-    const reader = new FileReader();
+  
+    const fileName = file.name;
+    const extensionIndex = fileName.lastIndexOf('.');
+    const extension = fileName.substring(extensionIndex);
+    let truncatedFileName = fileName.substring(0, 10);
+  
+    // Combine o nome truncado com a extensão
+    const truncatedFileNameWithExtension = truncatedFileName + extension;
+  
+    setNomeArquivo(truncatedFileNameWithExtension);
     onDataChange({ ...data, foto: file });
-    showSuccessToast("Anexado com sucesso.")
-  }; 
+    showSuccessToast("Anexado com sucesso.");
+  };
+  
 
   const buttonFileStyle = {
     padding: '10px',
@@ -111,7 +122,7 @@ const Formulario = ({ onDataChange, data }) => {
                   <label htmlFor="file-input">
                     <Button component="span" style={buttonFileStyle} variant="contained">
                       <FileJpg size={25} color="#000"/>
-                      Clique aqui para selecionar uma foto
+                      {nomeArquivo ? nomeArquivo : 'Clique aqui para selecionar uma foto'}
                     </Button>
                   </label>
               </div>
