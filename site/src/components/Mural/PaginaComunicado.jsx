@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Paper, Card, CardContent, Typography, IconButton, useTheme } from '@mui/material';
+import { Radio, RadioGroup, FormControlLabel, FormControl, Box, Paper, Typography, IconButton, useTheme } from '@mui/material';
 import { MagnifyingGlass } from 'phosphor-react';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { Search, SearchIconWrapper, StyledInputBase } from '../../Utils/StyledSearch';
-import { Eye, TrashSimple, CreditCard } from 'phosphor-react';
 import { deleteCartao } from '../../../service/cartaoService';
 import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
 import ComunicadoCard from '../Mural/Card';
 
-function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atualizaMural, setValid }) {
+function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atualizaMural, setValid}) {
   const [digitado, setDigitado] = useState('');
   const [comunicadosFiltrados, setComunicadosFiltrados] = useState(muralData);
+  const [tipoSelecionado, setTipoSelecionado] = useState('');
   const [comunicados, setComunicados] = useState(muralData);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const [codigoCartao, setCodigoCartao] = useState(null); // Added state for codigoCartao
+  const [codigoCartao, setCodigoCartao] = useState(null); 
 
   const iconContainerStyle = {
     display: 'flex',
@@ -27,6 +27,12 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
     height: 'auto',
     width: '20px',
     marginRight: theme.spacing(1),
+  };
+
+  const labelStyle = {
+    fontSize: '16px',
+    fontWeight: 700,
+    color: '#1B1A16'
   };
 
   console.log(comunicadosFiltrados);
@@ -41,17 +47,34 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
 
   const handleSearch = (value) => {
     setDigitado(value);
-    
+  
+    // Verifica se algum tipo de comunicado está selecionado
+    const isTypeSelected = tipoSelecionado.length > 0;
+  
     const filteredComunicados = muralData.filter(mural => {
-      return Object.values(mural).some(attrValue => {
-        if (typeof attrValue === 'string' || typeof attrValue === 'number') {
-          return String(attrValue).toLowerCase().includes(value.toLowerCase());
-        }
-        return false;
-      });
+      // Se algum tipo de comunicado estiver selecionado, filtrar com base no tipo
+      if (isTypeSelected) {
+        return (
+          tipoSelecionado.includes(mural.descricaoTipoComunicado) &&
+          Object.values(mural).some(attrValue => {
+            if (typeof attrValue === 'string' || typeof attrValue === 'number') {
+              return String(attrValue).toLowerCase().includes(value.toLowerCase());
+            }
+            return false;
+          })
+        );
+      } else { // Se nenhum tipo de comunicado estiver selecionado, filtrar livremente
+        return Object.values(mural).some(attrValue => {
+          if (typeof attrValue === 'string' || typeof attrValue === 'number') {
+            return String(attrValue).toLowerCase().includes(value.toLowerCase());
+          }
+          return false;
+        });
+      }
     });
+  
     setComunicadosFiltrados(filteredComunicados);
-  };
+  };   
 
   const handleDelete = async () => {
     try {
@@ -66,6 +89,21 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
       setLoading(false);
       showErrorToast(error.message);
     }
+  };
+
+  const handleRadioChange = (event) => {
+    const selectedType = event.target.value;
+    setTipoSelecionado(selectedType);
+  
+    // Filtrar os comunicados com base no tipo selecionado
+    const filteredComunicados = muralData.filter(mural => {
+      return (
+        selectedType === '' ||
+        mural.descricaoTipoComunicado === selectedType
+      );
+    });
+  
+    setComunicadosFiltrados(filteredComunicados);
   };
 
   return (
@@ -86,7 +124,7 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <Typography variant="h6" component="h1" style={{ fontWeight: 'bold' }}>Avisos</Typography>
         </div>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
           <Search>
               <SearchIconWrapper>
                 <IconButton>
@@ -100,6 +138,13 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
                 onChange={(e) => handleSearch(e.target.value)}
               />
           </Search>
+          <FormControl component="fieldset">
+            <RadioGroup row value={tipoSelecionado} onChange={handleRadioChange}>
+              <FormControlLabel value="Comunicado" control={<Radio />} label={<Typography style={labelStyle}>Comunicado</Typography>} />
+              <FormControlLabel value="Encomenda" control={<Radio />} label={<Typography style={labelStyle}>Encomenda</Typography>} />
+              <FormControlLabel value="Enquete" control={<Radio />} label={<Typography style={labelStyle}>Enquete</Typography>} />
+            </RadioGroup>
+          </FormControl>
         </div>
         <div>
           {comunicadosFiltrados.length === 0 && (

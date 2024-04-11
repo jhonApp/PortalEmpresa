@@ -22,7 +22,7 @@ function Mural() {
     };
     fetchData();
   }, []);
-  console.log(muralData);
+
   return (
     <div>
       <Menu atualizaMural={atualizaMural} />

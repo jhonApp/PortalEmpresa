@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyledDatePicker, StyledTimePicker, StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
+import { StyledDatePicker, StyledTimePicker, StyledTextField, StyledPaper, FormContainer, Column, FormRow, FormSection } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
 import { Checkbox, Typography, Input, Button } from '@mui/material';
 import { showSuccessToast, showErrorToast } from '../../../Utils/Notification';
@@ -10,14 +10,20 @@ import dayjs from 'dayjs';
 import { InputLabel } from '@mui/material';
 import 'dayjs/locale/pt-br';
 import useForm from '../../Formulario/useForm';
-import InputMask from 'react-input-mask';
+import SelectCondomino from './Selects/SelectCondomino';
+import SelectBloco from './Selects/SelectBloco';
+import SelectPiso from './Selects/SelectPiso';
+import SelectUnidade from './Selects/SelectUnidade';
 
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const Encomenda = ({ onDataChange, screenValidation }) => {
+const Encomenda = ({ formData, onDataChange, screenValidation }) => {
   const [locale, setLocale] = useState('pt-br');
-  const [formData, setFormData] = useState({});
+  const [nomeArquivo, setNomeArquivo] = useState('');
+  const [blocos, setBlocos] = useState({});
+  const [pisos, setPisos] = useState({});
+  const [unidades, setUnidades] = useState({});
   const {
     values,
     errors,
@@ -31,30 +37,45 @@ const Encomenda = ({ onDataChange, screenValidation }) => {
   );
 
   useEffect(() => {
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      tipoComunicacao: 2
-    }));
-
+    onDataChange({ ...formData, 'tipoComunicacao': 2 });
     screenValidation("comunicado");
-
   }, []); 
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
     handleValidation(fieldName);
-    onDataChange({ ...values, [fieldName]: value });
+    onDataChange({ ...formData, [fieldName]: value });
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if(file == null){
-      showErrorToast("Não foi possível anexar o arquivo, tente novamente.")
+    const newFiles = Array.from(event.target.files);
+  
+    if (!newFiles || newFiles.length === 0) {
+      showErrorToast("Nenhum arquivo selecionado.");
+      return;
     }
-    const reader = new FileReader();
-    onDataChange({ ...formData, file: file });
-    showSuccessToast("Anexado com sucesso.")
-  }; 
+    
+    const updatedFiles = [...formData.files, ...newFiles];
+
+    let concatenatedNames = '';
+    updatedFiles.forEach((file, index) => {
+      const fileName = file.name;
+      const extensionIndex = fileName.lastIndexOf('.');
+      const extension = fileName.substring(extensionIndex);
+      let truncatedFileName = fileName.substring(0, 10);
+    
+      const truncatedFileNameWithExtension = truncatedFileName + extension;
+  
+      concatenatedNames += truncatedFileNameWithExtension;
+      if (index !== updatedFiles.length - 1) {
+        concatenatedNames += ', ';
+      }
+    });
+  
+    setNomeArquivo(concatenatedNames);
+    onDataChange({ ...formData, files: updatedFiles }); 
+    showSuccessToast(`${newFiles.length} arquivo(s) anexado(s) com sucesso.`);
+  };   
 
   const buttonFileStyle = {
     padding: '10px',
@@ -90,7 +111,7 @@ const Encomenda = ({ onDataChange, screenValidation }) => {
                   name="dataInicial"
                   minDate={today}
                   error={errors.dataInicial}
-                  value={values.dataInicial || null}
+                  value={formData.dataInicial || null}
                   onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
                   onBlur={() => handleValidation('dataInicial')}
                 />
@@ -108,73 +129,24 @@ const Encomenda = ({ onDataChange, screenValidation }) => {
                 type="text"
                 autoComplete="off"
                 error={errors.titulo}
-                value={values.titulo || ''}
+                value={formData.titulo || ''}
                 onChange={(e) => handleFormChange('titulo', e.target.value)}
                 onBlur={(e) => handleFormChange('titulo', e.target.value)}
               />
               {renderErrorMessage('titulo')}
             </FormRow>
-            <FormContainer>
-              {/* BLoco/Piso/Unid */}
-              <Column>
-                {/* Bloco/Torre */}
-                <FormRow style={{display: 'flex'}}>
-                  <div style={{width: '46%'}}>
-                    <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                      Bloco/Torre
-                    </InputLabel>
-                    <StyledTextField
-                      variant="outlined"
-                      fullWidth
-                      margin="normal"
-                      type="number"
-                      autoComplete="off"
-                      error={errors.blocoTorre}
-                      value={values.blocoTorre || ''}
-                      onChange={(e) => handleFormChange('blocoTorre', e.target.value)}
-                      onBlur={(e) => handleFormChange('blocoTorre', e.target.value)}
-                    />
-                    {renderErrorMessage('blocoTorre')}
-                  </div>
-                  <div style={{width: '27%', marginLeft: '10px'}}>
-                    {/* Bloco/Torre */}
-                    <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                        Piso
-                      </InputLabel>
-                      <StyledTextField
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        type="number"
-                        autoComplete="off"
-                        error={errors.piso}
-                        value={values.piso || ''}
-                        onChange={(e) => handleFormChange('piso', e.target.value)}
-                        onBlur={(e) => handleFormChange('piso', e.target.value)}
-                      />
-                      {renderErrorMessage('piso')}
-                  </div>
-                  <div style={{width: '27%', marginLeft: '10px'}}>
-                    {/* Bloco/Torre */}
-                    <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                        Unid.
-                      </InputLabel>
-                      <StyledTextField
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        type="number"
-                        autoComplete="off"
-                        error={errors.unidade}
-                        value={values.unidade || ''}
-                        onChange={(e) => handleFormChange('unidade', e.target.value)}
-                        onBlur={(e) => handleFormChange('unidade', e.target.value)}
-                      />
-                      {renderErrorMessage('unidade')}
-                  </div>
-                </FormRow>
-              </Column>
-            </FormContainer>
+            {/*Condomino*/}
+            <FormRow>
+                <InputLabel
+                  shrink
+                  sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
+                >
+                  Condômino
+                </InputLabel>
+                <FormSection>
+                  <SelectCondomino setBlocos={setBlocos} setPisos={setPisos} setUnidades={setUnidades} onDataChange={handleFormChange} />
+                </FormSection>
+             </FormRow>
           </Column>
           <Column>
             {/* Data Fim */}
@@ -190,7 +162,7 @@ const Encomenda = ({ onDataChange, screenValidation }) => {
                   name="dataFim"
                   minDate={today}
                   error={errors.dataFim}
-                  value={values.dataFim || null}
+                  value={formData.dataFim || null}
                   onChange={(newValue) => { handleFormChange('dataFim', newValue); }}
                   onBlur={() => handleValidation('dataFim')}
                 />
@@ -202,33 +174,58 @@ const Encomenda = ({ onDataChange, screenValidation }) => {
                   <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
                       Anexos
                   </InputLabel>                  
-                  <Input type="file" id="file-input" sx={{ display: 'none' }} onChange={handleFileChange} />
+                  <Input type="file" id="file-input" sx={{ display: 'none' }} onChange={handleFileChange} multiple/>
                   <label htmlFor="file-input">
                     <Button component="span" style={buttonFileStyle} variant="contained">
                       <Export size={25} color="#000"/>
-                      Clique aqui para anexar um arquivo
+                      {nomeArquivo ? nomeArquivo : 'Clique aqui para anexar um arquivo'}
                     </Button>
                   </label>
               </div>
             </FormRow>
-            {/* Condomino */}
-            <FormRow>
-              <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                Condômino
-              </InputLabel>
-              <StyledTextField
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type="text"
-                autoComplete="off"
-                error={errors.condomino}
-                value={values.condomino || ''}
-                onChange={(e) => handleFormChange('condomino', e.target.value)}
-                onBlur={(e) => handleFormChange('condomino', e.target.value)}
-              />
-              {renderErrorMessage('condomino')}
-            </FormRow>
+            <FormContainer>
+              {/* BLoco/Piso/Unid */}
+              <Column>
+                {/* Bloco/Torre */}
+                <FormRow style={{display: 'flex'}}>
+                  <div style={{width: '46%'}}>
+                    <InputLabel
+                      shrink
+                      sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
+                    >
+                      Bloco/Torre
+                    </InputLabel>
+                    <FormSection>
+                      <SelectBloco blocos={blocos} onDataChange={handleFormChange} />
+                    </FormSection>
+                  </div>
+                  <div style={{width: '27%', marginLeft: '10px'}}>
+                      {/* Piso */}
+                      <InputLabel
+                        shrink
+                        sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
+                      >
+                        Piso
+                      </InputLabel>
+                      <FormSection>
+                        <SelectPiso pisos={pisos} onDataChange={handleFormChange} />
+                      </FormSection>
+                  </div>
+                  <div style={{width: '27%', marginLeft: '10px'}}>
+                    {/* Unidade */}
+                    <InputLabel
+                        shrink
+                        sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
+                      >
+                        Unidade
+                      </InputLabel>
+                      <FormSection>
+                        <SelectUnidade unidades={unidades} onDataChange={handleFormChange} />
+                      </FormSection>
+                  </div>
+                </FormRow>
+              </Column>
+            </FormContainer>
           </Column>
         </FormContainer>
         {/* Observação */}
@@ -255,10 +252,10 @@ const Encomenda = ({ onDataChange, screenValidation }) => {
               padding: '0px 0px 0px 0px !important',
               '& .MuiSvgIcon-root': { color: '#C4C7D4' }
             }}
-            checked={values.envioResponsavel || false}
+            checked={formData.envioResponsavel || false}
             error={errors.envioResponsavel}
             onChange={(e) => {
-              values.envioResponsavel = e.target.checked;
+              formData.envioResponsavel = e.target.checked;
               handleFormChange('envioResponsavel', e.target.checked);
             }}
             inputProps={{ 'aria-label': 'primary checkbox' }}   
@@ -271,10 +268,10 @@ const Encomenda = ({ onDataChange, screenValidation }) => {
               padding: '0px 0px 0px 0px !important',
               '& .MuiSvgIcon-root': { color: '#C4C7D4' }
             }}
-            checked={values.enviarParaTodos || false}
+            checked={formData.enviarParaTodos || false}
             error={errors.enviarParaTodos}
             onChange={(e) => {
-              values.enviarParaTodos = e.target.checked;
+              formData.enviarParaTodos = e.target.checked;
               handleFormChange('enviarParaTodos', e.target.checked);
             }}
             inputProps={{ 'aria-label': 'primary checkbox' }}   

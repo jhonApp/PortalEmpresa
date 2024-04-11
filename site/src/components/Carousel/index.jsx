@@ -16,6 +16,8 @@ export default function Test3({ attachment }) {
 
   function renderAttachment(anexo) {
     if (anexo.data) {
+    
+      debugger
       if (anexo.contentType && anexo.contentType.startsWith('image/')) {
         return <img src={`data:${anexo.contentType};base64,${anexo.data}`} alt="Anexo" style={{ maxWidth: '100%', maxHeight: '550px' }} />;
       } else {

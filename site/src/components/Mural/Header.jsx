@@ -23,7 +23,7 @@ function Header({ atualizaMural }) {
   const [popupDescription, setPopupDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ files: [] });
   const theme = useTheme();
   const {
     values,
@@ -76,6 +76,7 @@ function Header({ atualizaMural }) {
   };
 
   const handleFormChange = (data) => {
+    console.log(data)
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
   };
 
@@ -92,6 +93,7 @@ function Header({ atualizaMural }) {
 
       await handleSubmit(async () => {        
         try{
+            debugger
             await inserirComunicado(formData);
             showSuccessToast("Criado com sucesso!");
             atualizaMural();
@@ -116,9 +118,9 @@ function Header({ atualizaMural }) {
       case 'Enquete':
         return <Enquete onclose={handleClosePopup} onDataChange={handleFormChange} screenValidation={setScreenValidation} updateTable={atualizaMural}/>;
       case 'Encomenda':
-        return <Encomenda onDataChange={handleFormChange} screenValidation={setScreenValidation} />;
+        return <Encomenda formData={formData} onDataChange={handleFormChange} screenValidation={setScreenValidation} />;
       case 'Comunicado':
-        return <Comunicado onDataChange={handleFormChange} screenValidation={setScreenValidation} />;
+        return <Comunicado formData={formData} onDataChange={handleFormChange} screenValidation={setScreenValidation} />;
         default:
         return null;
     }

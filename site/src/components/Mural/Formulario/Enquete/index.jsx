@@ -8,8 +8,8 @@ import useForm from '../../../Formulario/useForm';
 import { validateForm } from '../../../Formulario/validation';
 import dayjs from 'dayjs';
 
-function Enquete({ onclose, screenValidation, action, updateTable }) {
-  const [formData, setFormData] = useState({});
+function Enquete({ onclose, onDataChange, screenValidation, action, updateTable }) {
+  const [formData, setFormData] = useState({ files: [], tipoComunicacao: 3 });
   const [invalidFields, setInvalidFields] = useState({});
   const steps = ['Condomíno', 'Enquete'];
   const [loading, setLoading] = useState(false);
@@ -27,13 +27,9 @@ function Enquete({ onclose, screenValidation, action, updateTable }) {
     'enquete'
   );
 
-  useEffect(() => {
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      tipoComunicacao: 3
-    }));
-
-  }, []); 
+  // useEffect(() => {
+  //   onDataChange({ ...formData, 'tipoComunicacao': 3 });
+  // }, []); 
 
   const handleFormChange = (data) => {
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
@@ -59,9 +55,9 @@ function Enquete({ onclose, screenValidation, action, updateTable }) {
               return (
                 <>
                   <Formulario
-                    formData={formData}
                     onDataChange={handleFormChange}
                     onFieldValidationChange={setInvalidFields}
+                    formData={formData}
                   />
                   <Progress isVisible={loading} />
                 </>
@@ -70,9 +66,9 @@ function Enquete({ onclose, screenValidation, action, updateTable }) {
               return (
                 <>
                   <FormularioEnquete
-                    formData={formData}
                     onDataChange={handleFormChange}
                     onFieldValidationChange={setInvalidFields}
+                    formData={formData}
                   />
                   <Progress isVisible={loading} />
                 </>

@@ -26,12 +26,13 @@ const ExibiComunicado = ({ codigoComunicado, sub, description, onDataChange, onF
 
   const handleAttachmentClick = async () => {
     try {
+      
       const anexo = await getAnexo(codigoComunicado);
-      if (anexo) {
+      if (anexo.length > 0) {
         setAttachment(anexo);
         setOpenModal(true);
       } else {
-        showErrorToast('Erro ao obter o anexo.');
+        showErrorToast('Não há anexos a serem exibidos.');
       }
     } catch (error) {
       showErrorToast(error);
