@@ -19,6 +19,7 @@ const ModalDocumento = ({ atualizaDocumento, documentoData }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [open, setOpen] = React.useState(false);
+  const [nomeArq, setNomeArquivo] = useState('');
   const [codigoDocumento, setCodigoDocumento] = useState(null);
   const [digitado, setDigitado] = useState('');
   const [formMode, setFormMode] = useState('incluir');
@@ -148,8 +149,18 @@ const ModalDocumento = ({ atualizaDocumento, documentoData }) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file == null) {
-      showErrorToast("Não foi possível anexar o arquivo, tente novamente.")
+      showErrorToast("Não foi possível anexar o arquivo, tente novamente.");
+      return;
     }
+
+    const fileName = file.name;
+    const extensionIndex = fileName.lastIndexOf('.');
+    const extension = fileName.substring(extensionIndex);
+    let truncatedFileName = fileName.substring(0, 10);
+
+    const truncatedFileNameWithExtension = truncatedFileName + extension;
+    setNomeArquivo(truncatedFileNameWithExtension);
+
     const reader = new FileReader();
     reader.onloadend = () => {
       setFormData({ ...formData, file: file, nomeArquivo: file.name });
@@ -190,7 +201,7 @@ const ModalDocumento = ({ atualizaDocumento, documentoData }) => {
                   <label htmlFor="file-input">
                     <Button component="span" style={buttonFileStyle} variant="contained">
                       <Export size={25} color="#000"/>
-                      Clique aqui para anexar um arquivo
+                      {nomeArq ? nomeArq : 'Clique aqui para selecionar uma foto'}
                     </Button>
                   </label>
             </div>

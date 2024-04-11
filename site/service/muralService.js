@@ -78,9 +78,10 @@ const processarMural = async (dados, inserirFuncao, alterarFuncao) => {
       Prioridade: 2,
       Titulo: dados.titulo,
       Mensagem: dados.obs,
-      Bloco: dados.blocoTorre,
+      Bloco: dados.bloco,
       Piso: dados.piso,
       Unidade: dados.unidade,
+      Condomino: dados.condomino,
       ApenasResponsaveis: dados.envioResponsavel,
       EnviarParaTodos: dados.enviarParaTodos,
       UsuarioInclusao: storage.codigo

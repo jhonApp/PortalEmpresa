@@ -34,10 +34,10 @@ function PaginaDocumentos({ documentoData, loading, setLoading, atualizaDocument
 
   useEffect(() => {
     const filteredCards = documentoData.filter(documento => {
-      return documento.nomeArquivo.toString().includes(digitado);
+      return documento.nomeArquivo.toUpperCase().includes(digitado.toUpperCase());
     });
     setDocumentosFiltrados(filteredCards);
-  }, [documentoData, digitado]);
+  }, [documentoData, digitado]);  
 
   const handleDownload = async (nomeArquivo, arquivoBase64) => {
     try {
@@ -136,7 +136,7 @@ function PaginaDocumentos({ documentoData, loading, setLoading, atualizaDocument
                     <CardContent sx={{ flex: '1 0 auto', p: '10px', display: 'flex', alignItems: 'center' }} >
                       <div style={iconContainerStyle}><File size={20} color="#0D1327" /></div>
                       <div style={{ marginLeft: theme.spacing(1), display:'flex', flexDirection:'column' }}>
-                        <TextWithEllipsis text={documentosFiltrados[index].nomeArquivo} maxLength={20} valueWeigth={600}/>
+                        <TextWithEllipsis text={documentosFiltrados[index].nomeArquivo} maxLength={17} valueWeigth={600}/>
                       </div>
                     </CardContent>
                     <Box sx={{ display: 'flex', color: '#BCC0CF', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>

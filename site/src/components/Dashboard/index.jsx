@@ -17,8 +17,6 @@ function Dashboard() {
   const columns = [
     { id: 'nome', label: 'Nome', width: 100, align: 'center' },
     { id: 'rgCpf', label: 'RG', minWidth: 80, align: 'center' },
-    { id: 'descricaoDataInicial', label: 'Data Inicial', minWidth: 140, align: 'center' },
-    { id: 'descricaoDataFim', label: 'Data Final', minWidth: 140, align: 'center' },
     { id: 'status', label: 'Status', width: 150, align: 'center' }
   ];
 

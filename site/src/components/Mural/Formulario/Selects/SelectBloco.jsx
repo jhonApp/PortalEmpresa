@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { styled } from '@mui/system';
-import { MarginTwoTone } from '@mui/icons-material';
 
-function SelectLocal({ espacos, label, onChange }) {
+function SelectBloco({ blocos, onDataChange }) {
   const [value, setValue] = useState(null);
-
   const StyledSelectField = styled(Autocomplete)({
     background: '#EBEAEF',
     width: '100%',
@@ -29,26 +27,38 @@ function SelectLocal({ espacos, label, onChange }) {
     }
   });
 
-  return (
+
+  const handleSelectChange = (event, newValue) => {
+    if(!newValue){
+      setValue(newValue);
+      onDataChange('bloco', '');
+      return;
+    }
+    
+    setValue(newValue);
+    onDataChange('bloco', newValue.value);
+  };
+console.log(blocos);
+const blocosOptions = blocos && blocos.length > 0 ? blocos.map((bloco) => ({ label: bloco.nome, value: bloco.codigo })) : [];
+
+return (
     <StyledSelectField
-      options={espacos.map((espaco) => ({ label: espaco.descricao, value: espaco.codigoLocal }))}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-        onChange(newValue ? newValue.value : '');
-      }}
-      value={value}
+      options={blocosOptions}
       isOptionEqualToValue={(option, value) => option.value === value.value}
+      onChange={handleSelectChange}
+      value={value}
       getOptionLabel={(option) => option.label}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Selecione o Local"
+          label="Selecione o Bloco"
           variant="outlined"
           InputLabelProps={{ shrink: false }}
         />
       )}
     />
-  );
+);
+
 }
 
-export default SelectLocal;
+export default SelectBloco;
