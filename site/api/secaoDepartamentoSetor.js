@@ -100,3 +100,26 @@ export const excluirSecao = async (codigoEmpresa, codigoDepartamento, codigoSeto
     throw error;
   }
 };
+
+export const desassociarSecao = async (codigo) => {
+  try {
+    if (!codigo) {
+      throw new Error('O valor está nulo.');
+    }
+
+    const params = { codigo };
+
+    const response = await axios.delete(`${API_URL}/excluirSecao`, {
+      params,
+      validateStatus: status => status < 500
+    });
+
+    if (response.status != 200) {
+      throw new Error(response.codigoSetor);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
