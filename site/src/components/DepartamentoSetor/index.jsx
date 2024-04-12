@@ -38,6 +38,8 @@ function DepartamentoSetor() {
     <div>
       <MenuDepartamentoSetor atualizarDepartamento={atualizaDepartamento} atualizarSetor={atualizaSetor} />
       <SecaoDepartamentoSetor
+        atualizaSetor={atualizaSetor}
+        atualizaDepartamento={atualizaDepartamento}
         setorData={setorData}
         departamentoData={departamentoData}
         loading={loading}

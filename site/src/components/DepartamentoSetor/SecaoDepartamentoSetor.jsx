@@ -5,52 +5,69 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { X } from 'phosphor-react';
-import { inserirSecao } from '../../../service/secaoService';
+import { inserirSecao, deleteSecao } from '../../../service/secaoService';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { StyledCardSecao } from '../../Utils/StyledCard';
 
-const SecaoDepartamentoSetor = ({ setorData, departamentoData }) => {
+const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData, departamentoData }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedSubgroups, setSelectedSubgroups] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isValid, setIsValid] = useState(true);
-  console.log(departamentoData);
+  const [setorDataLocal, setSetorDataLocal] = useState([]);
+  const [departamentoLocal, setDepartamentoLocal] = useState([]);
+  const [subgroupSelection, setSubgroupSelection] = useState({});
+
+  useEffect(() => {
+    setSetorDataLocal(setorData);
+  }, [setorData]);
+
+  useEffect(() => {
+    setDepartamentoLocal(departamentoData);
+  }, [departamentoData]);
+
+  const isSelected = (setor) => selectedGroup.codigoSetorSecao.some(codigo => setor.codigoSetorSecao.includes(codigo));
+
   const handleGroupChange = (group) => {
     setSelectedGroup(group);
     setSelectedSubgroups([]);
+    setSubgroupSelection({});
   };
 
-  const handleSubgroupChange = (subgroup) => {
-    const isSelected = selectedSubgroups.some(sub => sub.codigo === subgroup.codigo);
-    if (isSelected) {
-      setSelectedSubgroups(selectedSubgroups.filter(sub => sub.codigo !== subgroup.codigo));
+  const handleSubgroupChange = async (event, subgroup) => {
+    if (!event.target.checked) {
+      try {
+        await deleteSecao(subgroup.codigo);
+      } catch (error) {
+        showErrorToast("O registro associado está em uso.");
+      }
     } else {
-      setSelectedSubgroups([...selectedSubgroups, subgroup]);
+      await handleAssociacao(subgroup);
     }
+    atualizaDepartamento();
+    atualizaSetor();
   };
+    
 
-  const handleAssociacao = async () => {
+  const handleAssociacao = async (subgroup) => {
     setLoading(true);
     try {
-      const secoes = selectedSubgroups.map(subgroup => ({
+      const secao = {
         codigoDepartamento: selectedGroup.codigo,
         codigoSetor: subgroup.codigo,
-      }));
-
-      await Promise.all(secoes.map(secao => inserirSecao(secao)));
-      showSuccessToast("Associação realizada com sucesso");
+      };
+  
+      const idSecaoInserida = await inserirSecao(secao);
+      
+      showSuccessToast(`Associação realizada com sucesso.`);
+  
+      return idSecaoInserida;
     } catch (error) {
       showErrorToast(error.message);
+      return null;
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (selectedSubgroups.length > 0) {
-      handleAssociacao();
-    }
-  }, [selectedSubgroups]);
 
   return (
     <Box
@@ -71,7 +88,7 @@ const SecaoDepartamentoSetor = ({ setorData, departamentoData }) => {
           <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginLeft: '20px', marginBottom: '10px' }}>Departamento</Typography>
           <StyledCardSecao>
             <List>
-              {departamentoData.map((departamento, index) => (
+              {departamentoLocal.map((departamento, index) => (
                 <ListItemButton
                   key={index}
                   onClick={() => handleGroupChange(departamento)}
@@ -96,23 +113,28 @@ const SecaoDepartamentoSetor = ({ setorData, departamentoData }) => {
               <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginLeft: '20px', marginBottom: '10px' }}>Setores</Typography>
               <StyledCardSecao sx={{ borderRadius: '20px', width: '300px', height: '369px', overflowY: 'auto' }}>
                 <List>
-                  {setorData
-                    .filter((setor) => (
-                      !selectedGroup.codigoSetorSecao.some((codigo) => setor.codigoSetorSecao.includes(codigo))
-                    ))
-                    .map((setor, index) => (
-                      <ListItemButton
-                        key={index}
-                        onClick={() => handleSubgroupChange(setor)}
-                      >
-                        <Checkbox
-                          checked={selectedSubgroups.some(sub => sub.codigo === setor.codigo)}
-                          name="subgroup-checkbox"
-                          inputProps={{ 'aria-label': setor.nome }}
-                        />
-                        <ListItemText sx={{fontSize:'16px', fontWeight: 600 }} primary={setor.nome} />
-                      </ListItemButton>
-                    ))}
+                  {setorDataLocal
+                    .sort((a, b) => {
+                      const isSelectedA = isSelected(a);
+                      const isSelectedB = isSelected(b);
+                      return isSelectedB - isSelectedA;
+                    })
+                    .map((setor, index) => {
+                      // console.log(setor); // Aqui está o console.log()
+                      return (
+                        <ListItemButton
+                          key={index}
+                          onClick={(event) => handleSubgroupChange(event, setor)}
+                        >
+                          <Checkbox
+                            checked={isSelected(setor)}
+                            name="subgroup-checkbox"
+                            inputProps={{ 'aria-label': setor.nome }}
+                          />
+                          <ListItemText sx={{ fontSize: '16px', fontWeight: 600 }} primary={setor.nome} />
+                        </ListItemButton>
+                      );
+                    })}
                 </List>
               </StyledCardSecao>
             </Grid>

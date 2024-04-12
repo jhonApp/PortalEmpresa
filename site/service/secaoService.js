@@ -1,4 +1,4 @@
-import { obterSecao, existeSecao, incluirSecao, excluirSecao } from "../api/secaoDepartamentoSetor";
+import { obterSecao, existeSecao, incluirSecao, desassociarSecao } from "../api/secaoDepartamentoSetor";
 import { getData } from './storageService';
 import { incluirSecaoCargo, obterSecaoCargo } from "../api/secaoCargo";
 
@@ -29,7 +29,7 @@ export const inserirSecao = async (dados) => {
       throw new Error('Erro ao inserir departamento, entre em contato com o suporte técnico.');
     }
 
-    return response;
+    return response.data;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -101,4 +101,22 @@ export const listarDepartamentos = async () => {
       setLoading(false);
       setValid(false);
     }
+};
+
+export const deleteSecao = async (codigo) => {
+  try {
+    if (!codigo) {
+      throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    const response = await desassociarSecao(codigo);
+
+    if (response.status !== 200) {
+      throw new Error('Erro ao realizar desassociação, entre em contato com o suporte técnico.');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error('Erro ao desfazer associação: ' + error.message);
+  }
 };
