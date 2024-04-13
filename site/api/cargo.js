@@ -35,6 +35,37 @@ export const obterCargo = async (codigoEmpresa, nome) => {
   }
 };
 
+export const obterCargoPorStatus = async (codigoEmpresa, nome) => {
+  try {
+
+    if (!codigoEmpresa) {
+      throw new Error('O código da empresa é obrigatório para realizar a consulta.');
+    }
+
+    // Objeto para armazenar os parâmetros da solicitação
+    const params = { codigoEmpresa };
+
+    // Verifica se o nome foi fornecido
+    if (nome) {
+      params.nome = nome;
+    }
+
+    const response = await axios.get(`${API_URL}/obterCargoPorStatus`, {
+      params,
+      validateStatus: status => status < 500
+    });
+
+    if (response.status !== 200) {
+      throw new Error(response.data);
+    }
+
+    // Retorna os dados obtidos
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const incluirCargo = async (data) => {
   try {
     if (!data) {

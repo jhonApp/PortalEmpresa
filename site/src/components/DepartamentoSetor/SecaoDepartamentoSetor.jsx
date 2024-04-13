@@ -98,7 +98,12 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
                     name="group-radio"
                     inputProps={{ 'aria-label': departamento.nome }}
                   />
-                  <ListItemText sx={{ fontSize: '16px', fontWeight: 600 }} primary={departamento.nome} />
+                  {/* <ListItemText sx={{ fontSize: '16px', fontWeight: 600 }} primary={departamento.nome} /> */}
+                  <ListItemText>
+                    <Typography variant="h6" component="h1" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                      {departamento.nome}
+                    </Typography>
+                  </ListItemText>
                 </ListItemButton>
               ))}
             </List>
@@ -120,7 +125,6 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
                       return isSelectedB - isSelectedA;
                     })
                     .map((setor, index) => {
-                      // console.log(setor); // Aqui está o console.log()
                       return (
                         <ListItemButton
                           key={index}
@@ -131,7 +135,11 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
                             name="subgroup-checkbox"
                             inputProps={{ 'aria-label': setor.nome }}
                           />
-                          <ListItemText sx={{ fontSize: '16px', fontWeight: 600 }} primary={setor.nome} />
+                          <ListItemText>
+                            <Typography variant="h6" component="h1" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                              {setor.nome}
+                            </Typography>
+                          </ListItemText>
                         </ListItemButton>
                       );
                     })}

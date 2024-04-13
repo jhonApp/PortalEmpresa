@@ -1,4 +1,4 @@
-import { obterCargo, incluirCargo, excluirCargo, updateCargo } from "../api/cargo";
+import { obterCargo, obterCargoPorStatus, incluirCargo, excluirCargo, updateCargo } from "../api/cargo";
 import { getData } from './storageService';
 
 export const inserirCargo = async (dados) => {
@@ -45,7 +45,7 @@ export const deleteCargo = async (codigoCargo) => {
 
     return response;
   } catch (error) {
-    throw new Error('Erro ao excluir cargo: ' + error.message);
+    throw new Error('Erro: ' + error.response.data);
   }
 };
   
@@ -61,6 +61,20 @@ export const listarCargo = async () => {
       setLoading(false);
       setValid(false);
     }
+};
+
+export const listarCargoPorStatus = async () => {
+  try {
+    const storage = getData();
+    const data = await obterCargoPorStatus(storage.codigoEmpresa);
+
+    return data;
+
+  } catch (error) {
+    console.error('Erro ao obter dados de cargo:', error);
+    setLoading(false);
+    setValid(false);
+  }
 };
 
 export const alterarCargo = async (dados) => {
@@ -86,5 +100,21 @@ export const alterarCargo = async (dados) => {
     return response;
   } catch (error) {
     throw new Error('Erro ao alterar setor: ' + error.message);
+  }
+};
+
+export const getCargo = async (setCargoData, setLoading, setValid) => {
+  try {
+    
+    setLoading(true);
+    const dataCargo = await listarCargo();
+
+    setCargoData(dataCargo);
+    setLoading(false);
+    setValid(true);
+  } catch (error) {
+    console.error('Erro ao obter dados de cargos:', error);
+    setLoading(false);
+    setValid(false);
   }
 };

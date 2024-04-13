@@ -7,75 +7,81 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Checkbox from '@mui/material/Checkbox';
 import { X } from 'phosphor-react';
-import { inserirSecaoCargo } from '../../../service/secaoService';
+import { inserirSecaoCargo, deleteSecaoCargo } from '../../../service/secaoService';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { StyledCardSecao } from '../../Utils/StyledCard';
 
-const SecaoCargo = ({ setorData, departamentoData, cargoData }) => {
+const SecaoCargo = ({ setorData, departamentoData, cargoData, atualizaCargo, atualizaSetor, atualizaDepartamento }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedSubgroup, setSelectedSubgroup] = useState(null);
   const [selectedCargos, setSelectedCargos] = useState([]);
   const [cargosAssociados, setCargosAssociados] = useState([]);
-  const [checked, setChecked] = useState({});
   const [loading, setLoading] = useState(false);
-  const [isValid, setIsValid] = useState(true);
+
+  const isSelected = (cargo) => selectedCargos.some((selectedCargo) => selectedCargo.codigo === cargo.codigo);
 
   const handleGroupChange = (group) => {
     setSelectedGroup(group);
-    console.log(selectedSubgroup)
+    setSelectedSubgroup(null);
+    setSelectedCargos([]);
   };
 
   const handleSubgroupChange = (group) => {
     setSelectedSubgroup(group);
-  setSelectedCargos([]);
-    console.log(selectedCargos)
+    setSelectedCargos([]);
   };
 
-  const handleCargoChange = (cargoGroup) => {
-    const isSelected = selectedCargos.some(sub => sub.codigo === cargoGroup.codigo);
-    if (isSelected) {
-      console.log(isSelected)
-      setSelectedCargos(selectedCargos.filter(sub => sub.codigo !== cargoGroup.codigo));
+  const handleCargoChange = async (event, cargo) => {
+    if (!event.target.checked) {
+      try {
+        await deleteSecaoCargo(cargo.codigo, selectedGroup.codigo, selectedSubgroup.codigo);
+        showSuccessToast("Associação desfeita com sucesso.");
+      } catch (error) {
+        showErrorToast("O registro associado está em uso.");
+      }
     } else {
-      setSelectedCargos([...selectedCargos, cargoGroup]);
+      await handleAssociacao(cargo);
     }
+    atualizaSetor();
+    atualizaCargo();
   };
 
   useEffect(() => {
-    if (selectedCargos.length > 0) {
-      handleAssociacao();
+    if (selectedSubgroup) {
+      // Obtém os códigos dos cargos associados ao subgrupo selecionado
+      const associatedCargosCodes = selectedSubgroup.codigoSetorSecao;
+  
+      // Filtra apenas os cargos não associados com base nos códigos
+      const unassociatedCargos = cargoData.filter((cargo) => (
+        associatedCargosCodes.some(codigo => cargo.codigoSetorSecao.includes(codigo))
+      ));
+      
+      setSelectedCargos([...unassociatedCargos]);
+      
     }
-  }, [selectedCargos]);
-
-  const handleAssociacao = async () => {
+  }, [selectedSubgroup, cargoData]);  
+  
+  const handleAssociacao = async (cargo) => {
     setLoading(true);
     try {
-
-      const cargosNaoAssociados = selectedCargos.filter(cargo => (
-        !cargosAssociados.includes(cargo.codigo)
-      ));
-  
-      const secoes = cargosNaoAssociados.map(cargo => ({
+      const secao = {
         codigoDepartamento: selectedGroup.codigo,
         codigoSetor: selectedSubgroup.codigo,
         codigoCargo: cargo.codigo
-      }));
-  
-      await Promise.all(secoes.map(secao => inserirSecaoCargo(secao)));
-  
-      // Atualizando lista de cargos associados
-      setCargosAssociados(prev => [
-        ...prev,
-        ...cargosNaoAssociados.map(cargo => cargo.codigo)
-      ]);
-  
-      showSuccessToast("Associação realizada com sucesso");
+      };
+      
+      await inserirSecaoCargo(secao);
+      showSuccessToast(`Associação realizada com sucesso.`);
+
     } catch (error) {
       showErrorToast(error.message);
+      return null;
     } finally {
       setLoading(false);
     }
-  };  
+  };
+
+  
 
   return (
     <Box
@@ -153,19 +159,22 @@ const SecaoCargo = ({ setorData, departamentoData, cargoData }) => {
               <StyledCardSecao sx={{ borderRadius: '20px', width: '300px', height: '369px', overflowY: 'auto' }}>
                 <List>
                   {cargoData
-                    .filter(cargo => !selectedSubgroup.codigoSetorSecao.some((codigo) => cargo.codigoSetorSecao.includes(codigo))
-                    )
+                    .sort((a, b) => isSelected(b) - isSelected(a)) // Ordena os cargos com base na seleção
                     .map((cargo, index) => (
                       <ListItemButton 
                         key={index} 
-                        onClick={() => handleCargoChange(cargo)}
+                        onClick={(event) => handleCargoChange(event, cargo)}
                       >
                         <Checkbox
-                          checked={selectedCargos.some(sub => sub.codigo === cargo.codigo)}
+                          checked={isSelected(cargo)} // Verifica se o cargo está selecionado
                           name="cargogroup-checkbox"
                           inputProps={{ 'aria-label': cargo.nome }}
                         />
-                        <ListItemText primary={cargo.nome} />
+                        <ListItemText>
+                          <Typography variant="h6" component="h1" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                            {cargo.nome}
+                          </Typography>
+                        </ListItemText>
                       </ListItemButton>
                     ))
                   }

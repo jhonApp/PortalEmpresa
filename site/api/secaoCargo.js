@@ -41,6 +41,28 @@ export const incluirSecaoCargo = async (data) => {
     const response = await axios.post(url, data, {
       validateStatus: status => status < 500,
     });
+    debugger
+    if (response.status != 200) {
+      throw new Error(response.data);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const ativarSecaoCargo = async (data) => {
+  try {
+    if (!data) {
+      throw new Error('O valor está nulo.');
+    }
+    
+    const url = `${API_URL}/AtivarSecao`;
+
+    const response = await axios.put(url, data, {
+      validateStatus: status => status < 500,
+    });
 
     if (response.status != 200) {
       throw new Error(response.data);
@@ -74,3 +96,24 @@ export const excluirSecao = async (codigoEmpresa, codigoDepartamento, codigoSeto
     throw error;
   }
 };
+
+export const desassociarSecaoCargo = async (codigoDepartamentoSetor, codigoCargo) => {
+  try {
+    if (!codigoCargo || !codigoDepartamentoSetor) {
+      throw new Error('Um ou mais parâmetros estão ausentes.');
+    }
+    
+    const url = `${API_URL}/inativarSecao?codigoCargo=${codigoCargo}&codigoDepartamentoSetor=${codigoDepartamentoSetor}`;
+
+    const response = await axios.put(url);
+
+    if (response.status !== 200) {
+      throw new Error(response.data);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
