@@ -1,3 +1,4 @@
+import { height } from '@mui/system';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,7 +18,12 @@ export const showSuccessToast = (message) => {
 };
 
 export const showErrorToast = (message) => {
-  toast.error(message, defaultToastOptions);
+  toast.error(message, {
+    ...defaultToastOptions,
+    style: {
+      width: 350,
+    }
+  });
 };
 
 export const showInfoToast = (message) => {

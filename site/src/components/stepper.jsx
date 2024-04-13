@@ -3,6 +3,7 @@ import { Box, Step, StepLabel, Button } from '@mui/material';
 import { styled } from '@mui/system';
 import useForm from './Formulario/useForm';
 import { validateForm } from './Formulario/validation';
+import validateAndSetInvalidFields from './Formulario/useValidation';
 import PropTypes from 'prop-types';
 import { showSuccessToast, showErrorToast } from '../Utils/Notification';
 import { StyledStepper } from '../Utils/StyledDialog';
@@ -45,6 +46,7 @@ const HorizontalLinearStepper = ({
   formData,
   handleClose,
   onLoadingChange,
+  invalidFields,
   screenValidation,
   action,
   visibleAlert,
@@ -65,33 +67,31 @@ const HorizontalLinearStepper = ({
   };
 
   const handleNext = () => {
-    const { errorTypes } = validateForm(formData, screenValidation);
-    const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-    if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
-    }
-
+    
+    const errorMessage = validateAndSetInvalidFields(formData, screenValidation, invalidFields);
+  
+    if (errorMessage) { return; }
+  
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
+  
 
   const handleSave = async () => {
     try {
-      const { errorTypes } = validateForm(formData, screenValidation);
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
-      }
-      onLoadingChange(true);
+      
+      const errorMessage = validateAndSetInvalidFields(formData, screenValidation, invalidFields);
   
+      if (errorMessage) { return; }
+      
+      onLoadingChange(true);
+    
       await handleSubmit(async () => {        
         try{
             await createFunction(formData);
@@ -115,12 +115,9 @@ const HorizontalLinearStepper = ({
 
   const handleUpdate = async () => {
     try {
-      const { errorTypes } = validateForm(formData, screenValidation);
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
-      }
+      const errorMessage = validateAndSetInvalidFields(formData, screenValidation, invalidFields);
+  
+      if (errorMessage) { return; }
 
       onLoadingChange(true);
   
@@ -128,9 +125,9 @@ const HorizontalLinearStepper = ({
         try{
             await createFunction(formData);
             showSuccessToast("Alterado com sucesso!");
-            // updateTable();
             setActiveStep(0);
             handleClose(false);
+            updateTable();
         } catch (e) {
             onLoadingChange(false);
             showErrorToast(e.message);

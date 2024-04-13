@@ -5,12 +5,11 @@ import { Checkbox, Typography, InputLabel } from '@mui/material';
 import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
-const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
+const Formulario = ({ formData, onDataChange, invalidFields, screenValidation }) => {
   const [values, setValues] = useState({});
   const {
     errors,
     handleChange,
-    handleValidation,
     renderErrorMessage,
   } = useForm(
     formData,
@@ -18,13 +17,15 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
     'agendamento'
   );
 
+  useEffect(() => {
+    screenValidation('agendamento');
+  }, []);
+
   const handleFormChange = (fieldName, value) => {
     const updatedValues = { ...values, [fieldName]: value };
-    setValues(updatedValues); // Atualize os valores
+    setValues(updatedValues);
     handleChange(fieldName, value);
-    const isValid = handleValidation(fieldName);
     onDataChange(updatedValues);
-    onFieldValidationChange(isValid);
   };
   
   return (
@@ -40,9 +41,9 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               variant="outlined"
               fullWidth
               margin="normal"
-              type="number"
+              type="text"
               autoComplete="off"
-              error={errors.rgCpf}
+              error={invalidFields.some(field => field.field === 'rgCpf')}
               value={formData.rgCpf || ''}
               onChange={(e) => handleFormChange('rgCpf', e.target.value)}
             />
@@ -59,7 +60,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               margin="normal"
               type="text"
               autoComplete="off"
-              error={errors.email}
+              error={invalidFields.some(field => field.field === 'email')}
               value={formData.email || ''}
               onChange={(e) => handleFormChange('email', e.target.value)}
             />
@@ -95,7 +96,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               margin="normal"
               type="text"
               autoComplete="off"
-              error={errors.nomeCompleto}
+              error={invalidFields.some(field => field.field === 'nomeCompleto')}
               value={formData.nomeCompleto || ''}
               onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
             />
