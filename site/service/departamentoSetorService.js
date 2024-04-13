@@ -1,6 +1,6 @@
 import { listarDepartamentos } from "./departamentoService";
 import { listarSetor } from "./setorService";
-import { listarCargo } from "./cargoService";
+import { listarCargoPorStatus } from "./cargoService";
 
 export const listarDepartamento = async (setDepartamentoData, setLoading, setValid) => {
     try {
@@ -38,7 +38,7 @@ export const getCargo = async (setCargoData, setLoading, setValid) => {
   try {
     setLoading(true);
 
-    const dataCargo = await listarCargo();
+    const dataCargo = await listarCargoPorStatus();
 
     setCargoData(dataCargo);
 

@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PopupDialog from '../dialog';
 import { Box, Paper, Button, useTheme, Typography } from '@mui/material';
 import { Briefcase } from 'phosphor-react';
 import Cargo from './ModalCargo'
+import {getCargo} from '../../../service/cargoService';
 
-function Header({ atualizarCargo }) {
+function Header() {
   const [openPopup, setOpenPopup] = useState(false);
+  const [cargoData, setCargoData] = useState([]);
   const [popupType, setPopupType] = useState('');
   const [popupTitle, setPopupTitle] = useState('');
   const [popupDescription, setPopupDescription] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [isValid, setValid] = useState(true);
   const theme = useTheme();
 
   const iconContainerStyle = {
@@ -37,6 +41,21 @@ function Header({ atualizarCargo }) {
     height: '84px'
   };
 
+  const atualizaCargo = async () => {
+    try {
+      await getCargo(setCargoData, setLoading, setValid);
+    } catch (error) {
+      console.error('Erro ao atualizar tabela de cargos:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await atualizaCargo();
+    };
+    fetchData();
+  }, []);
+
   const handleOpenPopup = (title, description, type) => {
     setPopupTitle(title);
     setPopupType(type);
@@ -51,7 +70,7 @@ function Header({ atualizarCargo }) {
   const renderContent = () => {
     switch (popupType) {
       case 'Cargo':
-        return <Cargo onClose={handleClosePopup} updateCargo={atualizarCargo} />;
+        return <Cargo onClose={handleClosePopup} atualizarCargo={atualizaCargo} cargos={cargoData}/>;
       default:
         return null;
     }

@@ -46,11 +46,14 @@ function Cargo() {
 
   return (
     <div>
-      <MenuCargo atualizarCargo={atualizaCargo} />
+      <MenuCargo />
       <SecaoCargo
         setorData={setorData}
         departamentoData={departamentoData}
         cargoData={cargoData}
+        atualizaCargo={atualizaCargo}
+        atualizaSetor={atualizaSetor}
+        atualizaDepartamento={atualizaDepartamento}
         loading={loading}
         setLoading={setLoading}
         isValid={isValid}

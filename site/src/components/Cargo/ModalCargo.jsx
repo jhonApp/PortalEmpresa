@@ -13,10 +13,9 @@ import Progress from '../../Utils/LoadingProgress';
 import AlertDialog from '../../Utils/Modal/Delete';
 import { inserirCargo, listarCargo, deleteCargo, alterarCargo } from '../../../service/cargoService';
 
-const ModalCargo = ({ updateCargo }) => {
+const ModalCargo = ({ onClose, atualizarCargo, cargos }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
-  const [cargos, setCargos] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [codigoCargo, setCodigoCargo] = useState(null);
   const [formMode, setFormMode] = useState('incluir');
@@ -31,23 +30,6 @@ const ModalCargo = ({ updateCargo }) => {
     setCodigoCargo(codigo);
   };
 
-  const fetchData = async () => {
-    try {
-      handleLoadingChange(true);
-
-      const listaCargos = await listarCargo();
-      setCargos(listaCargos);
-      handleLoadingChange(false);
-    } catch (error) {
-      handleLoadingChange(false);
-      showErrorToast('Erro ao obter lista de cargos');
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const handleDelete = async () => {
     try {
       handleLoadingChange(true);
@@ -56,8 +38,7 @@ const ModalCargo = ({ updateCargo }) => {
 
       await deleteCargo(codigoCargo);
       showSuccessToast("Cargo excluído com sucesso!");
-      fetchData();
-      updateCargo();
+      atualizarCargo();
       handleLoadingChange(false);
     } catch (error) {
 
@@ -69,7 +50,7 @@ const ModalCargo = ({ updateCargo }) => {
   const handleFormChange = (data) => {
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
   };
-
+  console.log(cargos)
   const {
     values,
     errors,
@@ -99,8 +80,7 @@ const ModalCargo = ({ updateCargo }) => {
             await inserirCargo(formData);
             showSuccessToast("Criado com sucesso!");
             values.nome = '';
-            fetchData();
-            updateCargo();
+            atualizarCargo();
         } catch (e) {
             handleLoadingChange(false);
             showErrorToast(e.message);
@@ -137,8 +117,7 @@ const ModalCargo = ({ updateCargo }) => {
             await alterarCargo(formData);
             showSuccessToast("Alterado com sucesso!");
             values.nome = '';
-            fetchData();
-            updateCargo();
+            atualizarCargo();
             setFormMode('incluir');
         } catch (e) {
             handleLoadingChange(false);

@@ -152,7 +152,7 @@ const FormSection = styled('div')({
 const BootstrapInput = styled(InputBase)({
     'label + &': {
       marginTop: '-5px',
-      
+      marginLeft: '1px'
     },
     '& .MuiInputBase-input': {
       borderRadius: 4,
