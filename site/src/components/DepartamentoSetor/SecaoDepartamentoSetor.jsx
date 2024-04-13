@@ -11,32 +11,38 @@ import { StyledCardSecao } from '../../Utils/StyledCard';
 
 const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData, departamentoData }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
-  const [selectedSubgroups, setSelectedSubgroups] = useState([]);
+  const [selectedSetores, setSelectedSetores] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [setorDataLocal, setSetorDataLocal] = useState([]);
-  const [departamentoLocal, setDepartamentoLocal] = useState([]);
   const [subgroupSelection, setSubgroupSelection] = useState({});
 
   useEffect(() => {
-    setSetorDataLocal(setorData);
-  }, [setorData]);
+    if (selectedGroup) {
 
-  useEffect(() => {
-    setDepartamentoLocal(departamentoData);
-  }, [departamentoData]);
+      const associatedCodes = selectedGroup.codigoSetorSecao;
 
-  const isSelected = (setor) => selectedGroup.codigoSetorSecao.some(codigo => setor.codigoSetorSecao.includes(codigo));
+      const unassociatedCargos = setorData.filter((setor) => (
+        associatedCodes.some(codigo => setor.codigoSetorSecao.includes(codigo))
+      ));
+      
+      setSelectedSetores([...unassociatedCargos]);
+      
+    }
+  }, [selectedGroup, setorData]);  
+  console.log(selectedGroup)
+  
+  const isSelected = (setor) => selectedSetores.some((selected) => selected.codigo === setor.codigo);
 
   const handleGroupChange = (group) => {
     setSelectedGroup(group);
-    setSelectedSubgroups([]);
-    setSubgroupSelection({});
+    setSubgroupSelection(null);
+    setSelectedSetores([]);
   };
 
   const handleSubgroupChange = async (event, subgroup) => {
     if (!event.target.checked) {
       try {
-        await deleteSecao(subgroup.codigo);
+        await deleteSecao(selectedGroup.codigo, subgroup.codigo);
+        showSuccessToast("Associação desfeita com sucesso.");
       } catch (error) {
         showErrorToast("O registro associado está em uso.");
       }
@@ -46,9 +52,9 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
     atualizaDepartamento();
     atualizaSetor();
   };
-    
 
   const handleAssociacao = async (subgroup) => {
+    
     setLoading(true);
     try {
       const secao = {
@@ -56,11 +62,9 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
         codigoSetor: subgroup.codigo,
       };
   
-      const idSecaoInserida = await inserirSecao(secao);
-      
+      await inserirSecao(secao);
       showSuccessToast(`Associação realizada com sucesso.`);
-  
-      return idSecaoInserida;
+
     } catch (error) {
       showErrorToast(error.message);
       return null;
@@ -88,7 +92,7 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
           <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginLeft: '20px', marginBottom: '10px' }}>Departamento</Typography>
           <StyledCardSecao>
             <List>
-              {departamentoLocal.map((departamento, index) => (
+              {departamentoData.map((departamento, index) => (
                 <ListItemButton
                   key={index}
                   onClick={() => handleGroupChange(departamento)}
@@ -118,7 +122,7 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
               <Typography variant="h6" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginLeft: '20px', marginBottom: '10px' }}>Setores</Typography>
               <StyledCardSecao sx={{ borderRadius: '20px', width: '300px', height: '369px', overflowY: 'auto' }}>
                 <List>
-                  {setorDataLocal
+                  {setorData
                     .sort((a, b) => {
                       const isSelectedA = isSelected(a);
                       const isSelectedB = isSelected(b);

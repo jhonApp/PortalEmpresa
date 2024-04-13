@@ -48,7 +48,7 @@ export const deleteSetor = async (codigoSetor) => {
     if (error.response) {
       throw new Error(error.response.data);
     } else {
-      throw new Error('Erro ao excluir setor: ' + error.message);
+      throw new Error('Erro: ' + error.response.data);
     }
   }
 };

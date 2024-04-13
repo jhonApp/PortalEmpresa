@@ -1,4 +1,4 @@
-import { obterSecao, existeSecao, incluirSecao, desassociarSecao } from "../api/secaoDepartamentoSetor";
+import { obterSecao, existeSecao, incluirSecao, desassociarSecao, ativarSecao } from "../api/secaoDepartamentoSetor";
 import { getData } from './storageService';
 import { incluirSecaoCargo, obterSecaoCargo, desassociarSecaoCargo, ativarSecaoCargo } from "../api/secaoCargo";
 
@@ -10,10 +10,6 @@ export const inserirSecao = async (dados) => {
     }
 
     const storage = getData();
-    const hasSecao = await existeSecao(storage.codigoEmpresa, dados.codigoDepartamento, dados.codigoSetor);
-    if (hasSecao) {
-        throw new Error(`O Departamento e o Setor, já estão associados.`);
-    }
       
     var secaoDto = {
       CodigoDepartamento: dados.codigoDepartamento,
@@ -22,11 +18,16 @@ export const inserirSecao = async (dados) => {
       CodigoUsuario: storage.codigo,
     }
 
-    // Aguarda a conclusão da função incluirDepartamento
+    const secao = await obterSecao(storage.codigoEmpresa, dados.codigoDepartamento, dados.codigoSetor);
+    if (secao.codigo != 0) {
+      await ativarSecao(secao.codigo);
+      return 'Seção cargo associada com sucesso.';
+    }
+
     const response = await incluirSecao(secaoDto);
 
     if (response.status !== 200) {
-      throw new Error('Erro ao inserir departamento, entre em contato com o suporte técnico.');
+      throw new Error('Erro ao realizar associação, entre em contato com o suporte técnico.');
     }
 
     return response.data;
@@ -73,7 +74,6 @@ export const inserirSecaoCargo = async (dados) => {
   }
 };
 
-
 export const deleteDepartamento = async (codigoDepartamento) => {
   try {
     if (!codigoDepartamento) {
@@ -106,13 +106,20 @@ export const listarDepartamentos = async () => {
     }
 };
 
-export const deleteSecao = async (codigo) => {
+export const deleteSecao = async (codigoDepartamento, codigoSetor) => {
   try {
-    if (!codigo) {
+    
+    if (!codigoDepartamento, !codigoSetor) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
 
-    const response = await desassociarSecao(codigo);
+    const storage = getData();
+    const secao = await obterSecao(storage.codigoEmpresa, codigoDepartamento, codigoSetor);
+    if (secao.codigo === 0) {
+        throw new Error('Não há associação entre o Departamento e o Setor.');
+    }
+
+    const response = await desassociarSecao(secao.codigo);
 
     if (response.status !== 200) {
       throw new Error('Erro ao realizar desassociação, entre em contato com o suporte técnico.');
@@ -130,7 +137,7 @@ export const deleteSecaoCargo = async (codigoCargo, codigoDepartamento, codigoSe
     if (!codigoCargo, !codigoDepartamento, !codigoSetor) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
-    debugger
+    
     const storage = getData();
     const secao = await obterSecao(storage.codigoEmpresa, codigoDepartamento, codigoSetor);
     if (secao.codigo === 0) {
