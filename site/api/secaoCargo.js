@@ -41,7 +41,7 @@ export const incluirSecaoCargo = async (data) => {
     const response = await axios.post(url, data, {
       validateStatus: status => status < 500,
     });
-    debugger
+    
     if (response.status != 200) {
       throw new Error(response.data);
     }

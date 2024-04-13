@@ -46,7 +46,7 @@ export const deleteDepartamento = async (codigoDepartamento) => {
 
     return response;
   } catch (error) {
-    throw new Error('Erro ao inserir departamento: ' + error.message);
+    throw new Error('Erro: ' + error.response.data);
   }
 };
   

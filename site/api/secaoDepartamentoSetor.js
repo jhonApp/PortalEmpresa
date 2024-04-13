@@ -107,15 +107,32 @@ export const desassociarSecao = async (codigo) => {
       throw new Error('O valor está nulo.');
     }
 
-    const params = { codigo };
-
-    const response = await axios.delete(`${API_URL}/excluirSecao`, {
-      params,
+    const response = await axios.put(`${API_URL}/inativarSecao?codigo=${codigo}`, {
       validateStatus: status => status < 500
     });
 
     if (response.status != 200) {
       throw new Error(response.codigoSetor);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const ativarSecao = async (codigo) => {
+  try {
+    if (!codigo) {
+      throw new Error('O valor está nulo.');
+    }
+    
+    const response = await axios.put(`${API_URL}/ativarSecao?codigo=${codigo}`, {
+      validateStatus: status => status < 500
+    });
+
+    if (response.status !== 200) {
+      throw new Error(response.data);
     }
 
     return response;

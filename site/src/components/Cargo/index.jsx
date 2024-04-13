@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MenuCargo from './Header';
-import SecaoCargo from './SecaoCargoV2';
+import SecaoCargo from './SecaoCargo';
 import {listarDepartamento, getCargo, getSetor} from '../../../service/departamentoSetorService';
 
 function Cargo() {
