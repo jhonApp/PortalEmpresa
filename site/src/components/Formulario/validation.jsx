@@ -12,136 +12,131 @@ const isRegexValid = (value, regex) => {
 
 const validateForm = (values, currentScreen) => {
   const fieldValidations = ValidateField(currentScreen);
-  const errorTypes = {};
+  const errors = [];
 
-  Object.keys(fieldValidations).some(field => {
-    const isFieldRequired = fieldValidations[field];
+  Object.keys(fieldValidations).forEach(field => {
+    const fieldValidation = fieldValidations[field];
+    const isFieldRequired = fieldValidation.required;
     const value = values?.[field];
 
     // Verificando se o campo está vazio
     const isEmpty = isFieldEmpty(value);
 
     if (isFieldRequired && isEmpty) {
-      // Campo obrigatório vazio
-      errorTypes[field] = {
+      errors.push({
+        field,
+        description: fieldValidation.description || field,
         message: 'Campo obrigatório.',
-        type: 'error',
-        errorFound: true
-      };
-      return true;
+        type: 'error'
+      });
     }
 
     if (!isEmpty) {
       switch (field) {
         case 'email':
           if (!isEmailValid(value)) {
-            errorTypes[field] = {
+            errors.push({
+              field,
+              description: fieldValidation.description || field,
               message: 'Email inválido.',
-              type: 'error',
-              errorFound: true
-            };
-            return true;
+              type: 'error'
+            });
           }
           break;
         case 'confirmacao':
           if (value === false) {
-            errorTypes[field] = {
+            errors.push({
+              field,
+              description: fieldValidation.description || field,
               message: 'Checked não marcado.',
-              type: 'error',
-              errorFound: true
-            };
-            return true;
+              type: 'error'
+            });
           }
           break;
         case 'rgCpf':
           if (!isRgCpfValid(value)) {
-            errorTypes[field] = {
+            errors.push({
+              field,
+              description: fieldValidation.description || field,
               message: 'RG ou CPF inválido.',
-              type: 'error',
-              errorFound: true
-            };
-            return true;
+              type: 'error'
+            });
           }
           break;
         default:
           break;
       }
     }
-
-    return false;
   });
-  
-  
-  return { errorTypes };
+
+  return errors;
 };
-
-
 
 const screensValidations = {
   evento: {
-    codigoLocal: true,
-    descricao: true,
-    dataEvento: true,
-    horaInicio: true,
-    horaFim: true
+    codigoLocal: { required: true, description: "Local" },
+    descricao: { required: true, description: "Descrição" },
+    dataEvento: { required: true, description: "Data Evento" },
+    horaInicio: { required: true, description: "Hora Inicio" },
+    horaFim: { required: true, description: "Hora Fim" },
   },
   espaco: {
-    descricao: true,
-    descricaoResumida: true
+    descricao: { required: true, description: "Descrição" },
+    descricaoResumida: { required: true, description: "Descrição Resumida" }
   },
   opcaoEnquete: {
-    descricao: true
+    descricao: { required: true, description: "Descrição" },
   },
   enquete: {
-    dataInicial: true,
-    dataFim: true,
-    titulo: true,
+    dataInicial: { required: true, description: "Data Inicial" },
+    dataFim: { required: true, description: "Data Fim" },
+    titulo: { required: true, description: "Título" },
   },
   comunicado: {
-    dataInicial: true,
-    dataFim: true,
-    titulo: true,
-    obs: true,
+    dataInicial: { required: true, description: "Data Inicial" },
+    dataFim: { required: true, description: "Data Fim" },
+    titulo: { required: true, description: "Título" },
+    obs: { required: true, description: "Observação" },
   },
   agendamentoSimples2: {
-    dataInicial: true,
-    horaEntrada: true,
+    dataInicial: { required: true, description: "Data Inicial" },
+    horaEntrada: { required: true, description: "Hora Entrada" },
   },
   agendamento2: {
-    dataInicial: true,
-    dataFim: true,
-    horaEntrada: true,
-    horaSaida: true,
+    dataInicial: { required: true, description: "Data Inicial" },
+    dataFim: { required: true, description: "Data Fim" },
+    horaEntrada: { required: true, description: "Hora Entrada" },
+    horaSaida: { required: true, description: "Hora Fim" },
   },
   agendamento: {
-    rgCpf: true,
-    nomeCompleto: true,
-    email: true,
-    confirmacao: true,
+    rgCpf: { required: true, description: "RG/CPF" },
+    nomeCompleto: { required: true, description: "Nome Completo" },
+    email: { required: true, description: "Email" },
+    confirmacao: { required: true, description: "Confirmação" },
   },
   agendamentoEmMassa: {
-    tipo: true
+    tipo: { required: true, description: "Tipo" },
   },
   funcionario: {
-    nome: true,
-    dataNascimento: true,
-    cpf: true,
-    rg: true,
-    email: true,
-    telefone: true,
+    nome: { required: true, description: "Nome" },
+    dataNascimento: { required: true, description: "Data Nascimento" },
+    cpf: { required: true, description: "CPF" },
+    rg: { required: true, description: "RG" },
+    email: { required: true, description: "Email" },
+    telefone: { required: true, description: "Telefone" },
   },
   departamento: {
-    nome: true,
+    nome: { required: true, description: "Nome" }
   },
   cartao: {
-    numero: true,
+    numero: { required: true, description: "Cartão" },
   },
   secao: {
-    checkedSecao: true,
+    checkedSecao: { required: true, description: "Sessão" },
   },
   login: {
-    password: true,
-    email: true
+    password: { required: true, description: "Senha" },
+    email: { required: true, description: "Email" }
   }
 };
 

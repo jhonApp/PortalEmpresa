@@ -5,38 +5,28 @@ import { Checkbox, Typography, InputLabel } from '@mui/material';
 import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
-const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
+const Formulario = ({ onDataChange, formData, invalidFields, screenValidation }) => {
   const [values, setValues] = useState({});
   const {
     errors,
     handleChange,
-    handleValidation,
     renderErrorMessage,
   } = useForm(
     formData,
     validateForm,
     'agendamento'
   );
-  console.log(formData)
-
-  // const updateValues = (newFormData) => {
-  //   setTimeout(() => {
-  //     setValues(newFormData);
-  //   }, 3);
-  // };
   
-  // useLayoutEffect(() => {
-  //   updateValues(formData);
-  // }, [formData]);
+  useLayoutEffect(() => {
+    screenValidation('agendamento');
+  }, []);
 
   const handleFormChange = (fieldName, value) => {
     console.log(formData)
     const updatedValues = { ...values, [fieldName]: value };
     setValues(updatedValues);
     handleChange(fieldName, value);
-    const isValid = handleValidation(fieldName);
     onDataChange(updatedValues);
-    onFieldValidationChange(isValid);
   };
 
   return (
@@ -50,9 +40,9 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               </InputLabel>
               <StyledTextField 
                 id="rgCpf-input"
-                type="number"
+                type="text"
                 autoComplete="off"
-                error={errors.rgCpf}
+                error={invalidFields.some(field => field.field === 'rgCpf')}
                 value={formData.rgCpf || ''}
                 onChange={(e) => handleFormChange('rgCpf', e.target.value)} />
               {renderErrorMessage('rgCpf')}
@@ -66,7 +56,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
                 id="email-input"
                 type="text"
                 autoComplete="off"
-                error={errors.email}
+                error={invalidFields.some(field => field.field === 'email')}
                 value={formData.email || ''}
                 onChange={(e) => { handleFormChange('email', e.target.value); }}
               />
@@ -101,7 +91,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               type="text"
               autoComplete="off"
               name="nomeCompleto"
-              error={errors.nomeCompleto}
+              error={invalidFields.some(field => field.field === 'nomeCompleto')}
               value={formData.nomeCompleto || ''}
               onChange={(e) => { handleFormChange('nomeCompleto', e.target.value) }}
             />
@@ -159,7 +149,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
             '& .MuiSvgIcon-root': { color: '#C4C7D4' }
           }}
           checked={formData.confirmacao || false}
-          error={errors.confirmacao}
+          error={invalidFields.some(field => field.field === 'confirmacao')}
           onChange={(e) => {
             formData.confirmacao = e.target.checked;
             handleFormChange('confirmacao', e.target.checked);

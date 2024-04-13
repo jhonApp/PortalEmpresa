@@ -115,7 +115,7 @@ function LongMenu({ options, data, onDelete, PopupDialogComponent, updateTable }
           action={dialogConfig.action}
           title={dialogConfig.title} 
           description={dialogConfig.description}
-          updateTable={updateTable}
+          atualizaLista={updateTable}
         />
       )}
       <AlertDialog 

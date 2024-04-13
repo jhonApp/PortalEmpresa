@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Typography from '@mui/material/Typography';
@@ -14,7 +14,7 @@ import { fontSize } from '@mui/system';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData }) => {
+const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenValidation }) => {
   const [locale, setLocale] = useState('pt-br');
   const {
     values,
@@ -27,6 +27,10 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
     validateForm,
     'agendamentoSimples2'
   );
+
+  useLayoutEffect(() => {
+    screenValidation('agendamentoSimples2');
+  }, []);
 
   const handleLocaleChange = (newLocale) => {
     setLocale(newLocale); // Função para atualizar o estado da localidade
@@ -42,10 +46,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
   
     const updatedValues = { ...values, [fieldName]: updatedValue };
     handleChange(fieldName, updatedValue);
-    const isValid = handleValidation(fieldName);
-    console.log(isValid)
     onDataChange(updatedValues);
-    onFieldValidationChange(isValid);
   };
 
   const handleCheckboxChange = (e) => {
@@ -70,11 +71,9 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                   margin="normal"
                   type="date"
                   name="dataInicial"
-                  minDate={today}
-                  error={errors.dataInicial}
+                  error={invalidFields.some(field => field.field === 'dataInicial')}
                   value={values.dataInicial || null}
                   onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
-                  onBlur={() => handleValidation('dataInicial')}
                 />
                 {renderErrorMessage('dataInicial')}
             </FormRow>
@@ -94,7 +93,6 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 error={errors.dataFim}
                 value={values.dataFim || null}
                 onChange={(e) => handleFormChange('dataFim', e)}
-                onBlur={() => handleValidation('dataFim')}
               />
               {renderErrorMessage('dataFim')}
             </FormRow>
@@ -113,10 +111,9 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 name="horaEntrada"
                 ampm={false}
                 inputFormat="HH:mm"
-                error={errors.horaEntrada}
+                error={invalidFields.some(field => field.field === 'horaEntrada')}
                 value={values.horaEntrada}
                 onChange={(e) => handleFormChange('horaEntrada', e)}
-                onBlur={() => handleValidation('horaEntrada')}
               />
               {renderErrorMessage('horaEntrada')}
             </FormRow>
@@ -137,7 +134,6 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 error={errors.horaSaida}
                 value={values.horaSaida}
                 onChange={(e) => handleFormChange('horaSaida', e)}
-                onBlur={() => handleValidation('horaSaida')}
               />
               {renderErrorMessage('horaSaida')}
             </FormRow>
@@ -158,7 +154,6 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
             error={errors.obs}
             value={values.obs || ''}
             onChange={(e) => handleFormChange('obs', e.target.value)}
-            onBlur={() => handleValidation('obs')}
           />
         </FormRow>
         {/* Chegada */}
