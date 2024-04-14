@@ -13,7 +13,7 @@ import useForm from '../../Formulario/useForm';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenValidation }) => {
+const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenValidation, action }) => {
   const [locale, setLocale] = useState('pt-br');
   const {
     values,
@@ -59,6 +59,7 @@ const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenVa
                   variant="outlined"
                   fullWidth
                   margin="normal"
+                  disabled={action === 'view'}
                   type="date"
                   name="dataInicial"
                   minDate={today}
@@ -77,6 +78,7 @@ const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenVa
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                disabled={action === 'view'}
                 type="date"
                 name="dataFim"
                 minDate={today}
@@ -98,6 +100,7 @@ const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenVa
                 fullWidth
                 margin="normal"
                 type="time"
+                disabled={action === 'view'}
                 name="horaEntrada"
                 ampm={false}
                 inputFormat="HH:mm"
@@ -117,6 +120,7 @@ const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenVa
                 fullWidth
                 margin="normal"
                 type="time"
+                disabled={action === 'view'}
                 name="horaSaida"
                 ampm={false}
                 inputFormat="HH:mm"
@@ -138,6 +142,7 @@ const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenVa
             fullWidth
             margin="normal"
             name="obs"
+            disabled={action === 'view'}
             style={{ width: '100%' }}
             multiline
             error={errors.obs}
@@ -154,6 +159,7 @@ const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenVa
               }}
               checked={values.chegada || false}
               error={errors.chegada}
+              disabled={action === 'view'}
               onChange={(e) => {
                 values.chegada = e.target.checked;
                 handleFormChange('chegada', e.target.checked);

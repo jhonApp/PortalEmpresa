@@ -21,3 +21,17 @@ export const StatusMap = {
     'AcessoComPager': () => getStatusComponent('#F0EFE2', <Clock size={20} color="#746100" />, '#746100', 'Acesso Com Pager'),
     'AcessoSemPager': () => getStatusComponent('#F0EFE2', <Clock size={20} color="#746100" />, '#746100', 'Acesso Sem Pager'),
 };
+
+export const StatusColorMap = {
+    'Visualizado': ['#C9E3D4', '#1C843C'],
+    'Não Visualizado': ['#FBE4E4', '#FE4141'],
+    'Ativo': ['#C9E3D4', '#1C843C'],
+    'Autorizado': ['#C9E3D4', '#1C843C'],
+    'Inativo': ['#FBE4E4', '#FE4141'],
+    'Pendente': ['#F0EFE2', '#AA9F63'],
+    'Cancelado': ['#FBE4E4', '#FE4141'],
+    'NaoAutorizado': ['#FBE4E4', '#FE4141'],
+    'AguardandoAutorizacao': ['#F0EFE2', '#AA9F63'],
+    'AcessoComPager': ['#F0EFE2', '#AA9F63'],
+    'AcessoSemPager': ['#F0EFE2', '#AA9F63'],
+  };

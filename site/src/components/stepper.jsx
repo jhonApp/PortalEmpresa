@@ -63,7 +63,12 @@ const HorizontalLinearStepper = ({
   };
 
   const handleCancel = () => {
-    setOpenCancel(true);
+    if(action !== 'view'){
+      setOpenCancel(true);
+      return;
+    }
+
+    handleClose(true);
   };
 
   const handleNext = () => {

@@ -49,7 +49,7 @@ const renderStatus = (row) => (
   
 const renderAgendamento = (row, theme) => (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-      {IconMap[row.tipo](theme)}
+      {IconMap[row.tipo](theme, row.status)}
       <div style={{ textAlign: 'justify', width: theme.spacing(18) }}>
         <Typography variant="body1" fontSize={18} fontWeight={600}>{row.nomeCompleto}</Typography>
         <Typography variant="caption" fontSize={14} color="textSecondary">{row.tipo}</Typography>

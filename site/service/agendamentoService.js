@@ -110,8 +110,13 @@ export const alterarAgendamentoPrestador = async (dados) => {
 //  AGENDAMENTO MASSA
 export const inserirAgendamentoEmMassa = async (dados) => {
   try {
+    
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
+    }
+
+    if (dados.visitantes === undefined || dados.visitantes.length === 0) {
+      throw new Error('Os valores na planinha estão incorretos, por favor verifique os dados do excel e tente novamente.');
     }
 
     // Array para armazenar todas as promessas de inserção de agendamento
@@ -194,7 +199,7 @@ export const atualizarTabela = async (setAgendamentoData, setLoading, setValid) 
     ]);
 
     const combinedData = [...data1, ...data2, ...data3];
-    combinedData.sort((a, b) => new Date(b.dtValid) - new Date(a.dtValid));
+    combinedData.sort((a, b) => new Date(b.dataInicial) - new Date(a.dataInicial));
 
     setAgendamentoData(combinedData);
     setLoading(false);

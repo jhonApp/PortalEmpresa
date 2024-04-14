@@ -24,13 +24,14 @@ export default function AlertDialogCancel({ dialogOpen, handleClose, handleFunct
         aria-describedby="alert-dialog-description"
         PaperProps={{
           sx: {
+            maxWidth: 'none',
             width: '710px',
-            height: '500px',
+            height: '590px',
             borderRadius: '20px'
           },
         }}
       >
-        <DialogTitle id="alert-dialog-title" sx={{ backgroundColor: '#ffe5e5', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', pt: '90px' }}>
+        <DialogTitle id="alert-dialog-title" sx={{ backgroundColor: '#ffe5e5', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', pt: '130px' }}>
           <div style={{ marginBottom: '10px' }}>
             <XCircle size={80} color="#FF0B0B" />
           </div>

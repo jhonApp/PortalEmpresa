@@ -8,7 +8,8 @@ import dayjs from 'dayjs';
 
 function AgendamentoPrestador({ onClose, updateTable, data, action }) {
   const [formData, setFormData] = useState({});
-  const [invalidFields, setInvalidFields] = useState({});
+  const [invalidFields, setInvalidFields] = useState([]);
+  const [screenValidation, setscreenValidation] = useState('');
   const steps = ['Dados Visitante', 'Dados Agendamento'];
   const [loading, setLoading] = useState(false);
   const [createFunction, setCreateFunction] = useState(null);
@@ -69,8 +70,8 @@ function AgendamentoPrestador({ onClose, updateTable, data, action }) {
         formData={formData}
         handleClose={onClose}
         onLoadingChange={handleLoadingChange}
-        invalidFields={invalidFields}
-        screenValidation={"agendamento"}
+        invalidFields={setInvalidFields}
+        screenValidation={screenValidation}
         action={action}
         renderStepContent={(step) => {
           switch (step) {
@@ -80,7 +81,9 @@ function AgendamentoPrestador({ onClose, updateTable, data, action }) {
                   <Formulario
                     formData={formData}
                     onDataChange={handleFormChange}
-                    onFieldValidationChange={handleFieldValidationChange}
+                    invalidFields={invalidFields}
+                    screenValidation={setscreenValidation}
+                    action={action}
                   />
                   <Progress isVisible={loading} />
                 </>
@@ -91,7 +94,9 @@ function AgendamentoPrestador({ onClose, updateTable, data, action }) {
                   <FormularioAgendamento
                     formData={formData}
                     onDataChange={handleFormChange}
-                    onFieldValidationChange={handleFieldValidationChange}
+                    invalidFields={invalidFields}
+                    screenValidation={setscreenValidation}
+                    action={action}
                   />
                   <Progress isVisible={loading} />
                 </>

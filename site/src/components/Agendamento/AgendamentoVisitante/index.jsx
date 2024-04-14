@@ -82,6 +82,7 @@ function AgendamentoVisitante({ onClose, updateTable, data, action }) {
                     onDataChange={handleFormChange}
                     invalidFields={invalidFields}
                     screenValidation={setscreenValidation}
+                    action={action}
                   />
                   <Progress isVisible={loading} />
                 </>
@@ -94,6 +95,7 @@ function AgendamentoVisitante({ onClose, updateTable, data, action }) {
                     onDataChange={handleFormChange}
                     invalidFields={invalidFields}
                     screenValidation={setscreenValidation}
+                    action={action}
                   />
                   <Progress isVisible={loading} />
                 </>

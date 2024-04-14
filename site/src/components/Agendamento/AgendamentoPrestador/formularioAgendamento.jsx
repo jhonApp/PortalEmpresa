@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Typography from '@mui/material/Typography';
@@ -9,18 +9,16 @@ import 'dayjs/locale/pt-br';
 import Checkbox from '@mui/material/Checkbox';
 import { validateForm } from '../../Formulario/validation';
 import useForm from '../../Formulario/useForm';
-import { fontSize } from '@mui/system';
 
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData }) => {
+const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenValidation, action }) => {
   const [locale, setLocale] = useState('pt-br');
   const {
     values,
     errors,
-    handleChange,
-    handleValidation,
+    handleChange, 
     renderErrorMessage
   } = useForm(
     formData,
@@ -28,24 +26,17 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
     'agendamento2'
   );
 
+  useEffect(() => {
+    screenValidation('agendamento2');
+  }, []);
+
   const handleLocaleChange = (newLocale) => {
     setLocale(newLocale); // Função para atualizar o estado da localidade
   };
 
   const handleFormChange = (fieldName, value) => {
-    let updatedValue = value;
-  
-    // Verificar se o campo é telefone e se o valor é válido
-    if (fieldName === 'horaEntrada' || fieldName === 'horaSaida') {
-      updatedValue = dayjs(value, "HH:mm").format('HH:mm');
-    }
-  
-    const updatedValues = { ...values, [fieldName]: updatedValue };
-    handleChange(fieldName, updatedValue);
-    const isValid = handleValidation(fieldName);
-    console.log(isValid)
-    onDataChange(updatedValues);
-    onFieldValidationChange(isValid);
+    handleChange(fieldName, value);
+    onDataChange({ ...values, [fieldName]: value });
   };
 
   const handleCheckboxChange = (e) => {
@@ -53,7 +44,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
     setChegada(isChecked); // Atualiza o estado interno do Checkbox
     handleFormChange('chegada', isChecked); // Atualiza o estado do formulário
   };
-
+  console.log(values)
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
       <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
@@ -61,7 +52,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
           <Column>
             {/* Data Inicial */}
             <FormRow>
-              <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+              <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
                   Data Inicial *
               </InputLabel>
               <StyledDatePicker
@@ -70,18 +61,18 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                   margin="normal"
                   type="date"
                   name="dataInicial"
+                  disabled={action === 'view'}
                   minDate={today}
-                  error={errors.dataInicial}
+                  error={invalidFields.some(field => field.field === 'dataInicial')}
                   value={values.dataInicial || null}
                   onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
-                  onBlur={() => handleValidation('dataInicial')}
                 />
                 {renderErrorMessage('dataInicial')}
             </FormRow>
             {/* Data Fim */}
             <FormRow>
-              <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                Data Fim
+              <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                Data Fim *
               </InputLabel>
               <StyledDatePicker
                 variant="outlined"
@@ -89,11 +80,11 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 margin="normal"
                 type="date"
                 name="dataFim"
+                disabled={action === 'view'}
                 minDate={today}
-                error={errors.dataFim}
+                error={invalidFields.some(field => field.field === 'dataFim')}
                 value={values.dataFim || null}
                 onChange={(e) => handleFormChange('dataFim', e)}
-                onBlur={() => handleValidation('dataFim')}
               />
               {renderErrorMessage('dataFim')}
             </FormRow>
@@ -109,34 +100,33 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
                 fullWidth
                 margin="normal"
                 type="time"
+                disabled={action === 'view'}
                 name="horaEntrada"
                 ampm={false}
                 inputFormat="HH:mm"
-                error={errors.horaEntrada}
+                error={invalidFields.some(field => field.field === 'horaEntrada')}
                 value={values.horaEntrada}
                 onChange={(e) => handleFormChange('horaEntrada', e)}
-                onBlur={() => handleValidation('horaEntrada')}
               />
               {renderErrorMessage('horaEntrada')}
             </FormRow>
             {/* Hora de Saída */}
             <FormRow>
-              <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                Hora de Saída
+              <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                Hora de Saída *
               </InputLabel>
               <StyledTimePicker
-                label="Hora de Saída"
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 type="time"
+                disabled={action === 'view'}
                 name="horaSaida"
                 ampm={false}
                 inputFormat="HH:mm"
-                error={errors.horaSaida}
+                error={invalidFields.some(field => field.field === 'horaSaida')}
                 value={values.horaSaida}
                 onChange={(e) => handleFormChange('horaSaida', e)}
-                onBlur={() => handleValidation('horaSaida')}
               />
               {renderErrorMessage('horaSaida')}
             </FormRow>
@@ -144,7 +134,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
         </FormContainer>
         {/* Observação */}
         <FormRow>
-          <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+          <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
             Observação
           </InputLabel>
           <StyledTextField
@@ -152,12 +142,12 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
             fullWidth
             margin="normal"
             name="obs"
+            disabled={action === 'view'}
             style={{ width: '100%' }}
             multiline
             error={errors.obs}
             value={values.obs || ''}
             onChange={(e) => handleFormChange('obs', e.target.value)}
-            onBlur={() => handleValidation('obs')}
           />
         </FormRow>
         {/* Chegada */}
@@ -169,6 +159,7 @@ const FormularioAgendamento = ({ onDataChange, onFieldValidationChange, formData
               }}
               checked={values.chegada || false}
               error={errors.chegada}
+              disabled={action === 'view'}
               onChange={(e) => {
                 values.chegada = e.target.checked;
                 handleFormChange('chegada', e.target.checked);
