@@ -5,7 +5,7 @@ import { Checkbox, Typography, InputLabel } from '@mui/material';
 import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
-const Formulario = ({ formData, onDataChange, invalidFields, screenValidation }) => {
+const Formulario = ({ formData, onDataChange, invalidFields, screenValidation, action }) => {
   const [values, setValues] = useState({});
   const {
     errors,
@@ -42,6 +42,7 @@ const Formulario = ({ formData, onDataChange, invalidFields, screenValidation })
               fullWidth
               margin="normal"
               type="text"
+              disabled={action === 'view'}
               autoComplete="off"
               error={invalidFields.some(field => field.field === 'rgCpf')}
               value={formData.rgCpf || ''}
@@ -59,6 +60,7 @@ const Formulario = ({ formData, onDataChange, invalidFields, screenValidation })
               fullWidth
               margin="normal"
               type="text"
+              disabled={action === 'view'}
               autoComplete="off"
               error={invalidFields.some(field => field.field === 'email')}
               value={formData.email || ''}
@@ -95,6 +97,7 @@ const Formulario = ({ formData, onDataChange, invalidFields, screenValidation })
               fullWidth
               margin="normal"
               type="text"
+              disabled={action === 'view'}
               autoComplete="off"
               error={invalidFields.some(field => field.field === 'nomeCompleto')}
               value={formData.nomeCompleto || ''}
@@ -118,6 +121,7 @@ const Formulario = ({ formData, onDataChange, invalidFields, screenValidation })
                 <StyledTextField
                   variant="outlined"
                   fullWidth
+                  disabled={action === 'view'}
                   margin="normal"
                   autoComplete="off"
                   type="text"
@@ -154,6 +158,7 @@ const Formulario = ({ formData, onDataChange, invalidFields, screenValidation })
           }}
           checked={formData.confirmacao || false}
           error={errors.confirmacao}
+          disabled={action === 'view'}
           onChange={(e) => {
             formData.confirmacao = e.target.checked;
             handleFormChange('confirmacao', e.target.checked);

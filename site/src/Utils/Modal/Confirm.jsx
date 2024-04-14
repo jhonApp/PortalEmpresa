@@ -24,13 +24,14 @@ export default function AlertDialogConfirm({ dialogOpen, handleClose, handleFunc
         aria-describedby="alert-dialog-description"
         PaperProps={{
           sx: {
+            maxWidth: 'none',
             width: '710px',
-            height: '500px',
+            height: '590px',
             borderRadius: '20px'
           },
         }}
       >
-        <DialogTitle id="alert-dialog-title" sx={{ backgroundColor: '#E8F3FC', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', pt: '90px' }}>
+        <DialogTitle id="alert-dialog-title" sx={{ backgroundColor: '#E8F3FC', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', pt: '130px' }}>
           <div style={{ marginBottom: '10px' }}>
             <Info size={80} color="#228BE6" />
           </div>

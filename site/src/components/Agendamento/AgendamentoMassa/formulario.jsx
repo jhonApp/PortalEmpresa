@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
 import { Box, Paper, Button, ToggleButton, Typography, useTheme, Input } from '@mui/material';
 import { UserMinus, UsersThree, UploadSimple, FileCsv } from 'phosphor-react';
 import CheckIcon from '@mui/icons-material/Check';
-
+import { showSuccessToast, showErrorToast } from '../../../Utils/Notification';
 import useForm from '../../Formulario/useForm';
 import { createExcelContent } from '../AgendamentoMassa/createExcelContent';
 import * as XLSX from 'xlsx';
 import InputMask from 'react-input-mask';
 
-const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
+const Formulario = ({ formData, onDataChange, invalidFields, screenValidation }) => {
   const theme = useTheme();
   const [selected, setSelected] = React.useState(false);
+  const [nomeArq, setNomeArquivo] = useState('');
   const [selectedButton, setSelectedButton] = React.useState(null);
   const {
     values,
@@ -73,10 +74,12 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
 
   const handleDownloadExcel = () => {
     createExcelContent();
+    showSuccessToast("Download da planilha realizado com sucesso.")
   };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    const fileName = file.name;
     const reader = new FileReader();
   
     reader.onload = function(event) {
@@ -99,7 +102,8 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
         };
       });
       onDataChange({ ...formData, visitantes: processedVisitors });
-      
+      setNomeArquivo(fileName);
+      showSuccessToast("Upload realizado com sucesso.")
 
     };
     reader.readAsArrayBuffer(file);
@@ -151,7 +155,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
           <label htmlFor="file-input">
             <Button component="span" style={buttonFileStyle} variant="contained">
               <FileCsv size={25} color="#000"/>
-              Clique aqui para selecionar o excel
+              {nomeArq ? nomeArq : 'Clique aqui para selecionar o excel'}
             </Button>
           </label>
         </div>

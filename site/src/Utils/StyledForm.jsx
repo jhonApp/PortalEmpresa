@@ -78,7 +78,7 @@ const StyledPaperFiltro = styled(Paper)({
     textAlign: 'center',
     boxShadow: 'none',
     marginTop: '10px',
-    width: '300px',
+    width: '330px',
 });
 
 const FormContainer = styled('div')({

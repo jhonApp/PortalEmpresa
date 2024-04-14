@@ -5,7 +5,7 @@ import { Checkbox, Typography, InputLabel } from '@mui/material';
 import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
-const Formulario = ({ onDataChange, formData, invalidFields, screenValidation }) => {
+const Formulario = ({ onDataChange, formData, invalidFields, screenValidation, action }) => {
   const [values, setValues] = useState({});
   const {
     errors,
@@ -44,6 +44,7 @@ const Formulario = ({ onDataChange, formData, invalidFields, screenValidation })
                 autoComplete="off"
                 error={invalidFields.some(field => field.field === 'rgCpf')}
                 value={formData.rgCpf || ''}
+                disabled={action === 'view'}
                 onChange={(e) => handleFormChange('rgCpf', e.target.value)} />
               {renderErrorMessage('rgCpf')}
           </FormRow>
@@ -56,6 +57,7 @@ const Formulario = ({ onDataChange, formData, invalidFields, screenValidation })
                 id="email-input"
                 type="text"
                 autoComplete="off"
+                disabled={action === 'view'}
                 error={invalidFields.some(field => field.field === 'email')}
                 value={formData.email || ''}
                 onChange={(e) => { handleFormChange('email', e.target.value); }}
@@ -91,6 +93,7 @@ const Formulario = ({ onDataChange, formData, invalidFields, screenValidation })
               type="text"
               autoComplete="off"
               name="nomeCompleto"
+              disabled={action === 'view'}
               error={invalidFields.some(field => field.field === 'nomeCompleto')}
               value={formData.nomeCompleto || ''}
               onChange={(e) => { handleFormChange('nomeCompleto', e.target.value) }}
@@ -113,6 +116,7 @@ const Formulario = ({ onDataChange, formData, invalidFields, screenValidation })
                   <StyledTextField 
                     id="tel-input"
                     type="text"
+                    disabled={action === 'view'}
                     autoComplete="off"
                     name="telefone"
                     error={errors.telefone}
@@ -150,6 +154,7 @@ const Formulario = ({ onDataChange, formData, invalidFields, screenValidation })
           }}
           checked={formData.confirmacao || false}
           error={invalidFields.some(field => field.field === 'confirmacao')}
+          disabled={action === 'view'}
           onChange={(e) => {
             formData.confirmacao = e.target.checked;
             handleFormChange('confirmacao', e.target.checked);

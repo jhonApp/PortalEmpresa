@@ -8,7 +8,8 @@ import { inserirAgendamentoEmMassa } from '../../../../service/agendamentoServic
 
 function AgendamentoMassa({ updateTable, onClose }) {
   const [formData, setFormData] = useState({});
-  const [invalidFields, setInvalidFields] = useState({});
+  const [invalidFields, setInvalidFields] = useState([]);
+  const [screenValidation, setScreenValidation] = useState('');
   const steps = ['Convidado', 'Data do Agendamento'];
   const [loading, setLoading] = useState(false);
 
@@ -29,12 +30,12 @@ function AgendamentoMassa({ updateTable, onClose }) {
       <Stepper
         steps={steps}
         updateTable={updateTable}
-        createData={inserirAgendamentoEmMassa}
+        createFunction={inserirAgendamentoEmMassa}
         formData={formData}
         handleClose={onClose}
         onLoadingChange={handleLoadingChange}
-        invalidFields={invalidFields}
-        screenValidation={"agendamentoEmMassa"}
+        invalidFields={setInvalidFields}
+        screenValidation={screenValidation}
         renderStepContent={(step) => {
           switch (step) {
             case 0:
@@ -43,7 +44,8 @@ function AgendamentoMassa({ updateTable, onClose }) {
                   <Formulario
                     formData={formData}
                     onDataChange={handleFormChange}
-                    onFieldValidationChange={handleFieldValidationChange}
+                    invalidFields={invalidFields}
+                    screenValidation={setScreenValidation}
                   />
                   <Progress isVisible={loading} />
                 </>
@@ -54,7 +56,8 @@ function AgendamentoMassa({ updateTable, onClose }) {
                   <FormularioAgendamento
                     formData={formData}
                     onDataChange={handleFormChange}
-                    onFieldValidationChange={handleFieldValidationChange}
+                    invalidFields={invalidFields}
+                    screenValidation={setScreenValidation}
                   />
                   <Progress isVisible={loading} />
                 </>

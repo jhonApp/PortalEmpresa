@@ -11,13 +11,16 @@ import { Dialog, DialogContent, DialogActions, RadioGroup, Paper, useTheme, Radi
 import { StyledButtonPrimaryFiltro, StyledButtonSecundaryFiltro } from '../../Utils/StyledButton';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import 'dayjs/locale/pt-br';
 import { InputLabel } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { display } from '@mui/system';
 
 
 dayjs.locale('pt-br');
 dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 export default function TemporaryDrawer({ open, handleClose, data, setData }) {
     const [openFilter, setOpen] = React.useState(open);
@@ -75,20 +78,20 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
         item.nomeCompleto.toLowerCase().includes(formData.nomeCompleto.toLowerCase())
       );
     }
-  
+    
     // Aplicar filtros de datas se estiverem preenchidos
-    if (formData.dtValid && formData.dtEnd) {
+    if (formData.dataInicial && formData.dataFim) {
       filteredData = filteredData.filter(item =>
-        dayjs(item.dtValid).isSameOrAfter(dayjs(formData.dtValid), 'day') &&
-        dayjs(item.dtEnd).isSameOrBefore(dayjs(formData.dtEnd), 'day')
+        dayjs(item.dataInicial).isSameOrBefore(dayjs(formData.dataInicial), 'day') &&
+        dayjs(item.dataFim).isSameOrAfter(dayjs(formData.dataFim), 'day')
+    );    
+    } else if (formData.dataInicial) {
+      filteredData = filteredData.filter(item =>
+        dayjs(item.dataInicial).isSameOrAfter(dayjs(formData.dataInicial), 'day')
       );
-    } else if (formData.dtValid) {
+    } else if (formData.dataFim) {
       filteredData = filteredData.filter(item =>
-        dayjs(item.dtValid).isSameOrAfter(dayjs(formData.dtValid), 'day')
-      );
-    } else if (formData.dtEnd) {
-      filteredData = filteredData.filter(item =>
-        dayjs(item.dtEnd).isSameOrBefore(dayjs(formData.dtEnd), 'day')
+        dayjs(item.dataFim).isSameOrAfter(dayjs(formData.dataFim), 'day')
       );
     }
   
@@ -102,7 +105,7 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
   };
 
   const DrawerList = (
-    <Box sx={{ marginTop: 8, p: 2, backgroundColor: '#FAFAFA' }} role="presentation" >
+    <Box sx={{ width: '360px', height: '100%', p: 2, backgroundColor: '#FAFAFA' }} role="presentation" >
       <Typography variant="h5" component="h1" style={{ fontWeight: 'bold', marginBottom: 0, borderBottom: '1px solid #CCCCCC' }}>{"Filtros"}</Typography>
         <StyledPaperFiltro sx={{background:'#FAFAFA'}} elevation={1}>
             <FormContainer>
@@ -154,10 +157,10 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                                 fullWidth
                                 margin="normal"
                                 type="date"
-                                name="dtValid"
-                                value={formData.dtValid || null}
-                                onChange={(newValue) => { handleFormChange('dtValid', newValue); }}
-                                onBlur={() => handleValidation('dtValid')}
+                                name="dataInicial"
+                                value={formData.dataInicial || null}
+                                onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
+                                onBlur={() => handleValidation('dataInicial')}
                             />
                         </LocalizationProvider>
                     </FormRow>
@@ -174,10 +177,10 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                                 fullWidth
                                 margin="normal"
                                 type="date"
-                                name="dtEnd"
-                                value={formData.dtEnd || null}
-                                onChange={(newValue) => { handleFormChange('dtEnd', newValue); }}
-                                onBlur={() => handleValidation('dtEnd')}
+                                name="dataFim"
+                                value={formData.dataFim || null}
+                                onChange={(newValue) => { handleFormChange('dataFim', newValue); }}
+                                onBlur={() => handleValidation('dataFim')}
                             />
                         </LocalizationProvider>
                     </FormRow>
@@ -227,10 +230,11 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                     <RadioGroup
                         aria-labelledby="tipo-radio"
                         name="tipo-radio"
+                        defaultValue="todos"
                     >
                         <StyledFormControlLabel
                             control={
-                                <Radio checked={formData.tipo === 'todos'} 
+                                <Radio checked={formData.tipo === 'todos' || formData.tipo === ''}
                                    onChange={() => handleFormChange('tipo', 'todos')}
                                    name="todos" 
                                 />
@@ -267,10 +271,13 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                     </RadioGroup>
                 </FormControl>
             </FormContainer>
-            <DialogActions sx={{ backgroundColor: '#FAFAFA', borderTop: '1px solid #CCCCCC', paddingTop: 3, justifyContent: 'space-around' }}>
-            <StyledButtonSecundaryFiltro onClick={handleClose}> Cancelar </StyledButtonSecundaryFiltro>
-            <StyledButtonPrimaryFiltro onClick={handleSearch}> Filtrar </StyledButtonPrimaryFiltro>
-        </DialogActions>
+            <DialogActions sx={{ backgroundColor: '#FAFAFA', paddingTop: 13, flexDirection: 'column', justifyContent: 'space-around' }}>
+              <Divider sx={{ backgroundColor: '#CCCCCC', marginBottom: 2, width:'100%', height: 1 }}></Divider>
+              <div style={{ display: 'flex', gap: 40, marginLeft: 0 }}>
+                <StyledButtonSecundaryFiltro onClick={handleClose}> Cancelar </StyledButtonSecundaryFiltro>
+                <StyledButtonPrimaryFiltro onClick={handleSearch}> Filtrar </StyledButtonPrimaryFiltro>
+              </div>
+            </DialogActions>
         </StyledPaperFiltro>
       {/* <Divider /> */}
       

@@ -1,16 +1,15 @@
 import React, { useState , useEffect } from 'react';
-import { StyledTextField, StyledPaper, FormContainer, Column, FormRow } from '../../../Utils/StyledForm';
+import { StyledTextField, StyledPaper, FormContainer, Column, FormRow  } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
 import { Checkbox, Typography, InputLabel } from '@mui/material';
 import useForm from '../../Formulario/useForm';
 import InputMask from 'react-input-mask';
 
-const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
+const Formulario = ({ formData, onDataChange, invalidFields, screenValidation, action }) => {
   const [values, setValues] = useState({});
   const {
     errors,
     handleChange,
-    handleValidation,
     renderErrorMessage,
   } = useForm(
     formData,
@@ -18,21 +17,17 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
     'agendamento'
   );
 
-  // useEffect(() => {
-  //   if (formData && Object.keys(formData).length > 0) {
-  //     setValues(formData);
-  //   }
-  // }, [formData, setValues]);
+  useEffect(() => {
+    screenValidation('agendamento');
+  }, []);
 
   const handleFormChange = (fieldName, value) => {
     const updatedValues = { ...values, [fieldName]: value };
     setValues(updatedValues);
     handleChange(fieldName, value);
-    const isValid = handleValidation(fieldName);
     onDataChange(updatedValues);
-    onFieldValidationChange(isValid);
   };
-
+  
   return (
     <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>
       <FormContainer>
@@ -46,13 +41,12 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
               variant="outlined"
               fullWidth
               margin="normal"
-              type="number"
+              type="text"
               autoComplete="off"
-              error={errors.rgCpf}
+              disabled={action === 'view'}
+              error={invalidFields.some(field => field.field === 'rgCpf')}
               value={formData.rgCpf || ''}
               onChange={(e) => handleFormChange('rgCpf', e.target.value)}
-              onBlur={(e) => handleFormChange('rgCpf', e.target.value)}
-
             />
             {renderErrorMessage('rgCpf')}
           </FormRow>
@@ -66,23 +60,24 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
               fullWidth
               margin="normal"
               type="text"
+              disabled={action === 'view'}
               autoComplete="off"
-              error={errors.email}
+              error={invalidFields.some(field => field.field === 'email')}
               value={formData.email || ''}
               onChange={(e) => handleFormChange('email', e.target.value)}
-              onBlur={(e) => handleFormChange('email', e.target.value)}
             />
             {renderErrorMessage('email')}
           </FormRow>
           {/* Empresa */}
           <FormRow>
-            <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+            <InputLabel shrink sx={{ fontSize: 20, color:'#666666', fontWeight: 600, textAlign: 'start'}}>
               Empresa
             </InputLabel>
             <StyledTextField
               variant="outlined"
               fullWidth
               margin="normal"
+              disabled
               type="text"
               autoComplete="off"
               error={errors.empresa}
@@ -94,19 +89,19 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
         <Column>
           {/* Nome Completo */}
           <FormRow>
-            <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+            <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
               Nome Completo *
             </InputLabel>
             <StyledTextField
               variant="outlined"
               fullWidth
               margin="normal"
+              disabled={action === 'view'}
               type="text"
               autoComplete="off"
-              error={errors.nomeCompleto}
+              error={invalidFields.some(field => field.field === 'nomeCompleto')}
               value={formData.nomeCompleto || ''}
               onChange={(e) => handleFormChange('nomeCompleto', e.target.value)}
-              onBlur={(e) => handleFormChange('nomeCompleto', e.target.value)}
             />
             {renderErrorMessage('nomeCompleto')}
           </FormRow>
@@ -126,6 +121,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
                 <StyledTextField
                   variant="outlined"
                   fullWidth
+                  disabled={action === 'view'}
                   margin="normal"
                   autoComplete="off"
                   type="text"
@@ -136,12 +132,13 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
           </FormRow>
           {/* Serviço */}
           <FormRow>
-            <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-              Serviço *
+            <InputLabel shrink htmlFor="tel-input" sx={{ fontSize: 20, color:'#666666', fontWeight: 600, textAlign: 'start'}}>
+              Serviço
             </InputLabel>
             <StyledTextField
               variant="outlined"
               fullWidth
+              disabled
               margin="normal"
               type="text"
               autoComplete="off"
@@ -167,7 +164,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange , formData }) => {
           }}
           inputProps={{ 'aria-label': 'primary checkbox' }}   
         />
-        <Typography sx ={{marginLeft: 1, fontSize: 14}}>Confirmo que as informações acima são verdadeiras *</Typography>
+        <Typography sx ={{marginLeft: 1, fontSize: 14, fontWeight: 600}}>Confirmo que as informações acima são verdadeiras *</Typography>
       </FormRow>
     </StyledPaper>
   );
