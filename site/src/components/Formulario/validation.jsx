@@ -124,6 +124,8 @@ const screensValidations = {
     rg: { required: true, description: "RG" },
     email: { required: true, description: "Email" },
     telefone: { required: true, description: "Telefone" },
+    horaEntrada: { required: true, description: "Hora Entrada" },
+    horaSaida: { required: true, description: "Hora Saída" },
   },
   departamento: {
     nome: { required: true, description: "Nome" }

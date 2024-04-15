@@ -18,7 +18,7 @@ import 'dayjs/locale/pt-br';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-export default function AccordionTransition({ onDataChange, onFieldValidationChange, formData }) {
+export default function AccordionTransition({ onDataChange, formData }) {
   const [expanded, setExpanded] = React.useState(false);
   const [locale, setLocale] = useState('pt-br');
   const {
@@ -35,9 +35,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
-    const isValid = handleValidation(fieldName);
     onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange (isValid);
   };
 
   const handleExpansion = () => {
@@ -101,7 +99,6 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     error={errors.admissao}
                     value={values.admissao || null}
                     onChange={(newValue) => { handleFormChange('admissao', newValue); }}
-                    onBlur={() => handleValidation('admissao')}
                   />
                 </ LocalizationProvider>
               </FormRow>
@@ -140,7 +137,6 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     error={errors.demissao}
                     value={values.demissao || null}
                     onChange={(newValue) => { handleFormChange('demissao', newValue); }}
-                    onBlur={() => handleValidation('demissao')}
                   />
                 </ LocalizationProvider>
               </FormRow>

@@ -18,7 +18,7 @@ import 'dayjs/locale/pt-br';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-export default function AccordionTransition({ onDataChange, onFieldValidationChange, formData }) {
+export default function AccordionTransition({ invalidFields, onDataChange, formData }) {
   const [expanded, setExpanded] = React.useState(false);
   const [locale, setLocale] = useState('pt-br');
   const {
@@ -35,9 +35,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
-    const isValid = handleValidation(fieldName);
     onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange (isValid);
   };
 
   const handleExpansion = () => {
@@ -83,10 +81,9 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     name="horaEntrada"
                     ampm={false}
                     inputFormat="HH:mm"
-                    error={errors.horaEntrada}
+                    error={invalidFields.some(field => field.field === 'horaEntrada')}
                     value={values.horaEntrada}
                     onChange={(e) => handleFormChange('horaEntrada', e)}
-                    onBlur={() => handleValidation('horaEntrada')}
                   />
                 </FormRow>
               </ LocalizationProvider>
@@ -123,10 +120,9 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     name="horaSaida"
                     ampm={false}
                     inputFormat="HH:mm"
-                    error={errors.horaSaida}
+                    error={invalidFields.some(field => field.field === 'horaSaida')}
                     value={values.horaSaida}
                     onChange={(e) => handleFormChange('horaSaida', e)}
-                    onBlur={() => handleValidation('horaSaida')}
                   />
                 </FormRow>
               </ LocalizationProvider>

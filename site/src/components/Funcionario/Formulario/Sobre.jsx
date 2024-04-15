@@ -19,10 +19,10 @@ import 'dayjs/locale/pt-br';
 
 dayjs.locale('pt-br');
 
-export default function AccordionTransition({ onDataChange, onFieldValidationChange, formData }) {
+export default function AccordionTransition({ invalidFields, onDataChange, formData }) {
   const [expanded, setExpanded] = React.useState(false);
-  const [cartoes, setCartoes] = useState([]);
-  const [cargos, setCargos] = useState([]);
+  const [cartoes, setCartoes] = useState(null);
+  const [cargos, setCargos] = useState(null);
   const [locale, setLocale] = useState('pt-br');
   const {
     values,
@@ -56,12 +56,9 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
-    const isValid = handleValidation(fieldName);
     onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange (isValid);
-    console.log(formData)
   };
-
+  console.log(formData)
   return (
     <div>
       <Accordion
@@ -98,7 +95,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     margin="normal"
                     type="text"
                     autoComplete="off"
-                    error={errors.nome}
+                    error={invalidFields.some(field => field.field === 'nome')}
                     value={values.nome || ''}
                     onChange={(e) => handleFormChange('nome', e.target.value)}
                     onBlur={(e) => handleFormChange('nome', e.target.value)}
@@ -124,7 +121,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                             margin="normal"
                             type="text"
                             autoComplete="off"
-                            error={errors.cpf}
+                            error={invalidFields.some(field => field.field === 'cpf')}
                           />
                           {renderErrorMessage('cpf')}
                         </div>
@@ -144,10 +141,9 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     margin="normal"
                     type="date"
                     name="dataNascimento"
-                    error={errors.dataNascimento}
+                    error={invalidFields.some(field => field.field === 'dataNascimento')}
                     value={values.dataNascimento || null}
                     onChange={(newValue) => { handleFormChange('dataNascimento', newValue); }}
-                    onBlur={() => handleValidation('dataNascimento')}
                   />
                   {renderErrorMessage('dataNascimento')}
                 </FormRow>
@@ -170,7 +166,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                             margin="normal"
                             type="text"
                             autoComplete="off"
-                            error={errors.rg}
+                            error={invalidFields.some(field => field.field === 'rg')}
                           />
                           {renderErrorMessage('rg')}
                         </div>
@@ -192,7 +188,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                     margin="normal"
                     type="text"
                     autoComplete="off"
-                    error={errors.email}
+                    error={invalidFields.some(field => field.field === 'email')}
                     value={values.email || ''}
                     onChange={(e) => handleFormChange('email', e.target.value)}
                     onBlur={(e) => handleFormChange('email', e.target.value)}
@@ -207,8 +203,9 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                   <StyledSelectField
                       label="cartão"
                       value={values.selectedCartao}
-                      options={cartoes.map((cartao) => cartao.codigoCartao)}
-                      onChange={(e, value) => handleFormChange('selectedCartao', value)}
+                      options={cartoes ? cartoes.map((cartao) => ({ label: cartao.codigoCartao, value: cartao.codigoCartao })) : []}
+                      getOptionLabel={(option) => option.label.toString()}
+                      onChange={(e, value) => handleFormChange('selectedCartao', value.value)}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -231,7 +228,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                       {() => (
                         <div>
                           <InputLabel shrink htmlFor="tel-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                            Telefone
+                            Telefone *
                           </InputLabel>
                           <StyledTextField 
                             id="tel-input"
@@ -253,8 +250,8 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
                   <StyledSelectField
                     label="cargo"
                     value={values.selectedCargo}
-                    options={cargos.map((cargo) => ({ label: `${cargo.nome}`, value: cargo.codigo }))}
-                    onChange={(event, newValue) => handleFormChange('selectedCargo', newValue)}
+                    options={cargos ? cargos.map((cargo) => ({ label: `${cargo.nome}`, value: cargo.codigo })) : []}
+                    onChange={(event, newValue) => handleFormChange('selectedCargo', newValue.value)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
