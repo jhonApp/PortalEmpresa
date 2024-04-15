@@ -17,6 +17,7 @@ import Switch from '@mui/material/Switch';
 import Message from '../Message';
 import useForm from '../Formulario/useForm';
 import { validateForm } from '../Formulario/validation'
+import validateAndSetInvalidFields from '../Formulario/useValidation';
 import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -101,6 +102,7 @@ const LoginForm = () => {
   const currentScreen = 'login';
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [invalidFields, setInvalidFields] = useState([]);
   const [savedCredentials, setSavedCredentials] = useState(null);
   const [listaConexao, setConexoes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -191,8 +193,7 @@ const LoginForm = () => {
             margin="normal"
             value={values.email}
             onChange={(e) => handleChange('email', e.target.value)}
-            error={errors.email}
-            onBlur={handleValidation}
+            error={invalidFields.some(field => field.field === 'email')}
           />
           {renderErrorMessage('email')}
         </FormSection>
@@ -203,10 +204,9 @@ const LoginForm = () => {
           <StyledTextPassword
             id="outlined-adornment-password"
             value={values.password}
-            error={errors.password}
+            error={invalidFields.some(field => field.field === 'password')}
             type={showPassword ? 'text' : 'password'}
             onChange={(e) => handleChange('password', e.target.value)}
-            onBlur={handleValidation}
             onKeyDown={handleEnterKey}
             endAdornment={
               <InputAdornment position="end">

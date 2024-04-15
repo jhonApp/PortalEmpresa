@@ -16,6 +16,7 @@ const StyledGrid = styled(Box)({
   '@media (max-width: 1000px)': {
     gridTemplateColumns: '1fr',
     marginLeft: '0',
+    gridTemplateRows: '150px 1fr',
   },
 });
 
@@ -23,7 +24,7 @@ const Login = () => {
   return (
     <StyledGrid>
       <Logo />
-      <LoginForm/>
+      <LoginForm />
     </StyledGrid>
   );
 };
