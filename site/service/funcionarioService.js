@@ -15,7 +15,7 @@ export const atualizarTabela = async (setFuncionarioData, setLoading, setValid, 
 };
 
 const separarTelefone = (telefone) => {
-  const partes = telefone.replace(/[^\d]/g, '').match(/^(\d{2})(\d{4,5})(\d{4})$/);
+  const partes = telefone?.replace(/[^\d]/g, '').match(/^(\d{2})(\d{4,5})(\d{4})$/);
   if (partes) {
     return {
       ddd: partes[1],
@@ -34,7 +34,7 @@ export const cadastrarFuncionario = async (dados) => {
     if (!dados) {
       throw new Error('Os valores estão nulos, por favor entre em contato com suporte.');
     }
-
+    
     // Convertendo CPF
     const cpf = dados.cpf.replace(/\D/g, '');
 
@@ -42,7 +42,7 @@ export const cadastrarFuncionario = async (dados) => {
     const rg = dados.rg.replace(/\D/g, '');
 
     // Convertendo CEP
-    const cep = dados.cep.replace(/\D/g, '');
+    const cep = dados.cep?.replace(/\D/g, '');
 
     const telefoneSeparado = separarTelefone(dados.telefone);
 

@@ -129,7 +129,7 @@ function Funcionarios({ funcionarioData, setFuncionarioData, loading, setLoading
       <Box display="flex" gap={2} marginTop={2}>
         <Table data={digitado ? funcionariosFiltrados : funcionarioData} window={"funcionario"} columns={columns} loading={loading} isValid={isValid} />
       </Box>
-      <Progress isVisible={loading} />
+      {/* <Progress isVisible={loading} /> */}
     </Box>
   );
 }

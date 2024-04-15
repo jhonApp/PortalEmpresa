@@ -12,7 +12,7 @@ import useForm from '../../Formulario/useForm';
 import { validateForm } from '../../Formulario/validation';
 import Fade from '@mui/material/Fade';
 
-export default function AccordionTransition({ onDataChange, onFieldValidationChange, formData }) {
+export default function AccordionTransition({ onDataChange, formData }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const {
@@ -29,9 +29,7 @@ export default function AccordionTransition({ onDataChange, onFieldValidationCha
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
-    const isValid = handleValidation(fieldName);
     onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange (isValid);
   };
 
   const fetchAddressData = async (cep) => {

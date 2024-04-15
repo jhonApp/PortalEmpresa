@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Paper, Button, useTheme, Input, IconButton } from '@mui/material';
 import { showSuccessToast, showErrorToast } from '../../../Utils/Notification';
 import { validateForm } from '../../Formulario/validation';
+import validateAndSetInvalidFields from '../../Formulario/useValidation';
 import useForm from '../../Formulario/useForm';
 import { CaretLeft, Camera } from 'phosphor-react';
 import Typography from '@mui/material/Typography';
@@ -18,17 +19,13 @@ import { cadastrarFuncionario } from '../../../../service/funcionarioService';
 function FormFuncionario({ updateTable }) {
   const theme = useTheme();
   const [formData, setFormData] = useState({});
-  const [invalidFields, setInvalidFields] = useState({});
+  const [invalidFields, setInvalidFields] = useState([]);
   const [loading, setLoading] = useState(false);
   const { handleSubmit } = useForm();
 
   const handleFormChange = (data) => {
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
     console.log(formData);
-  };
-
-  const handleFieldValidationChange = (isInvalid) => {
-    setInvalidFields(isInvalid);
   };
 
   const handleFileChange = (event) => {
@@ -58,11 +55,11 @@ function FormFuncionario({ updateTable }) {
 
   const handleSave = async () => {
     try {
-      const { errorTypes } = validateForm(formData, 'funcionario');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
+
+      const errorMessage = validateAndSetInvalidFields(formData, 'funcionario', setInvalidFields);
+      if (errorMessage) { 
+        setLoading(false) 
+        return; 
       }
 
       setLoading(true);
@@ -72,7 +69,7 @@ function FormFuncionario({ updateTable }) {
             await cadastrarFuncionario(formData);
             showSuccessToast("Criado com sucesso!");
             setLoading(false);
-            updateTable();
+            // updateTable();
         } catch (e) {
           setLoading(false);
           showErrorToast(e.message);
@@ -130,12 +127,12 @@ function FormFuncionario({ updateTable }) {
         </Box>
         <Box display="flex" flexDirection="row" width="100%" justifyContent="space-between" mt="20px" mb="20px">
           <Box sx={{ display:'flex', flexDirection: 'column', gap:'10px', flex: 1, marginRight: '8px' }}>
-            <AccordionSobre formData={formData} onFieldValidationChange={handleFieldValidationChange} onDataChange={handleFormChange} />
-            <AccordionEndereco formData={formData} onFieldValidationChange={handleFieldValidationChange} onDataChange={handleFormChange} />
+            <AccordionSobre invalidFields={invalidFields} formData={formData} onDataChange={handleFormChange} />
+            <AccordionEndereco formData={formData} onDataChange={handleFormChange} />
           </Box>
           <Box sx={{ display:'flex', flexDirection: 'column', gap:'10px', flex: 1, marginLeft: '8px' }}>
-            <AccordionAcesso formData={formData} onFieldValidationChange={handleFieldValidationChange} onDataChange={handleFormChange} />
-            <AccordionAdicionais formData={formData} onFieldValidationChange={handleFieldValidationChange} onDataChange={handleFormChange} />
+            <AccordionAcesso invalidFields={invalidFields} formData={formData} onDataChange={handleFormChange} />
+            <AccordionAdicionais formData={formData} onDataChange={handleFormChange} />
           </Box>
         </Box>
         <StyledButtonPrimary sx={{marginLeft: 0}} variant="contained" onClick={handleSave}>
