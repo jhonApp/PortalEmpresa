@@ -7,7 +7,7 @@ export const autenticacao = async (email, password, condominioUrl) => {
       throw new Error('Email e senha são campos obrigatórios.');
     }
 
-    const url = `${condominioUrl}usuario/login?email=${encodeURIComponent(email)}&senha=${encodeURIComponent(password)}&condominio=${encodeURIComponent(16)}`;
+    const url = `${condominioUrl}usuario/login?email=${encodeURIComponent(email)}&senha=${encodeURIComponent(password)}&condominio=${encodeURIComponent(1)}`;
     
     const response = await axios.post(url, {
       withCredentials: true,
