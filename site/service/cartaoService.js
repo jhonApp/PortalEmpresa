@@ -8,26 +8,21 @@ export const inserirCartao = async (dados) => {
     }
 
     const storage = getData();
-    const cargo = await obterCartao(storage.codigoEmpresa, dados.numero);
-    if (cargo.data != null) {
-      throw new Error('Cartão já foi registrado.');
-    }
-
     var cartaoDto = {
       CodigoEmpresa: storage.codigoEmpresa,
       CodigoUsuario: storage.codigo,
       CodigoCartao: dados.numero
     }
-
+    
     const response = await incluirCartao(cartaoDto);
-
+    
     if (response.status !== 200) {
       throw new Error('Erro ao inserir cartão, entre em contato com o suporte técnico.');
     }
 
     return response;
   } catch (error) {
-    throw new Error('Erro ao inserir cartão: ' + error.message);
+    throw new Error('Erro: ' + error.response.data);
   }
 };
 

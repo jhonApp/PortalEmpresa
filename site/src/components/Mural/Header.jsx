@@ -3,6 +3,7 @@ import Popup from './Popup';
 import PopupDialog from '../dialog';
 import ExibiComunicado from './Modal/ExibiComunicado'
 import { StyledButtonPrimary, StyledButtonSecundary } from '../../Utils/StyledButton';
+import validateAndSetInvalidFields from '../Formulario/useValidation';
 import ExibiEnquete from './Modal/ExibirEnquete'
 import Comunicado from './Formulario/ModalComunicado'
 import Encomenda from './Formulario/Encomenda'
@@ -18,6 +19,7 @@ import { Bell, Package, ListChecks } from 'phosphor-react';
 function Header({ atualizaMural }) {
   const [openPopup, setOpenPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
+  const [invalidFields, setInvalidFields] = useState([]);
   const [popupTitle, setPopupTitle] = useState('');
   const [screenValidation, setScreenValidation] = useState('');
   const [popupDescription, setPopupDescription] = useState('');
@@ -82,18 +84,17 @@ function Header({ atualizaMural }) {
 
   const handleSave = async () => {
     try {
-      const { errorTypes } = validateForm(formData, screenValidation);
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
+
+      const errorMessage = validateAndSetInvalidFields(formData, screenValidation, setInvalidFields);
+      if (errorMessage) { 
+        setLoading(false) 
+        return; 
       }
 
       setLoading(true);
 
       await handleSubmit(async () => {        
         try{
-            debugger
             await inserirComunicado(formData);
             showSuccessToast("Criado com sucesso!");
             atualizaMural();
@@ -118,9 +119,9 @@ function Header({ atualizaMural }) {
       case 'Enquete':
         return <Enquete onclose={handleClosePopup} onDataChange={handleFormChange} screenValidation={setScreenValidation} updateTable={atualizaMural}/>;
       case 'Encomenda':
-        return <Encomenda formData={formData} onDataChange={handleFormChange} screenValidation={setScreenValidation} />;
+        return <Encomenda invalidFields={invalidFields} formData={formData} onDataChange={handleFormChange} screenValidation={setScreenValidation} />;
       case 'Comunicado':
-        return <Comunicado formData={formData} onDataChange={handleFormChange} screenValidation={setScreenValidation} />;
+        return <Comunicado invalidFields={invalidFields} formData={formData} onDataChange={handleFormChange} screenValidation={setScreenValidation} />;
         default:
         return null;
     }

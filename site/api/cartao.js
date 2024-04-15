@@ -46,7 +46,7 @@ export const incluirCartao = async (data) => {
     const response = await axios.post(url, data, {
       validateStatus: status => status < 500,
     });
-
+    
     if (response.status != 200) {
       throw new Error(response.data);
     }

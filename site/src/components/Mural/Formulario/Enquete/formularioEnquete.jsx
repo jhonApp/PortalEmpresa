@@ -5,6 +5,7 @@ import { StyledBoxComunicado } from '../../../../Utils/StyledDialog';
 import { IconButton, Typography, InputLabel } from '@mui/material';
 import { StyledCard, StyledCardContent, StyledCardBox, StyledIconButton } from '../../../../Utils/StyledCard';
 import { StyledButtonPrimary, StyledButtonSecundary } from '../../../../Utils/StyledButton';
+import validateAndSetInvalidFields from '../../../Formulario/useValidation';
 import { showSuccessToast, showErrorToast } from '../../../../Utils/Notification';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -17,7 +18,7 @@ import useForm from '../../../Formulario/useForm';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const FormularioEnquete = ({ onDataChange, onFieldValidationChange, formData }) => {
+const FormularioEnquete = ({ onDataChange, invalidFields, setInvalidFields, formData }) => {
   const [locale, setLocale] = useState('pt-br');
   const [formMode, setFormMode] = useState('incluir');
   const [codigoCargo, setCodigoCargo] = useState(null);
@@ -27,8 +28,6 @@ const FormularioEnquete = ({ onDataChange, onFieldValidationChange, formData }) 
     values,
     errors,
     handleChange,
-    handleValidation,
-    renderErrorMessage,
   } = useForm(
     formData,
     validateForm,
@@ -38,20 +37,14 @@ const FormularioEnquete = ({ onDataChange, onFieldValidationChange, formData }) 
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
-    handleValidation(fieldName);
     onDataChange({ ...formData, [fieldName]: value });
   };
 
   const handleAdd = async () => {
     try {
       setLoading(true);
-
-      const { errorTypes } = validateForm(formData, 'opcaoEnquete');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
-      }
+      const errorMessage = validateAndSetInvalidFields(formData, 'opcaoEnquete', setInvalidFields);
+      if (errorMessage) { return; }
 
       let updatedFormData = { ...formData };
       if (opcoes.length === 0) {
@@ -106,7 +99,6 @@ const FormularioEnquete = ({ onDataChange, onFieldValidationChange, formData }) 
                 error={errors.obs}
                 value={values.obs || ''}
                 onChange={(e) => handleFormChange('obs', e.target.value)}
-                onBlur={() => handleValidation('obs')}
               />
             </FormRow>
           </Column>
@@ -122,13 +114,12 @@ const FormularioEnquete = ({ onDataChange, onFieldValidationChange, formData }) 
                 type="text"
                 autoComplete="off"
                 name="descricao"
-                error={errors.descricao}
+                error={invalidFields.some(field => field.field === 'descricao')}
                 value={values.descricao}
                 onChange={(e) => {
                   handleChange('descricao', e.target.value);
                   handleFormChange('descricao', e.target.value);
                 }}
-                onBlur={handleValidation}
               />
             </div>
             <StyledButtonPrimary variant="contained" color="primary" onClick={handleAdd} style={{ width: 145, height: 40, marginLeft: '10px', marginTop: '20px' }}>

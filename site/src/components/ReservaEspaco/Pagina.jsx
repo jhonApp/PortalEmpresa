@@ -3,6 +3,7 @@ import { Modal, Box, Paper, InputLabel, Typography, useTheme, IconButton } from 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StyledButtonPrimary } from '../../Utils/StyledButton';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import validateAndSetInvalidFields from '../Formulario/useValidation';
 import { StyledTextField, StyledTextObs, StyledDatePicker, StyledTimePicker, FormSection, FormContainer, Column, FormRow } from '../../Utils/StyledForm';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { Image, XCircle } from 'phosphor-react';
@@ -15,8 +16,6 @@ import Calendario from './Calendario';
 import { inserirEvento } from '../../../service/eventoService';
 import { getFoto } from '../../../service/espacoService';
 
-
-
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 
@@ -26,6 +25,7 @@ const today = dayjs();
 function Pagina({ espacos, loading, setLoading }) {
   const [maxPessoaChange, setMaxPessoa] = useState('');
   const [attachment, setAttachment] = useState([]);
+  const [invalidFields, setInvalidFields] = useState([]);
   const [codigoLocal, setCodigoLocal] = useState('');
   const [locale, setLocale] = useState('pt-br');
   const [formData, setformData] = useState([]);
@@ -67,12 +67,10 @@ function Pagina({ espacos, loading, setLoading }) {
     try {
       setLoading(true);
       
-      const { errorTypes } = validateForm(formData, 'evento');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        setLoading(false);
-        return;
+      const errorMessage = validateAndSetInvalidFields(formData, 'evento', setInvalidFields);
+      if (errorMessage) { 
+        setLoading(false) 
+        return; 
       }
 
       await handleSubmit(async () => {        
@@ -211,7 +209,7 @@ function Pagina({ espacos, loading, setLoading }) {
                       margin="normal"
                       type="text"
                       autoComplete="off"
-                      error={errors.descricao}
+                      error={invalidFields.some(field => field.field === 'descricao')}
                       value={formData.descricao || ''}
                       onChange={(e) => handleFormChange('descricao', e.target.value)}
                       onBlur={(e) => handleFormChange('descricao', e.target.value)}
@@ -233,7 +231,7 @@ function Pagina({ espacos, loading, setLoading }) {
                       margin="normal"
                       type="date"
                       name="dataEvento"
-                      error={errors.dataEvento}
+                      error={invalidFields.some(field => field.field === 'dataEvento')}
                       value={formData.dataEvento || null}
                       onChange={(newValue) => {
                         handleFormChange('dataEvento', newValue);
@@ -259,7 +257,7 @@ function Pagina({ espacos, loading, setLoading }) {
                       name="horaInicio"
                       ampm={false}
                       inputFormat="HH:mm"
-                      error={errors.horaInicio}
+                      error={invalidFields.some(field => field.field === 'horaInicio')}
                       value={formData.horaInicio || null}
                       onChange={(e) => handleFormChange('horaInicio', e)}
                       onBlur={() => handleValidation('horaInicio')}
@@ -283,7 +281,7 @@ function Pagina({ espacos, loading, setLoading }) {
                       name="horaFim"
                       ampm={false}
                       inputFormat="HH:mm"
-                      error={errors.horaFim}
+                      error={invalidFields.some(field => field.field === 'horaFim')}
                       value={formData.horaFim || null}
                       onChange={(e) => handleFormChange('horaFim', e)}
                       onBlur={() => handleFormChange('horaFim')}

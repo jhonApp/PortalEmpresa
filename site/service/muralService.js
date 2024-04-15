@@ -95,6 +95,9 @@ const processarMural = async (dados, inserirFuncao, alterarFuncao) => {
       });
     }
 
+    if(dados.tipoComunicacao === 3 && dados.opcaoEnquete === undefined){
+      throw new Error('É obrigátorio criar as opções para a enquete.'); 
+    }
     formData.append('OpcaoEnquete', JSON.stringify(dados.opcaoEnquete));
 
     const responsePromise = inserirFuncao ? inserirFuncao(formData) : alterarFuncao(formData);
@@ -107,7 +110,7 @@ const processarMural = async (dados, inserirFuncao, alterarFuncao) => {
 
     return response;
   } catch (error) {
-    throw new Error('Erro ao processar comunicado: ' + error.message);
+    throw new Error('Erro: ' + error.message);
   }
 };
 

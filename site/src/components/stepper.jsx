@@ -92,7 +92,6 @@ const HorizontalLinearStepper = ({
     try {
       
       const errorMessage = validateAndSetInvalidFields(formData, screenValidation, invalidFields);
-  
       if (errorMessage) { return; }
       
       onLoadingChange(true);
