@@ -18,7 +18,7 @@ import SelectUnidade from './Selects/SelectUnidade';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const Encomenda = ({ formData, onDataChange, screenValidation }) => {
+const Encomenda = ({ invalidFields, formData, onDataChange, screenValidation }) => {
   const [locale, setLocale] = useState('pt-br');
   const [nomeArquivo, setNomeArquivo] = useState('');
   const [blocos, setBlocos] = useState({});
@@ -43,7 +43,6 @@ const Encomenda = ({ formData, onDataChange, screenValidation }) => {
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
-    handleValidation(fieldName);
     onDataChange({ ...formData, [fieldName]: value });
   };
 
@@ -110,10 +109,9 @@ const Encomenda = ({ formData, onDataChange, screenValidation }) => {
                   type="date"
                   name="dataInicial"
                   minDate={today}
-                  error={errors.dataInicial}
+                  error={invalidFields.some(field => field.field === 'dataInicial')}
                   value={formData.dataInicial || null}
                   onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
-                  onBlur={() => handleValidation('dataInicial')}
                 />
                 {renderErrorMessage('dataInicial')}
             </FormRow>
@@ -128,7 +126,7 @@ const Encomenda = ({ formData, onDataChange, screenValidation }) => {
                 margin="normal"
                 type="text"
                 autoComplete="off"
-                error={errors.titulo}
+                error={invalidFields.some(field => field.field === 'titulo')}
                 value={formData.titulo || ''}
                 onChange={(e) => handleFormChange('titulo', e.target.value)}
                 onBlur={(e) => handleFormChange('titulo', e.target.value)}
@@ -161,10 +159,9 @@ const Encomenda = ({ formData, onDataChange, screenValidation }) => {
                   type="date"
                   name="dataFim"
                   minDate={today}
-                  error={errors.dataFim}
+                  error={invalidFields.some(field => field.field === 'dataFim')}
                   value={formData.dataFim || null}
                   onChange={(newValue) => { handleFormChange('dataFim', newValue); }}
-                  onBlur={() => handleValidation('dataFim')}
                 />
                 {renderErrorMessage('dataFim')}
             </FormRow>
@@ -240,11 +237,11 @@ const Encomenda = ({ formData, onDataChange, screenValidation }) => {
             name="obs"
             style={{ width: '100%' }}
             multiline
-            error={errors.obs}
+            error={invalidFields.some(field => field.field === 'obs')}
             value={values.obs || ''}
             onChange={(e) => handleFormChange('obs', e.target.value)}
-            onBlur={() => handleValidation('obs')}
           />
+          {renderErrorMessage('obs')}
         </FormRow>
         <FormRow style={{ display: 'flex', alignItems: 'center', marginTop: 10}}>
           <Checkbox
@@ -253,7 +250,7 @@ const Encomenda = ({ formData, onDataChange, screenValidation }) => {
               '& .MuiSvgIcon-root': { color: '#C4C7D4' }
             }}
             checked={formData.envioResponsavel || false}
-            error={errors.envioResponsavel}
+            error={invalidFields.some(field => field.field === 'envioResponsavel')}
             onChange={(e) => {
               formData.envioResponsavel = e.target.checked;
               handleFormChange('envioResponsavel', e.target.checked);
@@ -269,7 +266,7 @@ const Encomenda = ({ formData, onDataChange, screenValidation }) => {
               '& .MuiSvgIcon-root': { color: '#C4C7D4' }
             }}
             checked={formData.enviarParaTodos || false}
-            error={errors.enviarParaTodos}
+            error={invalidFields.some(field => field.field === 'enviarParaTodos')}
             onChange={(e) => {
               formData.enviarParaTodos = e.target.checked;
               handleFormChange('enviarParaTodos', e.target.checked);

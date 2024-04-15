@@ -3,6 +3,7 @@ import { StyledTextField, StyledPaper, FormContainer, FormRow, BootstrapInput } 
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
+import validateAndSetInvalidFields from '../Formulario/useValidation';
 import { Box, Card, CardContent, IconButton, Typography, InputLabel} from '@mui/material';
 import { PencilSimple, TrashSimple } from 'phosphor-react';
 import { StyledButtonPrimary, StyledButtonSecundary } from '../../Utils/StyledButton';
@@ -16,6 +17,7 @@ import { inserirSetor, listarSetor, deleteSetor, alterarSetor } from '../../../s
 const ModalSetor = ({ updateSetor }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
+  const [invalidFields, setInvalidFields] = useState([]);
   const [setores, setSetor] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [codigoSetor, setCodigoSetor] = useState(null);
@@ -86,11 +88,10 @@ const ModalSetor = ({ updateSetor }) => {
     try {
       handleLoadingChange(true);
 
-      const { errorTypes } = validateForm(formData, 'setor');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
+      const errorMessage = validateAndSetInvalidFields(formData, 'departamento', setInvalidFields);
+      if (errorMessage) { 
+        handleLoadingChange(false) 
+        return; 
       }
 
       await handleSubmit(async () => {        
@@ -124,11 +125,10 @@ const ModalSetor = ({ updateSetor }) => {
     try {
       handleLoadingChange(true);
 
-      const { errorTypes } = validateForm(formData, 'setor');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
+      const errorMessage = validateAndSetInvalidFields(formData, 'departamento', setInvalidFields);
+      if (errorMessage) { 
+        handleLoadingChange(false) 
+        return; 
       }
 
       await handleSubmit(async () => {        
@@ -173,14 +173,14 @@ const ModalSetor = ({ updateSetor }) => {
                 autoComplete="off"
                 name="nome"
                 inputRef={nomeInputRef}
-                error={errors.nome}
+                error={invalidFields.some(field => field.field === 'nome')}
                 value={values.nome}
                 onChange={(e) => {
                   handleChange('nome', e.target.value);
                   handleFormChange({ nome: e.target.value });
                 }}
-                onBlur={handleValidation}
               />
+              {renderErrorMessage('nome')}
           </div>
           <StyledButtonPrimary variant="contained" color="primary" onClick={formMode === 'incluir' ? handleSave : handleAlterar} style={{ width: 145, height: 40, marginLeft: '10px', marginTop: '20px' }}>
             {handleSubmitButtonLabel}

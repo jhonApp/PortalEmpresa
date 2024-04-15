@@ -18,7 +18,7 @@ import SelectUnidade from '../Selects/SelectUnidade';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
+const Formulario = ({ onDataChange, invalidFields, formData }) => {
   const [locale, setLocale] = useState('pt-br');
   const [nomeArquivo, setNomeArquivo] = useState('');
   const [blocos, setBlocos] = useState({});
@@ -37,8 +37,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
   );
 
   const handleFormChange = (fieldName, value) => {
-    handleChange(fieldName, value);
-    handleValidation(fieldName);
+    handleChange(fieldName, value);;
     onDataChange({ ...formData, [fieldName]: value });
   };
 
@@ -106,10 +105,9 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
                   type="date"
                   name="dataInicial"
                   minDate={today}
-                  error={errors.dataInicial}
+                  error={invalidFields.some(field => field.field === 'dataInicial')}
                   value={formData.dataInicial || null}
                   onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
-                  onBlur={() => handleValidation('dataInicial')}
                 />
                 {/* {renderErrorMessage('dataInicial')} */}
             </FormRow>
@@ -124,7 +122,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
                 margin="normal"
                 type="text"
                 autoComplete="off"
-                error={errors.titulo}
+                error={invalidFields.some(field => field.field === 'titulo')}
                 value={formData.titulo || ''}
                 onChange={(e) => handleFormChange('titulo', e.target.value)}
                 onBlur={(e) => handleFormChange('titulo', e.target.value)}
@@ -157,10 +155,9 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
                   type="date"
                   name="dataFim"
                   minDate={today}
-                  error={errors.dataFim}
+                  error={invalidFields.some(field => field.field === 'dataFim')}
                   value={formData.dataFim || null}
                   onChange={(newValue) => { handleFormChange('dataFim', newValue); }}
-                  onBlur={() => handleValidation('dataFim')}
                 />
                 {/* {renderErrorMessage('dataFim')} */}
             </FormRow>
@@ -231,7 +228,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               '& .MuiSvgIcon-root': { color: '#C4C7D4' }
             }}
             checked={formData.envioResponsavel || false}
-            error={errors.envioResponsavel}
+            error={invalidFields.some(field => field.field === 'envioResponsavel')}
             onChange={(e) => {
               formData.envioResponsavel = e.target.checked;
               handleFormChange('envioResponsavel', e.target.checked);
@@ -247,7 +244,7 @@ const Formulario = ({ onDataChange, onFieldValidationChange, formData }) => {
               '& .MuiSvgIcon-root': { color: '#C4C7D4' }
             }}
             checked={formData.enviarParaTodos || false}
-            error={errors.enviarParaTodos}
+            error={invalidFields.some(field => field.field === 'enviarParaTodos')}
             onChange={(e) => {
               formData.enviarParaTodos = e.target.checked;
               handleFormChange('enviarParaTodos', e.target.checked);

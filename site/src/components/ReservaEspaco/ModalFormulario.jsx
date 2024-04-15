@@ -15,15 +15,12 @@ import 'dayjs/locale/pt-br';
 dayjs.locale('pt-br');
 const today = dayjs();
 
-const Formulario = ({ onDataChange, data }) => {
+const Formulario = ({ onDataChange, data, invalidFields }) => {
   const [locale, setLocale] = useState('pt-br');
   const [nomeArquivo, setNomeArquivo] = useState('');
   const {
     values,
-    errors,
     handleChange,
-    handleValidation,
-    renderErrorMessage,
   } = useForm(
     data,
     validateForm,
@@ -32,7 +29,6 @@ const Formulario = ({ onDataChange, data }) => {
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
-    handleValidation(fieldName);
     onDataChange({ ...values, [fieldName]: value });
   };
 
@@ -56,7 +52,6 @@ const Formulario = ({ onDataChange, data }) => {
     showSuccessToast("Anexado com sucesso.");
   };
   
-
   const buttonFileStyle = {
     padding: '10px',
     borderRadius: '5px',
@@ -89,7 +84,7 @@ const Formulario = ({ onDataChange, data }) => {
                 margin="normal"
                 type="text"
                 autoComplete="off"
-                error={errors.descricao}
+                error={invalidFields.some(field => field.field === 'descricao')}
                 value={values.descricao || ''}
                 onChange={(e) => handleFormChange('descricao', e.target.value)}
                 onBlur={(e) => handleFormChange('descricao', e.target.value)}
@@ -106,7 +101,7 @@ const Formulario = ({ onDataChange, data }) => {
                 margin="normal"
                 type="text"
                 autoComplete="off"
-                error={errors.localizacao}
+                error={invalidFields.some(field => field.field === 'localizacao')}
                 value={values.localizacao || ''}
                 onChange={(e) => handleFormChange('localizacao', e.target.value)}
                 onBlur={(e) => handleFormChange('localizacao', e.target.value)}
@@ -140,7 +135,7 @@ const Formulario = ({ onDataChange, data }) => {
                 margin="normal"
                 type="text"
                 autoComplete="off"
-                error={errors.descricaoResumida}
+                error={invalidFields.some(field => field.field === 'descricaoResumida')}
                 value={values.descricaoResumida || ''}
                 onChange={(e) => handleFormChange('descricaoResumida', e.target.value)}
                 onBlur={(e) => handleFormChange('descricaoResumida', e.target.value)}
@@ -157,7 +152,7 @@ const Formulario = ({ onDataChange, data }) => {
                 margin="normal"
                 type="number"
                 autoComplete="off"
-                error={errors.maxPessoa}
+                error={invalidFields.some(field => field.field === 'maxPessoa')}
                 value={values.maxPessoa || ''}
                 onChange={(e) => handleFormChange('maxPessoa', e.target.value)}
                 onBlur={(e) => handleFormChange('maxPessoa', e.target.value)}

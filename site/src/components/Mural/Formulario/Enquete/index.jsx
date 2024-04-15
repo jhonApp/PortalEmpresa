@@ -10,8 +10,8 @@ import dayjs from 'dayjs';
 
 function Enquete({ onclose, onDataChange, screenValidation, action, updateTable }) {
   const [formData, setFormData] = useState({ files: [], tipoComunicacao: 3 });
-  const [invalidFields, setInvalidFields] = useState({});
   const steps = ['Condomíno', 'Enquete'];
+  const [invalidFields, setInvalidFields] = useState([]);
   const [loading, setLoading] = useState(false);
   const [visible, setVisibleAlert] = useState(false);
   const [createFunction, setCreateFunction] = useState(null);
@@ -47,6 +47,7 @@ function Enquete({ onclose, onDataChange, screenValidation, action, updateTable 
         formData={formData}
         handleClose={onclose}
         onLoadingChange={setLoading}
+        invalidFields={setInvalidFields}
         screenValidation={"enquete"}
         visibleAlert={false}
         renderStepContent={(step) => {
@@ -56,7 +57,7 @@ function Enquete({ onclose, onDataChange, screenValidation, action, updateTable 
                 <>
                   <Formulario
                     onDataChange={handleFormChange}
-                    onFieldValidationChange={setInvalidFields}
+                    invalidFields={invalidFields}
                     formData={formData}
                   />
                   <Progress isVisible={loading} />
@@ -67,7 +68,8 @@ function Enquete({ onclose, onDataChange, screenValidation, action, updateTable 
                 <>
                   <FormularioEnquete
                     onDataChange={handleFormChange}
-                    onFieldValidationChange={setInvalidFields}
+                    invalidFields={invalidFields}
+                    setInvalidFields={setInvalidFields}
                     formData={formData}
                   />
                   <Progress isVisible={loading} />

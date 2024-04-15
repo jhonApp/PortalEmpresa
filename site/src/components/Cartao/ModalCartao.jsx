@@ -3,6 +3,7 @@ import { StyledTextField, StyledPaper, FormContainer, FormRow, BootstrapInput } 
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
+import validateAndSetInvalidFields from '../Formulario/useValidation';
 import { Box, Card, CardContent, IconButton, Typography, InputLabel } from '@mui/material';
 import { StyledBox } from '../../Utils/StyledDialog';
 import { StyledCard, StyledCardContent, StyledCardBox, StyledIconButton } from '../../Utils/StyledCard';
@@ -17,6 +18,7 @@ import { inserirCartao, listarCartao, deleteCartao, alterarCartao } from '../../
 const ModalCartao = ({ atualizaCartao }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
+  const [invalidFields, setInvalidFields] = useState([]);
   const [cartoes, setCartoes] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [codigoCartao, setCodigoCartao] = useState(null);
@@ -106,12 +108,11 @@ const ModalCartao = ({ atualizaCartao }) => {
   const handleAlterar = async () => {
     try {
       handleLoadingChange(true);
-      const { errorTypes } = validateForm(formData, 'cartao');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha o campo obrigatório ou realize a alteração conforme esperado.');
-        handleLoadingChange(false);
-        return;
+
+      const errorMessage = validateAndSetInvalidFields(formData, 'cartao', setInvalidFields);
+      if (errorMessage) { 
+        handleLoadingChange(false) 
+        return; 
       }
 
       await handleSubmit(async () => {        
@@ -139,12 +140,10 @@ const ModalCartao = ({ atualizaCartao }) => {
     try {
       handleLoadingChange(true);
 
-      const { errorTypes } = validateForm(formData, 'cartao');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        handleLoadingChange(false);
-        return;
+      const errorMessage = validateAndSetInvalidFields(formData, 'cartao', setInvalidFields);
+      if (errorMessage) { 
+        handleLoadingChange(false) 
+        return; 
       }
 
       await handleSubmit(async () => {        
@@ -188,13 +187,12 @@ const ModalCartao = ({ atualizaCartao }) => {
               autoComplete="off"
               name="numero"
               inputRef={numeroInputRef}
-              error={errors.numero}
+              error={invalidFields.some(field => field.field === 'numero')}
               value={values.numero}
               onChange={(e) => {
                 handleChange('numero', e.target.value);
                 handleFormChange({ numero: e.target.value });
               }}
-              onBlur={handleValidation}
             />
           </div>
           <StyledButtonPrimary variant="contained" color="primary" onClick={formMode === 'incluir' ? handleSave : handleAlterar} style={{ width: 145, height: 40, marginLeft: '10px', marginTop: '20px' }}>

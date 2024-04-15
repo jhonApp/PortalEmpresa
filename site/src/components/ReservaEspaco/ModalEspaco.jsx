@@ -3,6 +3,7 @@ import { StyledPaper, FormContainer, FormRow } from '../../Utils/StyledForm';
 import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
+import validateAndSetInvalidFields from '../Formulario/useValidation';
 import PopupDialog from '../dialog';
 import Formulario from './ModalFormulario'
 import { IconButton, Typography } from '@mui/material';
@@ -19,6 +20,7 @@ import { inserirEspaco, listarEspaco, deleteEspaco, alterarEspaco } from '../../
 const ModalEspaco = ({ onClose, espacos, atualizaEspacos, title, description }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
+  const [invalidFields, setInvalidFields] = useState([]);
   const [onUpdate, setOnUpdate] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -84,12 +86,10 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspacos, title, description }) 
   const handleSave = async () => {
     try {
       setLoading(true);
-      
-      const { errorTypes } = validateForm(formData, 'espaco');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
-        return;
+      const errorMessage = validateAndSetInvalidFields(formData, 'espaco', setInvalidFields);
+      if (errorMessage) { 
+        setLoading(false) 
+        return; 
       }
 
       await handleSubmit(async () => {        
@@ -139,7 +139,7 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspacos, title, description }) 
   };
 
   const renderContent = () => {
-    return <Formulario onDataChange={handleFormChange} data={formData} />;
+    return <Formulario onDataChange={handleFormChange} data={formData} invalidFields={invalidFields} />;
   };
 
   const renderActionButton = () => {

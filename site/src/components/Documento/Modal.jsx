@@ -5,6 +5,7 @@ import { validateForm } from '../Formulario/validation';
 import useForm from '../Formulario/useForm';
 import { IconButton, Typography, InputLabel, Input, Button } from '@mui/material';
 import { StyledBox } from '../../Utils/StyledDialog';
+import validateAndSetInvalidFields from '../Formulario/useValidation';
 import { StyledCard, StyledCardContent, StyledCardBox, StyledIconButton } from '../../Utils/StyledCard';
 import TextWithEllipsis from '../../Utils/Helpers';
 import { Export } from 'phosphor-react';
@@ -19,6 +20,7 @@ const ModalDocumento = ({ atualizaDocumento, documentoData }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [open, setOpen] = React.useState(false);
+  const [invalidFields, setInvalidFields] = useState([]);
   const [nomeArq, setNomeArquivo] = useState('');
   const [codigoDocumento, setCodigoDocumento] = useState(null);
   const [digitado, setDigitado] = useState('');
@@ -113,14 +115,13 @@ const ModalDocumento = ({ atualizaDocumento, documentoData }) => {
   const handleSave = async () => {
     try {
       handleLoadingChange(true);
-      const { errorTypes } = validateForm(formData, 'documento');
-      const hasErrors = Object.values(errorTypes).some((error) => error.errorFound);
-      if (hasErrors) {
-        showErrorToast('Por favor, preencha os campos obrigatórios');
+
+      if(nomeArq === ""){
+        showErrorToast("Nenhum arquivo selecionado.");
         handleLoadingChange(false);
         return;
       }
-  
+
       await handleSubmit(async () => {        
         try {
           const codigoDocumento = await inserirDocumento(formData);
@@ -194,16 +195,16 @@ const ModalDocumento = ({ atualizaDocumento, documentoData }) => {
       <FormContainer>
         <FormRow style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
             <div>
-                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                      Anexos
-                  </InputLabel>                  
-                  <Input type="file" id="file-input" sx={{ display: 'none' }} onChange={handleFileChange} />
-                  <label htmlFor="file-input">
-                    <Button component="span" style={buttonFileStyle} variant="contained">
-                      <Export size={25} color="#000"/>
-                      {nomeArq ? nomeArq : 'Clique aqui para selecionar uma foto'}
-                    </Button>
-                  </label>
+              <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+                  Anexos
+              </InputLabel>                  
+              <Input type="file" id="file-input" sx={{ display: 'none' }} onChange={handleFileChange} />
+              <label htmlFor="file-input">
+                <Button component="span" style={buttonFileStyle} variant="contained">
+                  <Export size={25} color="#000"/>
+                  {nomeArq ? nomeArq : 'Clique aqui para selecionar uma foto'}
+                </Button>
+              </label>
             </div>
           <StyledButtonPrimary variant="contained" color="primary" onClick={formMode === 'incluir' ? handleSave : handleAlterar} style={{ width: 145, height: 40, marginLeft: '10px', marginTop: '30px' }}>
             {handleSubmitButtonLabel}
