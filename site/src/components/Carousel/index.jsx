@@ -4,7 +4,7 @@ import Carousel from "react-material-ui-carousel";
 export default function Test3({ attachment }) {
   return (
     <div className="Example3" style={{ marginTop: "50px", color: "#494949" }}>
-      <Carousel animation="fade" navButtonsAlwaysVisible autoPlay={false}>
+      <Carousel style={{ left: "57%" }} animation="fade" navButtonsAlwaysVisible autoPlay={false}>
         {attachment.map((anexo, index) => (
           <Paper key={index} style={{ justifyContent: "center", display: "flex", boxShadow: 'none', height: 500 }} className="HeightItem">
             {renderAttachment(anexo)}

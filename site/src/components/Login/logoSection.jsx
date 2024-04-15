@@ -25,9 +25,9 @@ const StyledImageLogo = styled('img')({
 
 const StyledImage = styled('img')({
   position:'fixed',
-  marginTop: '125px',
-  height: '750px',
-  width: '750px',
+  marginTop: '13.5%',
+  height: '70%',
+  width: '70%',
 });
 
 const LogoSection = () => (
