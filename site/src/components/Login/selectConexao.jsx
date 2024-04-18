@@ -3,28 +3,25 @@ import { obterConexao } from '../../../service/urlService';
 import { Autocomplete, TextField } from '@mui/material';
 import { styled } from '@mui/system';
 
-function SelectConexao({ label, onChange }) {
+const StyledSelectField = styled(Autocomplete)({
+  borderRadius: '20px',
+  background: 'transparent',
+  width: '100%',
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '20px',
+    fontSize: '15px',
+  },
+  '& .MuiOutlinedInput-input': {
+    padding: '17px',
+  },
+  '& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input': {
+    fontSize: '12px',
+  }
+});
+
+function SelectConexao({ onChange }) {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState(null);
-
-  const StyledSelectField = styled(Autocomplete)({
-    borderRadius: '20px',
-    background: 'transparent',
-    width: '100%',
-    '& .MuiOutlinedInput-root': {
-      borderRadius: '20px',
-      fontSize: '15px',
-    },
-    '& .MuiInputLabel-root': {
-      fontSize: '0.9rem',
-    },
-    '& .MuiOutlinedInput-input': {
-      padding: '17px',
-    },
-    '& .MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input': {
-      fontSize: '12px',
-    }
-  });
 
   useEffect(() => {
     const fetchCondominios = async () => {
@@ -42,22 +39,23 @@ function SelectConexao({ label, onChange }) {
 
   return (
     <StyledSelectField
-      label={label}
-      options={options.map((option) => ({ label: option.nome, value: option.conexao }))}
+      disablePortal
+      id="combo-box-demo"
+      options={options}
+      getOptionLabel={(option) => option.nome}
       onChange={(event, newValue) => {
         setValue(newValue);
-        onChange('condominio', newValue ? newValue.value : '');
+        onChange(event, newValue);
       }}
-      value={value}
+      value={value} 
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Condimínio"
-          variant="outlined"
+          label="Condomínio"
         />
       )}
     />
   );
 }
 
-export default SelectConexao;
+export default React.memo(SelectConexao);

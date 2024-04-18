@@ -32,6 +32,7 @@ function Dashboard() {
     try {
       const data = await getNaoVisualizados(setMuralData, setLoading, setValid);
       setOpenPopups(new Array(data.length).fill(true));
+      console.log(data);
     } catch (error) {
       console.error('Erro ao exibir os comunicados: ', error);
     }

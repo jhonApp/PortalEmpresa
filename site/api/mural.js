@@ -81,6 +81,25 @@ export const alterarVisualizacao = async (codigoComunicado, codigoUsuario) => {
   }
 };
 
+export const alterarRecebimento = async (codigoComunicado, codigoUsuario) => {
+  try {
+    if (!codigoUsuario) {
+      throw new Error('O código do usuário são obrigatórios para realizar a consulta.');
+    }
+
+    const response = await axios.post(`${API_URL}/registrarRecebimento?codigoComunicado=${codigoComunicado}&codigoUsuario=${codigoUsuario}`);
+
+    if (response.status !== 200) {
+      throw new Error(response.data);
+    }
+
+    // Retorna os dados obtidos
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const incluirRecebimento = async (codigoUsuario, codigoComunicado) => {
   try {
     const response = await axios.post(`${API_URL}/registrarVisualizacao?codigoComunicado=${codigoComunicado}&codigoUsuario=${codigoUsuario}`);
@@ -96,23 +115,17 @@ export const incluirRecebimento = async (codigoUsuario, codigoComunicado) => {
   }
 };
 
-export const inserirVotoEnquete = async (formData) => {
+export const inserirVotoEnquete = async (codigoUsuario, codigoComunicado, opcaoEnquete) => {
   try {
-    if (!formData) {
-      throw new Error('O valor está nulo.');
-    }
-
-    const url = `${API_URL}/inserirVoto`;
-
-    const response = await axios.post(url, formData, {
-      validateStatus: status => status < 500,
-    });
+    debugger
+    const response = await axios.post(`${API_URL}/registrarVoto?codigoComunicado=${codigoComunicado}&codigoUsuario=${codigoUsuario}&opcaoVoto=${opcaoEnquete}`);
 
     if (response.status !== 200) {
       throw new Error(response.data);
     }
 
-    return response;
+    // Retorna os dados obtidos
+    return response.data;
   } catch (error) {
     throw error;
   }

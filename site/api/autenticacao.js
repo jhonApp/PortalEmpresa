@@ -3,6 +3,11 @@ import {createDataStorage} from '../service/storageService';
 
 export const autenticacao = async (email, password, condominioUrl) => {
   try {
+
+    if (!condominioUrl) {
+      throw new Error('A seleção do condomínio é obrigatório.');
+    }
+
     if (!email || !password) {
       throw new Error('Email e senha são campos obrigatórios.');
     }
