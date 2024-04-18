@@ -1,5 +1,5 @@
 import { getData } from './storageService';
-import { obterMural, incluirComunicado, obterNaoVisualizados, alterarVisualizacao, incluirRecebimento } from "../api/mural";
+import { obterMural, incluirComunicado, alterarVisualizacao, alterarRecebimento, inserirVotoEnquete } from "../api/mural";
 import { obterAnexo } from "../api/anexo";
 
 export const getMural = async (setMuralData, setLoading, setValid) => {
@@ -24,6 +24,7 @@ export const getNaoVisualizados = async (setMuralData, setLoading, setValid) => 
 
     const storage = getData();
     const data = await obterMural(storage.codigo);
+    console.log(data)
     const registrosFiltrados = data.filter(registro => registro.status === 'Não Visualizado');
 
     // Mapear os tipos de comunicado para os tipos de exibição correspondentes
@@ -39,7 +40,6 @@ export const getNaoVisualizados = async (setMuralData, setLoading, setValid) => 
           return registro;
       }
     });
-    
     setMuralData(muralAtualizado);
     setLoading(false);
     setValid(true);
@@ -126,27 +126,29 @@ export const registrarVisualizacao = async (codigoComunicado) => {
     return data;
 
   } catch (error) {
-    console.error('Erro ao obter dados de cargo:', error);
-    setLoading(false);
-    setValid(false);
+    throw error;
   }
 };
 
-const enqueteVoto = async (data) => {
+export const registrarRecebimento = async (codigoComunicado) => {
   try {
     const storage = getData();
+    const data = await alterarRecebimento(codigoComunicado, storage.codigo);
 
-    const voto = {
-      CodigoEnquete: data.enquete,
-      CodigoOpcao: data.opcao,
-      CodigoUsuario: storage.codigo
-    }
-
-    const response = await inserirVotoEnquete(voto);
+    return data;
 
   } catch (error) {
-    console.error('Erro ao incluir recebimento:', error);
-    setLoading(false);
-    setValid(false);
+    throw error;
+  }
+};
+
+export const enqueteVoto = async (codigoComunicado, opcaoEnquete) => {
+  try {
+
+    const storage = getData();
+    return await inserirVotoEnquete(storage.codigo, codigoComunicado, opcaoEnquete);
+
+  } catch (error) {
+    throw error;
   }
 };

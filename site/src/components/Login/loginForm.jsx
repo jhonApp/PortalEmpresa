@@ -8,7 +8,7 @@ import {
   InputLabel,
 } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import Progress from '../../Utils/LoadingProgress';
+import { showSuccessToast, showErrorToast } from '../../Utils/Notification';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 import { autenticacao } from '../../../api/autenticacao';
@@ -25,8 +25,9 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SelectConexao from './selectConexao';
+import CircularProgress from '@mui/material/CircularProgress';
 
-const StyledButton = styled(Button)({
+const StyledButton = styled(Button)(({ theme, disabled }) => ({
   background: '#242c48',
   color: '#fff',
   border: '1px solid rgba(0, 0, 0, 0.23)',
@@ -34,10 +35,15 @@ const StyledButton = styled(Button)({
   borderRadius: '20px',
   boxShadow: 'none',
   '&:hover': {
-    background: 'transparent',
-    color: 'rgba(0, 0, 0, 0.87)',
+    background: '#242c48',
+    color: '#fff',
   },
-});
+  '&.Mui-disabled': {
+    background: '#242c48',
+    color: 'rgba(0, 0, 0, 0.26)',
+    boxShadow: 'none',
+  }
+}));
 
 const StyledTextField = styled(TextField)({
   borderRadius: '20px',
@@ -135,7 +141,8 @@ const LoginForm = () => {
   }, [rememberMe, savedCredentials]);
 
   const handleLogin = async () => {
-    await handleSubmit(async () => {
+    try {
+      setLoading(true);
       await autenticacao(values.email, values.password, values.condominio);
       if (rememberMe) {
         setSavedCredentials({ email: values.email, password: values.password, condominio: values.condominio });
@@ -144,10 +151,17 @@ const LoginForm = () => {
         setSavedCredentials(null);
         localStorage.removeItem('savedCredentials');
       }
-
-      navigate('/system/');
-    });
+      setTimeout(() => {
+        navigate('/system/');
+        setLoading(false);
+      }, 5000);
+    } catch (error) {
+      showErrorToast(error.message);
+      setLoading(false);
+    }
   };
+  
+  
 
   const handleMessageClose = () => {
     clearMessage();
@@ -167,7 +181,12 @@ const LoginForm = () => {
       handleLogin();
     }
   };
-  console.log(values);
+
+  const handleOptionChange = (event, newValue) => {
+    console.log(newValue.conexao)
+    handleChange('condominio', newValue.conexao);
+  };
+
   return (
     <StyledPaper elevation={3} style={{margin:'0 auto'}}>
       <StyledTitle variant="h2">Login</StyledTitle>
@@ -178,10 +197,7 @@ const LoginForm = () => {
       <FormContainer>
         {/*Condominio*/}
         <FormSection>
-          <SelectConexao
-            label="condomínio"
-            onChange={(event, newValue) => handleChange('condominio', newValue)}
-          />
+          <SelectConexao onChange={handleOptionChange} />
         </FormSection>
 
         {/*Email*/}
@@ -231,16 +247,27 @@ const LoginForm = () => {
           label="Lembrar de mim" 
         />
       </FormSection>
-      <StyledButton variant="contained" fullWidth onClick={handleLogin}>
+      <StyledButton
+          fullWidth
+          variant="contained"
+          disabled={loading}
+          onClick={handleLogin}
+        >
         Entrar
+        {loading && (
+        <CircularProgress
+          size={24}
+          sx={{
+            color: '#fff',
+            position: 'absolute',
+          }}
+        />
+      )}
       </StyledButton>
-
+      
       <Typography variant="body2" color="textSecondary" style={{ marginTop: '16px' }}>
         Copyright Grupo Detk 2024
       </Typography>
-
-      <Message type={messageType} message={message} onClose={handleMessageClose} />
-      <Progress isVisible={loading} />
     </StyledPaper>
   )
 };

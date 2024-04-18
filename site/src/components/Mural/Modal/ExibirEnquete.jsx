@@ -1,39 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyledFormControlLabel, StyledPaper } from '../../../Utils/StyledForm';
-import { validateForm } from '../../Formulario/validation';
-import { RadioGroup, Typography, Link, Radio, Button, Modal, Box, IconButton } from '@mui/material';
+import { RadioGroup, Typography, Link, Radio, Modal, Box, IconButton } from '@mui/material';
 import { getAnexo } from '../../../../service/muralService';
 import { XCircle } from 'phosphor-react';
-import useForm from '../../Formulario/useForm';
 import Carousel from '../../Carousel';
-import InputMask from 'react-input-mask';
 
-const ExibiEnquete = ({ codigoComunicado, enquetes, sub, description, onDataChange, onFieldValidationChange, formData }) => {
-  const {
-    values,
-    errors,
-    handleChange,
-    handleValidation,
-    renderErrorMessage,
-  } = useForm(
-    formData,
-    validateForm,
-    'agendamento'
-  );
-
+const ExibiEnquete = ({ codigoComunicado, enquetes, sub, description, opcaoEnquete }) => {
   const [attachment, setAttachment] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const labelStyle = {
     fontSize: '16px',
     fontWeight: 600
-  };
-
-  const handleFormChange = (fieldName, value) => {
-    handleChange(fieldName, value);
-    const isValid = handleValidation(fieldName);
-    onDataChange({ ...values, [fieldName]: value });
-    onFieldValidationChange(isValid);
   };
 
   const handleAttachmentClick = async () => {
@@ -55,6 +34,24 @@ const ExibiEnquete = ({ codigoComunicado, enquetes, sub, description, onDataChan
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+  
+  const handleOptionChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedOption(selectedValue);
+    opcaoEnquete(selectedValue);
+  };
+
+  useEffect(() => {
+    const savedOption = enquetes.find(enquete => {
+      console.log(enquete);
+      return enquete.opcaoVoto !== 0;
+    });
+    
+    if (savedOption) {
+      setSelectedOption(savedOption.opcao);
+    }
+    
+  }, []);
 
   return (
     <StyledPaper sx={{ background: '#FAFAFA' }} elevation={1}>
@@ -63,14 +60,20 @@ const ExibiEnquete = ({ codigoComunicado, enquetes, sub, description, onDataChan
       </Typography>
       <StyledPaper sx={{ marginTop: 1, background: '#F5F5F5', border: '1px solid #ABACB2', padding: '10px', textAlign: 'start' }}>
         <div variant="h3" style={{ margin: 12}}>
-          <RadioGroup
+        <RadioGroup
             aria-labelledby="status-radio"
             name="status-radio"
+            value={selectedOption}
+            onChange={handleOptionChange}
           >
               {enquetes.map((enquete, index) => (
-                <StyledFormControlLabel key={index} value={enquete.opcao} control={<Radio />} label={<Typography style={labelStyle}>{enquete.descricao}</Typography>} />
+                <StyledFormControlLabel 
+                  key={index}
+                  value={enquete.opcao}
+                  control={<Radio />} 
+                  label={<Typography style={labelStyle}>{enquete.descricao}</Typography>} />
               ))}
-          </RadioGroup>
+        </RadioGroup>
         </div>
       </StyledPaper>
       <Link variant="h6" component="h7" style={{ color: '#0000EE', fontWeight: 600, float: 'left', lineHeight: '2.6', textDecoration: 'none', cursor: 'pointer', fontSize: 16, textAlign: 'start' }} onClick={handleAttachmentClick}>

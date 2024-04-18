@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import ExibiEncomenda from './Modal/ExibiEncomenda';
 import ExibiComunicado from './Modal/ExibiComunicado'
@@ -8,17 +8,19 @@ import { Dialog, DialogContent, DialogActions , Button, Paper, useTheme } from '
 import { XCircle } from 'phosphor-react';
 import { StyledDialog } from '../../Utils/StyledDialog';
 import { StyledButtonPrimary, StyledButtonSecundary } from '../../Utils/StyledButton';
-import { registrarVisualizacao } from '../../../service/muralService';
+import { registrarVisualizacao, registrarRecebimento, enqueteVoto } from '../../../service/muralService';
 
 function PopupDialog({ open, handleClose, atualizaMural, codigoComunicado, title, sub, description, type, enquetes }) {
   const theme = useTheme();
+  const [confirmCheck, setConfirmCheck] = useState(false);
+  const [opcaoEnquete, setOpcaoEnquete] = useState('');
 
   const renderContent = () => {
     switch (type) {
       case 'ExibirEnquete':
-        return <ExibiEnquete codigoComunicado={codigoComunicado} enquetes={enquetes} sub={sub} description={description} onClose={handleClose} />;
+        return <ExibiEnquete codigoComunicado={codigoComunicado} enquetes={enquetes} sub={sub} description={description} opcaoEnquete={setOpcaoEnquete} />;
       case 'ExibirComunicado':
-        return <ExibiComunicado codigoComunicado={codigoComunicado} sub={sub} description={description} onClose={handleClose} />;
+        return <ExibiComunicado codigoComunicado={codigoComunicado} sub={sub} description={description} confirmCheck={setConfirmCheck} />;
       case 'ExibirEncomenda':
         return <ExibiEncomenda codigoComunicado={codigoComunicado} sub={sub} description={description} onClose={handleClose} />;
         default:
@@ -28,14 +30,42 @@ function PopupDialog({ open, handleClose, atualizaMural, codigoComunicado, title
 
   const handleVisualizacao = async () => {
     try {
+      if (!codigoComunicado) {
+        throw new Error("Falha ao registrar visualização: Código do comunicado não está definido.");
+      }
       
-      if (!codigoComunicado) return;
+      if(type == "ExibirComunicado" && !confirmCheck){ handleClose(); return; }
+
       await registrarVisualizacao(codigoComunicado);
-      // showSuccessToast("Visualização alterada");
       atualizaMural();
       handleClose();
     } catch (error) {
       showErrorToast(error.message);
+      handleClose();
+    }
+  };
+
+  const handleRecebimento = async () => {
+    try {
+      await registrarRecebimento(codigoComunicado);
+      atualizaMural();
+      handleClose();
+    } catch (error) {
+      showErrorToast(error.message);
+      handleClose();
+    }
+  };
+
+  const handleVoto = async () => {
+    try {
+      await enqueteVoto(codigoComunicado, opcaoEnquete);
+      await registrarVisualizacao(codigoComunicado);
+      atualizaMural();
+      showSuccessToast("Voto realizado com sucesso.");
+      handleClose();
+    } catch (error) {
+      showErrorToast(error.message);
+      handleClose();
     }
   };
   
@@ -44,11 +74,14 @@ function PopupDialog({ open, handleClose, atualizaMural, codigoComunicado, title
       'ExibirEncomenda': (
         <div>
           <StyledButtonSecundary autoFocus onClick={handleVisualizacao}>Cancelar</StyledButtonSecundary>
-          <StyledButtonPrimary onClick={handleVisualizacao} sx={{mr: 2, width: '230px'}}>Já recebi a encomenda</StyledButtonPrimary>
+          <StyledButtonPrimary onClick={handleRecebimento} sx={{mr: 2, width: '230px'}}>Já recebi a encomenda</StyledButtonPrimary>
         </div>
       ),
       'ExibirEnquete': (
-        <StyledButtonPrimary autoFocus onClick={handleVisualizacao}>Voltar</StyledButtonPrimary>
+        <div>
+          <StyledButtonSecundary autoFocus onClick={handleVisualizacao}>Voltar</StyledButtonSecundary>
+          <StyledButtonPrimary autoFocus onClick={handleVoto} sx={{mr: 2}}>Votar</StyledButtonPrimary>
+        </div>
       ),
       default: (
         <StyledButtonPrimary autoFocus onClick={handleVisualizacao}>Fechar</StyledButtonPrimary>
