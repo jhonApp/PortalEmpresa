@@ -57,19 +57,24 @@ export const listarCartao = async () => {
 };
 
 export const getCartao = async (setCartaoData, setLoading, setValid) => {
-    try {
-      setLoading(true);
-  
-      const dataCartao = await listarCartao();
-      setCartaoData(dataCartao);
-  
-      setLoading(false);
-      setValid(true);
-    } catch (error) {
-      console.error('Erro ao obter dados do cartão: ', error);
-      setLoading(false);
-      setValid(false);
-    }
+  try {
+    setLoading(true);
+
+    const dataCartao = await listarCartao();
+
+    const cartoesFormatados = dataCartao.map(cartao => ({
+      ...cartao,
+      nomeUsuario: cartao.nomeUsuario ? formatarNome(cartao.nomeUsuario.trim()) : ''
+    }));
+
+    setCartaoData(cartoesFormatados);
+
+    setLoading(false);
+    setValid(true);
+  } catch (error) {
+    setLoading(false);
+    setValid(false);
+  }
 };
 
 export const alterarCartao = async (dados) => {
@@ -96,4 +101,10 @@ export const alterarCartao = async (dados) => {
   } catch (error) {
     throw new Error('Erro ao alterar setor: ' + error.message);
   }
+};
+
+const formatarNome = (nome) => {
+  return nome
+    .toLowerCase()
+    .replace(/\b\w/g, c => c.toUpperCase());
 };
