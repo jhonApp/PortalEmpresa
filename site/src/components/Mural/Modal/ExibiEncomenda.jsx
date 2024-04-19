@@ -59,7 +59,7 @@ const ExibiEncomenda = ({ codigoComunicado, sub, description, onDataChange, onFi
           {"Clica aqui para ver o anexo"}
         </Link>
         <Modal open={openModal} onClose={handleCloseModal}>
-          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '35%', bgcolor: 'background.paper', boxShadow: 24, p: 5, borderRadius: '20px' }}>
+          <Box sx={{ position: 'absolute', top: '50%', left: '57%', transform: 'translate(-50%, -50%)', width: '35%', bgcolor: 'background.paper', boxShadow: 24, p: 5, borderRadius: '20px' }}>
             <IconButton onClick={handleCloseModal} style={{ position: 'absolute', top: 0, right: 0 }}>
               <XCircle size={28} color="#FF0B0B" />
             </IconButton>
