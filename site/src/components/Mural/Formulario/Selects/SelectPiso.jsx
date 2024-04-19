@@ -50,7 +50,7 @@ return (
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Selecione o Bloco"
+          label=""
           variant="outlined"
           InputLabelProps={{ shrink: false }}
         />
