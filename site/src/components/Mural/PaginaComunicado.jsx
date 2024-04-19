@@ -150,9 +150,9 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
           {comunicadosFiltrados.length === 0 && (
             <Typography style={{ marginTop: 15, textAlign: 'center' }}>Nenhum resultado encontrado</Typography>
           )}
-          <Box sx={{ overflow:'auto', height:'400px', display: 'flex', width: `calc(${300 / comunicadosPorLinha}% - 10px)`, flexWrap: 'wrap', justifyContent: 'space-between' }}>
+          <Box sx={{ overflow:'auto', mt: 3, maxHeight:'500px', display: 'flex', width: `calc(${300 / comunicadosPorLinha}% - 0px)`, flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {Array.from({ length: comunicadosPorLinhaAtual * comunicadosPorLinha }, (_, index) => (
-              <Box key={index} sx={{width: '436px', height: '153px' , mt: 2 }}>
+              <Box key={index} sx={{width: '436px', height: '183px'}}>
                 {index < comunicadosFiltrados.length && (
                   <ComunicadoCard
                     tipoComunicado={comunicadosFiltrados[index].descricaoTipoComunicado}
