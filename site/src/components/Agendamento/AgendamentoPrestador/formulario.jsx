@@ -77,7 +77,6 @@ const Formulario = ({ formData, onDataChange, invalidFields, screenValidation, a
               variant="outlined"
               fullWidth
               margin="normal"
-              disabled
               type="text"
               autoComplete="off"
               error={errors.empresa}
@@ -138,7 +137,6 @@ const Formulario = ({ formData, onDataChange, invalidFields, screenValidation, a
             <StyledTextField
               variant="outlined"
               fullWidth
-              disabled
               margin="normal"
               type="text"
               autoComplete="off"

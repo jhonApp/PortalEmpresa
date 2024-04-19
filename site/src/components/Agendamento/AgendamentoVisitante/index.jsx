@@ -72,6 +72,7 @@ function AgendamentoVisitante({ onClose, updateTable, data, action }) {
         invalidFields={setInvalidFields}
         screenValidation={screenValidation}
         action={action}
+        visibleAlert={true}
         renderStepContent={(step) => {
           switch (step) {
             case 0:

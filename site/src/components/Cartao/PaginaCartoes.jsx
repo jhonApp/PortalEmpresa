@@ -34,7 +34,10 @@ function PaignaCartao({ cartaoData, loading, setLoading, atualizaCartao }) {
 
   useEffect(() => {
     const filteredCards = cartaoData.filter(cartao => {
-      return cartao.codigoCartao.toString().includes(digitado);
+      return (
+        cartao.codigoCartao.toString().includes(digitado) || 
+        cartao.nomeUsuario.toUpperCase().includes(digitado.toUpperCase())
+      );
     });
     setCartoesFiltrados(filteredCards);
   }, [cartaoData, digitado]);
