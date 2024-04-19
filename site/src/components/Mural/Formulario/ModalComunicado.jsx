@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { StyledDatePicker, StyledTimePicker, StyledTextField, StyledPaper, FormContainer, Column, FormRow, FormSection  } from '../../../Utils/StyledForm';
 import { validateForm } from '../../Formulario/validation';
-import { Checkbox, Typography, Input, Button } from '@mui/material';
+import { InputLabel, Tooltip, Checkbox, Modal, Box, IconButton, Typography, Link, Input, Button } from '@mui/material';
+import { XCircle, FolderOpen } from 'phosphor-react';
 import { showSuccessToast, showErrorToast } from '../../../Utils/Notification';
 import { Export } from 'phosphor-react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { InputLabel } from '@mui/material';
 import 'dayjs/locale/pt-br';
 import useForm from '../../Formulario/useForm';
 import SelectCondomino from './Selects/SelectCondomino';
 import SelectBloco from './Selects/SelectBloco';
 import SelectPiso from './Selects/SelectPiso';
 import SelectUnidade from './Selects/SelectUnidade';
+import Carousel from '../../Carousel/files';
 
 dayjs.locale('pt-br');
 const today = dayjs();
@@ -24,7 +25,8 @@ const ModalComunicado = ({ invalidFields, formData, onDataChange, screenValidati
   const [blocos, setBlocos] = useState({});
   const [pisos, setPisos] = useState({});
   const [unidades, setUnidades] = useState({});
-
+  const [attachment, setAttachment] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
   const {
     values,
     errors,
@@ -36,6 +38,44 @@ const ModalComunicado = ({ invalidFields, formData, onDataChange, screenValidati
     validateForm,
     'agendamento'
   );
+
+  const handleCloseModal = () => { setOpenModal(false); };
+
+  const handleAttachmentClick = async () => {
+    try {
+      const files = formData.files;
+      const attachments = []; // Lista para armazenar os anexos
+
+      if(files.length === 0){ 
+        showErrorToast("Nenhum arquivo selecionado.") 
+        return; 
+      }
+      // Iterar sobre cada arquivo na lista
+      for (const file of files) {
+        const reader = new FileReader();
+  
+        // Utilizar uma promessa para aguardar a leitura do arquivo
+        const attachmentData = await new Promise((resolve, reject) => {
+          reader.onload = (e) => resolve(e.target.result); // Resolve com os dados do anexo
+          reader.onerror = (e) => reject(e.target.error);
+          reader.readAsDataURL(file); // Leia o arquivo como URL de dados
+        });
+  
+        // Adicionar os dados do anexo à lista
+        attachments.push({
+          data: attachmentData,
+          type: file.type
+        });
+      }
+  
+      // Passar a lista de anexos para o componente Test3
+      setAttachment(attachments);
+      setOpenModal(true);
+    } catch (error) {
+      console.error("Erro ao ler o conteúdo do arquivo:", error);
+      showErrorToast("Erro ao abrir o anexo.");
+    }
+  };  
 
   useEffect(() => {
     onDataChange({ ...formData, 'tipoComunicacao': 1 });
@@ -93,9 +133,18 @@ const ModalComunicado = ({ invalidFields, formData, onDataChange, screenValidati
     boxShadow: 'none',
     width: '100%'
   };
+
+  const buttonOpenFileStyle = {
+    borderRadius: '5px',
+    border: '1px solid #CBCDD9',
+    backgroundColor: '#DDDCE2',
+    color: 'black',
+    width: '100%'
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-      <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 445 }} elevation={1}>
+      <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 525 }} elevation={1}>
         <FormContainer>
           <Column>
             {/* Data Inicial */}
@@ -134,18 +183,18 @@ const ModalComunicado = ({ invalidFields, formData, onDataChange, screenValidati
               />
               {renderErrorMessage('titulo')}
             </FormRow>
-            {/*Condomino*/}
+            {/* Bloco/Torre */}
             <FormRow>
-                <InputLabel
-                  shrink
-                  sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
-                >
-                  Condômino
-                </InputLabel>
-                <FormSection>
-                  <SelectCondomino setBlocos={setBlocos} setPisos={setPisos} setUnidades={setUnidades} onDataChange={handleFormChange} />
-                </FormSection>
-             </FormRow>
+              <InputLabel
+                shrink
+                sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
+              >
+                Bloco/Torre
+              </InputLabel>
+              <FormSection>
+                <SelectBloco blocos={blocos} onDataChange={handleFormChange} />
+              </FormSection>
+            </FormRow>
           </Column>
           <Column>
             {/* Data Fim */}
@@ -166,66 +215,71 @@ const ModalComunicado = ({ invalidFields, formData, onDataChange, screenValidati
                 />
                 {renderErrorMessage('dataFim')}
             </FormRow>
-            {/* Anexos */}
-            <FormRow>
-              <div style={{ width: "100%" }} >
-                  <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
-                      Anexos
-                  </InputLabel>                  
-                  <Input type="file" id="file-input" sx={{ display: 'none' }} onChange={handleFileChange} multiple/>
-                  <label htmlFor="file-input">
-                    <Button component="span" style={buttonFileStyle} variant="contained">
-                      <Export size={25} color="#000"/>
-                      {nomeArquivo ? nomeArquivo : 'Clique aqui para anexar um arquivo'}
-                    </Button>
-                  </label>
+            {/*Condomino*/}
+            <FormRow style={{marginTop: '10px'}}>
+                <InputLabel
+                  shrink
+                  sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
+                >
+                  Condômino
+                </InputLabel>
+                <FormSection>
+                  <SelectCondomino setBlocos={setBlocos} setPisos={setPisos} setUnidades={setUnidades} onDataChange={handleFormChange} />
+                </FormSection>
+            </FormRow>
+            {/* Piso/Unid */}
+            <FormRow style={{display: 'flex', marginTop: '14px'}}>
+              <div style={{width: '50%'}}>
+                  {/* Piso */}
+                  <InputLabel
+                    shrink
+                    sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
+                  >
+                    Piso
+                  </InputLabel>
+                  <FormSection>
+                    <SelectPiso pisos={pisos} onDataChange={handleFormChange} />
+                  </FormSection>
+              </div>
+              <div style={{width: '50%', marginLeft: '10px'}}>
+                {/* Unidade */}
+                <InputLabel
+                    shrink
+                    sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
+                  >
+                    Unid.
+                  </InputLabel>
+                  <FormSection>
+                    <SelectUnidade unidades={unidades} onDataChange={handleFormChange} />
+                  </FormSection>
               </div>
             </FormRow>
-            <FormContainer>
-              {/* BLoco/Piso/Unid */}
-              <Column>
-                {/* Bloco/Torre */}
-                <FormRow style={{display: 'flex'}}>
-                  <div style={{width: '46%'}}>
-                    <InputLabel
-                      shrink
-                      sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
-                    >
-                      Bloco/Torre
-                    </InputLabel>
-                    <FormSection>
-                      <SelectBloco blocos={blocos} onDataChange={handleFormChange} />
-                    </FormSection>
-                  </div>
-                  <div style={{width: '27%', marginLeft: '10px'}}>
-                      {/* Piso */}
-                      <InputLabel
-                        shrink
-                        sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
-                      >
-                        Piso
-                      </InputLabel>
-                      <FormSection>
-                        <SelectPiso pisos={pisos} onDataChange={handleFormChange} />
-                      </FormSection>
-                  </div>
-                  <div style={{width: '27%', marginLeft: '10px'}}>
-                    {/* Unidade */}
-                    <InputLabel
-                        shrink
-                        sx={{ fontSize: 20, color: '#1B1A16', fontWeight: 600, textAlign: 'start' }}
-                      >
-                        Unidade
-                      </InputLabel>
-                      <FormSection>
-                        <SelectUnidade unidades={unidades} onDataChange={handleFormChange} />
-                      </FormSection>
-                  </div>
-                </FormRow>
-              </Column>
-            </FormContainer>
           </Column>
         </FormContainer>
+        {/* Anexos */}
+        <FormRow>
+          <InputLabel shrink sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
+              Anexos
+          </InputLabel>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ width: "90%" }} >
+              <input type="file" id="file-input" style={{ display: 'none' }} onChange={handleFileChange} multiple/>
+              <label htmlFor="file-input">
+                <Button component="span" style={buttonFileStyle} variant="contained">
+                  <Export size={25} color="#000"/>
+                  {nomeArquivo ? nomeArquivo : 'Clique aqui para anexar um arquivo'}
+                </Button>
+              </label>
+            </div>
+            <div style={{ width: "10%" }} >
+              <Tooltip title="Ver anexos" placement="top" arrow>
+                <IconButton style={buttonOpenFileStyle} onClick={handleAttachmentClick}>
+                    <FolderOpen size={30} />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </div>
+        </FormRow>
         {/* Observação */}
         <FormRow>
           <InputLabel shrink htmlFor="rgCpf-input" sx={{ fontSize: 20, color:'#1B1A16', fontWeight: 600, textAlign: 'start'}}>
@@ -275,6 +329,15 @@ const ModalComunicado = ({ invalidFields, formData, onDataChange, screenValidati
           />
           <Typography sx ={{marginLeft: 1, fontSize: 14}}>Todas as empresas do bloco</Typography>
         </FormRow>
+
+        <Modal open={openModal} onClose={handleCloseModal}>
+          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '40%', minHeight: '67%', bgcolor: 'background.paper', boxShadow: 24, p: 1, borderRadius: '20px', overflow: 'auto' }}>
+            <IconButton onClick={handleCloseModal} style={{ position: 'absolute', top: 0, right: 0 }}>
+              <XCircle size={28} color="#FF0B0B" />
+            </IconButton>
+            <Carousel attachment={attachment} />
+          </Box>
+        </Modal>
       </StyledPaper>
     </LocalizationProvider>
   );
