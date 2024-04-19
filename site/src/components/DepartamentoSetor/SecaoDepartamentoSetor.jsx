@@ -14,34 +14,34 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
   const [selectedSetores, setSelectedSetores] = useState([]);
   const [loading, setLoading] = useState(false);
   const [subgroupSelection, setSubgroupSelection] = useState({});
+  const isSelected = (setor) => selectedSetores.some((selected) => selected.codigo === setor.codigo);
 
   useEffect(() => {
     if (selectedGroup) {
 
       const associatedCodes = selectedGroup.codigoSetorSecao;
-
-      const unassociatedCargos = setorData.filter((setor) => (
+      const unassociatedSetores = setorData.filter((setor) => (
         associatedCodes.some(codigo => setor.codigoSetorSecao.includes(codigo))
       ));
-      
-      setSelectedSetores([...unassociatedCargos]);
+      console.log(unassociatedSetores)
+      setSelectedSetores([...unassociatedSetores]);
       
     }
   }, [selectedGroup, setorData]);  
-  console.log(selectedGroup)
+  // console.log(selectedSetores)
   
-  const isSelected = (setor) => selectedSetores.some((selected) => selected.codigo === setor.codigo);
-
   const handleGroupChange = (group) => {
     setSelectedGroup(group);
     setSubgroupSelection(null);
     setSelectedSetores([]);
+    atualizaSetor();
   };
 
   const handleSubgroupChange = async (event, subgroup) => {
     if (!event.target.checked) {
       try {
         await deleteSecao(selectedGroup.codigo, subgroup.codigo);
+        setSelectedSetores(selectedSetores.filter(setor => setor.codigo !== subgroup.codigo));
         showSuccessToast("Associação desfeita com sucesso.");
       } catch (error) {
         showErrorToast("O registro associado está em uso.");
@@ -49,9 +49,8 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
     } else {
       await handleAssociacao(subgroup);
     }
-    atualizaDepartamento();
-    atualizaSetor();
-  };
+    await atualizaDepartamento();
+  };  
 
   const handleAssociacao = async (subgroup) => {
     
@@ -61,9 +60,10 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
         codigoDepartamento: selectedGroup.codigo,
         codigoSetor: subgroup.codigo,
       };
-  
+
       await inserirSecao(secao);
       showSuccessToast(`Associação realizada com sucesso.`);
+      setSelectedSetores([...selectedSetores, subgroup]);
 
     } catch (error) {
       showErrorToast(error.message);

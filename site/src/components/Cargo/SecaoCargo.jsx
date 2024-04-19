@@ -29,13 +29,16 @@ const SecaoCargo = ({ setorData, departamentoData, cargoData, atualizaCargo, atu
   const handleSubgroupChange = (group) => {
     setSelectedSubgroup(group);
     setSelectedCargos([]);
+    atualizaCargo();
   };
 
   const handleCargoChange = async (event, cargo) => {
     if (!event.target.checked) {
       try {
         await deleteSecaoCargo(cargo.codigo, selectedGroup.codigo, selectedSubgroup.codigo);
+        setSelectedCargos(selectedCargos.filter(cg => cg.codigo !== cargo.codigo));
         showSuccessToast("Associação desfeita com sucesso.");
+
       } catch (error) {
         showErrorToast("O registro associado está em uso.");
       }
@@ -43,23 +46,22 @@ const SecaoCargo = ({ setorData, departamentoData, cargoData, atualizaCargo, atu
       await handleAssociacao(cargo);
     }
     atualizaSetor();
-    atualizaCargo();
   };
 
   useEffect(() => {
     if (selectedSubgroup) {
-      // Obtém os códigos dos cargos associados ao subgrupo selecionado
       const associatedCargosCodes = selectedSubgroup.codigoSetorSecao;
   
-      // Filtra apenas os cargos não associados com base nos códigos
-      const unassociatedCargos = cargoData.filter((cargo) => (
-        associatedCargosCodes.some(codigo => cargo.codigoSetorSecao.includes(codigo))
-      ));
-      
-      setSelectedCargos([...unassociatedCargos]);
-      
+      const associatedCargos = cargoData.filter((cargo) =>
+        cargo.setorSecao.some((setorSecao) =>
+          setorSecao.status === "A" && associatedCargosCodes.includes(setorSecao.codigoSetorSecao)
+        )
+      );
+      setSelectedCargos(associatedCargos);
     }
-  }, [selectedSubgroup, cargoData]);  
+  }, [selectedSubgroup, cargoData]);
+  
+
   
   const handleAssociacao = async (cargo) => {
     setLoading(true);
@@ -71,6 +73,7 @@ const SecaoCargo = ({ setorData, departamentoData, cargoData, atualizaCargo, atu
       };
       
       await inserirSecaoCargo(secao);
+      setSelectedCargos([...selectedCargos, cargo]);
       showSuccessToast(`Associação realizada com sucesso.`);
 
     } catch (error) {
