@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
@@ -50,7 +50,7 @@ const routes = [
     text: 'Pesquisas',
     icon: <MagnifyingGlass size={24} />,
     subItems: [
-      { link: 'system/acessos', text: 'Acessos', icon: <File size={24} /> },
+      { index: 11, link: 'system/acessos', text: 'Acessos', icon: <File size={24} /> },
     ],
   },
 ];
@@ -128,7 +128,34 @@ export default function MiniDrawer({ children }) {
   const [title, setTitle] = useState('Dashboard');
   const memoizedTitle = useMemo(() => title, [title]);
   const navigate = useNavigate();
-  console.log("Index")
+
+  useEffect(() => {
+    const storedIndex = localStorage.getItem('selectedMenuItemIndex');
+    if (storedIndex !== null) {
+      const storedIndexInt = parseInt(storedIndex);
+      setSelectedIndex(storedIndexInt);
+      
+      const selectedItem = routes.find(route => route.index === storedIndexInt);
+      const selectedSubItem = routes.reduce((foundSubItem, route) => {
+        if (!foundSubItem && route.subItems) {
+          return route.subItems.find(subItem => subItem.index === storedIndexInt);
+        }
+        return foundSubItem;
+      }, null);
+
+      if (selectedSubItem) {
+        setTitle(selectedSubItem.text);
+      } else if (selectedItem) {
+        setTitle(selectedItem.text);
+      }
+  
+      const parentItem = routes.find(route => route.subItems && route.subItems.some(subItem => subItem.index === storedIndexInt));
+      if (parentItem) {
+        setAdminOpen(true);
+      }
+    }
+  }, []);
+  
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -143,7 +170,6 @@ export default function MiniDrawer({ children }) {
       setTitle(newTitle);
     }
   }
-  
 
   const handleAdminClick = (item) => {
     if (adminOpen) {
@@ -153,17 +179,20 @@ export default function MiniDrawer({ children }) {
     }
     setSelectedIndex(item.index);
     hadleDrawerTitle(item.text);
+    localStorage.setItem('selectedMenuItemIndex', item.index);
   };
   
   const handleSubItemClick = (item) => {
     setSelectedIndex(item.index);
     hadleDrawerTitle(item.text);
+    localStorage.setItem('selectedMenuItemIndex', item.index);
   };
 
   const handleLogout = () => {
     clearDataStorage();
+    localStorage.removeItem('selectedMenuItemIndex');
     navigate('/');
-  };
+  };  
 
   const generateLink = (link) => `/${link.toLowerCase()}`;
 
@@ -208,7 +237,6 @@ export default function MiniDrawer({ children }) {
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon sx={{color: '#fff'}} /> : <ChevronLeftIcon sx={{color: '#fff'}} />}
           </IconButton>
-          
         </DrawerHeader>
         <Divider />
         {/* Menu */}
