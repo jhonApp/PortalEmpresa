@@ -8,18 +8,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { CheckCircle } from 'phosphor-react';
 import { StyledButtonSucess } from '../../Utils/StyledButton';
 
-export default function AlertDialogSucess({ dialogOpen, handleClose, handleFunction }) {
+export default function AlertDialogSucess({ dialogOpen, handleClose }) {
   
   const handleConfirmSucess = () => {
+    debugger
     handleClose();
-    handleFunction();
   };
   
   return (
     <React.Fragment>
       <Dialog
         open={dialogOpen}
-        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         PaperProps={{

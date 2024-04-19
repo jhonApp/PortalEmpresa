@@ -199,9 +199,17 @@ export const atualizarTabela = async (setAgendamentoData, setLoading, setValid) 
     ]);
 
     const combinedData = [...data1, ...data2, ...data3];
-    combinedData.sort((a, b) => new Date(b.dataInicial) - new Date(a.dataInicial));
-
-    setAgendamentoData(combinedData);
+    const sortedData = [...combinedData]; // Crie uma cópia antes de ordenar
+    sortedData.sort((a, b) => {
+      const dateA = new Date(a.dataInclusao);
+      const dateB = new Date(b.dataInclusao);
+      if (dateA > dateB) return -1; // se a é mais recente, retorna -1
+      if (dateA < dateB) return 1; // se b é mais recente, retorna 1
+      // se as datas são iguais, compara os horários
+      return new Date(b.dataInclusao) - new Date(a.dataInclusao);
+    });
+    console.log(sortedData)
+    setAgendamentoData(sortedData);
     setLoading(false);
   } catch (error) {
     console.error('Erro ao obter dados de agendamento:', error);
@@ -209,6 +217,8 @@ export const atualizarTabela = async (setAgendamentoData, setLoading, setValid) 
     setValid(false);
   }
 };
+
+
 
 export const obeterUltimosAgendamentos = async (setAgendamentoData, setLoading, setValid) => {
   try {

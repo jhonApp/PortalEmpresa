@@ -36,6 +36,7 @@ function AgendamentoMassa({ updateTable, onClose }) {
         onLoadingChange={handleLoadingChange}
         invalidFields={setInvalidFields}
         screenValidation={screenValidation}
+        visibleAlert={true}
         renderStepContent={(step) => {
           switch (step) {
             case 0:

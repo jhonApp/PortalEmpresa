@@ -99,11 +99,15 @@ const HorizontalLinearStepper = ({
       await handleSubmit(async () => {        
         try{
             await createFunction(formData);
-            showSuccessToast("Criado com sucesso!");
             updateTable();
             setActiveStep(0);
+            
+            if(visibleAlert === true){
+              setOpen(visibleAlert);
+              return;
+            }
+            showSuccessToast("Criado com sucesso!");
             handleClose(false);
-            setOpen(visibleAlert);
         } catch (e) {
             onLoadingChange(false);
             showErrorToast(e.message);
@@ -128,10 +132,15 @@ const HorizontalLinearStepper = ({
       await handleSubmit(async () => {        
         try{
             await createFunction(formData);
-            showSuccessToast("Alterado com sucesso!");
-            setActiveStep(0);
-            handleClose(false);
             updateTable();
+            setActiveStep(0);
+
+            if(visibleAlert === true){
+              setOpen(visibleAlert);
+              return;
+            }
+            showSuccessToast("Alterado com sucesso!");
+            handleClose(false);
         } catch (e) {
             onLoadingChange(false);
             showErrorToast(e.message);
@@ -147,6 +156,11 @@ const HorizontalLinearStepper = ({
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
+  };
+
+  const handleCloseCallback = (closeAlertDialogSucess) => {
+    handleClose(closeAlertDialogSucess);
+    setOpen(false); 
   };
 
   return (
@@ -188,7 +202,7 @@ const HorizontalLinearStepper = ({
           </Box>
         )}
       </Box>
-      <AlertDialogSucess dialogOpen={open} handleClose={() => setOpen(false)} handleFunction={() => handleClose(false)} visibleAlert={visibleAlert}/>
+      <AlertDialogSucess dialogOpen={open} handleClose={handleCloseCallback} />
       <AlertDialogCancel dialogOpen={openCancel} handleClose={() => setOpenCancel(false)} handleFunction={() => handleClose(false)} />
     </Box>
   );

@@ -70,6 +70,7 @@ const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenVa
                   fullWidth
                   margin="normal"
                   type="date"
+                  minDate={today}
                   name="dataInicial"
                   disabled={action === 'view'}
                   error={invalidFields.some(field => field.field === 'dataInicial')}
