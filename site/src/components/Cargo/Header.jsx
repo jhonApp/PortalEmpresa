@@ -3,11 +3,9 @@ import PopupDialog from '../dialog';
 import { Box, Paper, Button, useTheme, Typography } from '@mui/material';
 import { Briefcase } from 'phosphor-react';
 import Cargo from './ModalCargo'
-import {getCargo} from '../../../service/cargoService';
 
-function Header() {
+function Header({atualizaCargo, cargoData}) {
   const [openPopup, setOpenPopup] = useState(false);
-  const [cargoData, setCargoData] = useState([]);
   const [popupType, setPopupType] = useState('');
   const [popupTitle, setPopupTitle] = useState('');
   const [popupDescription, setPopupDescription] = useState('');
@@ -40,21 +38,6 @@ function Header() {
     width: '300px',
     height: '84px'
   };
-
-  const atualizaCargo = async () => {
-    try {
-      await getCargo(setCargoData, setLoading, setValid);
-    } catch (error) {
-      console.error('Erro ao atualizar tabela de cargos:', error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await atualizaCargo();
-    };
-    fetchData();
-  }, []);
 
   const handleOpenPopup = (title, description, type) => {
     setPopupTitle(title);

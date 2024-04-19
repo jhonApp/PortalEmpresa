@@ -20,6 +20,7 @@ function DepartamentoSetor() {
 
   const atualizaSetor = async () => {
     try {
+      
       await getSetor(setSetorData, setLoading, setValid);
     } catch (error) {
       console.error('Erro ao atualizar tabela de agendamentos:', error);

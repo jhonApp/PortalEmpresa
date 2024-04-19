@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import MenuCargo from './Header';
 import SecaoCargo from './SecaoCargo';
-import {listarDepartamento, getCargo, getSetor} from '../../../service/departamentoSetorService';
+import {listarDepartamento, getSetor} from '../../../service/departamentoSetorService';
+import { getCargo } from '../../../service/cargoService';
 
 function Cargo() {
   const [setorData, setSetorData] = useState([]);
@@ -11,7 +12,6 @@ function Cargo() {
   const [isValid, setValid] = useState(true);
 
   const atualizaDepartamento = async () => {
-    console.log("Departamento")
     try {
       await listarDepartamento(setDepartamentoData, setLoading, setValid);
     } catch (error) {
@@ -46,7 +46,7 @@ function Cargo() {
 
   return (
     <div>
-      <MenuCargo />
+      <MenuCargo atualizaCargo={atualizaCargo} cargoData={cargoData}/>
       <SecaoCargo
         setorData={setorData}
         departamentoData={departamentoData}
