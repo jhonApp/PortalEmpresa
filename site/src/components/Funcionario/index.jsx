@@ -19,7 +19,7 @@ function Funcionario() {
 
   return (
     <div>
-      <TipoFuncionario atualizarFuncionario={atualizarFuncionario} />
+      <TipoFuncionario />
       <Funcionarios
         funcionarioData={funcionarioData}
         setFuncionarioData={setFuncionarioData}

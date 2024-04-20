@@ -13,7 +13,7 @@ const isRegexValid = (value, regex) => {
 const validateForm = (values, currentScreen) => {
   const fieldValidations = ValidateField(currentScreen);
   const errors = [];
-
+  
   Object.keys(fieldValidations).forEach(field => {
     const fieldValidation = fieldValidations[field];
     const isFieldRequired = fieldValidation.required;
@@ -29,6 +29,18 @@ const validateForm = (values, currentScreen) => {
         message: 'Campo obrigatório.',
         type: 'error'
       });
+    }
+
+    if (!isEmpty) {
+      // Verificar maxLength se existir na validação do campo
+      if (fieldValidation.maxLength && value.length > fieldValidation.maxLength) {
+        errors.push({
+          field,
+          description: fieldValidation.description || field,
+          message: `Máximo de ${fieldValidation.maxLength} caracteres permitidos.`,
+          type: 'error'
+        });
+      }
     }
 
     if (!isEmpty) {
@@ -63,6 +75,36 @@ const validateForm = (values, currentScreen) => {
             });
           }
           break;
+        case 'rg':
+          if (!isRgValid(value)) {
+            errors.push({
+              field,
+              description: fieldValidation.description || field,
+              message: 'RG inválido.',
+              type: 'error'
+            });
+          }
+          break;
+        case 'cpf':
+          if (!isCpfValid(value)) {
+            errors.push({
+              field,
+              description: fieldValidation.description || field,
+              message: 'CPF inválido.',
+              type: 'error'
+            });
+          }
+          break;
+        case 'telefone':
+            if (!isTelefoneValid(value)) {
+              errors.push({
+                field,
+                description: fieldValidation.description || field,
+                message: 'Número inválido.',
+                type: 'error'
+              });
+            }
+            break;
         default:
           break;
       }
@@ -126,6 +168,7 @@ const screensValidations = {
     telefone: { required: true, description: "Telefone" },
     horaEntrada: { required: true, description: "Hora Entrada" },
     horaSaida: { required: true, description: "Hora Saída" },
+    logradouro: { maxLength: 60 }
   },
   departamento: {
     nome: { required: true, description: "Nome" }
@@ -148,8 +191,9 @@ const ValidateField = (currentScreen) => {
 
 // Expressões regulares
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const rgRegex = /^\d{9,10}$/;
-const cpfRegex = /^\d{11}$/;
+const rgRegex = /^(\d{2}\.\d{3}\.\d{3}-\d|\d{9}|\d{9}-\d)$/;
+const cpfRegex = /^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/;
+const telefoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
 
 // Funções de validação específicas
 const isEmailValid = (email) => {
@@ -158,6 +202,18 @@ const isEmailValid = (email) => {
 
 const isRgCpfValid = (rgCpf) => {
   return isRegexValid(rgCpf, rgRegex) || isRegexValid(rgCpf, cpfRegex);
+};
+
+const isRgValid = (rg) => {
+  return isRegexValid(rg, rgRegex);
+};
+
+const isCpfValid = (cpf) => {
+  return isRegexValid(cpf, cpfRegex);
+};
+
+const isTelefoneValid = (telefone) => {
+  return isRegexValid(telefone, telefoneRegex);
 };
 
 export { validateForm };
