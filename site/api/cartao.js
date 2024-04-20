@@ -102,3 +102,24 @@ export const updateCartao = async (data) => {
     throw error;
   }
 };
+
+export const obterContagemCartao = async (codigoEmpresa) => {
+  try {
+    if (!codigoEmpresa) {
+      throw new Error('Código da empresa não fornecido.');
+    }
+    const url = `${API_URL}/obterContagemCartao?codigoEmpresa=${encodeURIComponent(codigoEmpresa)}`;
+
+    const response = await axios.get(url, {
+      validateStatus: status => status < 500,
+    });
+
+    if (response.status !== 200) {
+      throw new Error(response.data || 'Erro desconhecido ao obter cartão.');
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
