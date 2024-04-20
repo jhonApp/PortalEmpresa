@@ -12,7 +12,7 @@ const Search = styled('div')({
     width: '100%',
     '@media (min-width: 600px)': {
       marginLeft: 0,
-      width: '250px',
+      width: '270px',
       height: '42px'
     },
 });

@@ -25,6 +25,27 @@ export const obterFuncionario = async (codigoEmpresa, status) => {
   }
 };
 
+export const obterContagemFuncionario = async (codigoEmpresa) => {
+  try {
+    if (!codigoEmpresa) {
+      throw new Error('Código da empresa não fornecido.');
+    }
+    const url = `${API_URL}/obterContagemFuncionarios?codigoEmpresa=${encodeURIComponent(codigoEmpresa)}`;
+
+    const response = await axios.get(url, {
+      validateStatus: status => status < 500,
+    });
+
+    if (response.status !== 200) {
+      throw new Error(response.data || 'Erro desconhecido ao obter funcionário.');
+    }
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const inserirFuncionario = async (data, foto) => {
   try {
 

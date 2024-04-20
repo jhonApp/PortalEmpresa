@@ -1,17 +1,33 @@
-import { obterFuncionario, inserirFuncionario } from '../api/funcionario';
+import { obterFuncionario, inserirFuncionario, obterContagemFuncionario } from '../api/funcionario';
 import { getData } from './storageService';
 
 export const atualizarTabela = async (setFuncionarioData, setLoading, setValid, status) => {
-    try {
-        const storage = getData();
-        const data = await  obterFuncionario(storage.codigoEmpresa, status);
-        setFuncionarioData(data.sort((a, b) => new Date(b.dtValid) - new Date(a.dtValid)));
-        setLoading(false);
-    } catch (error) {
-        console.error('Erro ao obter dados do funcionario: ', error);
-        setLoading(false);
-        setValid(false);
-    }
+  try {
+      const storage = getData();
+      const data = await obterFuncionario(storage.codigoEmpresa, status);
+      
+      setFuncionarioData(data.sort((a, b) => new Date(b.dtValid) - new Date(a.dtValid)));
+      setLoading(false);
+  } catch (error) {
+      console.error('Erro ao obter dados do funcionario: ', error);
+      setLoading(false);
+      setValid(false);
+  }
+};
+
+export const contagemFuncionarios = async (setAtivo, setInativo, setPendente, setTodos) => {
+  try {
+      const storage = getData();
+      const contagem = await obterContagemFuncionario(storage.codigoEmpresa);
+      
+      setAtivo(contagem.ativos);
+      setInativo(contagem.inativos);
+      setPendente(contagem.pendentes);
+      setTodos(contagem.todos);
+
+  } catch (error) {
+      throw error;
+  }
 };
 
 const separarTelefone = (telefone) => {
@@ -107,8 +123,6 @@ export const cadastrarFuncionario = async (dados) => {
     throw new Error('Erro ao inserir funcionário: ' + error.message);
   }
 };
-
-
 
 export const inserirFoto = async (data) => {
   try {

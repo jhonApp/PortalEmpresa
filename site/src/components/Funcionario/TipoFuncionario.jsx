@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import { ListBullets } from 'phosphor-react';
 import Typography from '@mui/material/Typography';
+import {contagemFuncionarios} from '../../../service/funcionarioService';
 
 function BotaoTipoFuncionario({ iconContainerStyle, buttonStyle, quantidade, descricao }) {
   return (
@@ -15,11 +16,11 @@ function BotaoTipoFuncionario({ iconContainerStyle, buttonStyle, quantidade, des
   );
 }
 
-function TipoFuncionario({ atualizarFuncionario }) {
-  const [openPopup, setOpenPopup] = useState(false);
-  const [popupType, setPopupType] = useState('');
-  const [popupTitle, setPopupTitle] = useState('');
-  const [popupDescription, setPopupDescription] = useState('');
+function TipoFuncionario() {
+  const [ativo, setAtivo] = useState(0);
+  const [inativo, setInativo] = useState(0);
+  const [pendente, setPendente] = useState(0);
+  const [todos, setTodos] = useState(0);
   const theme = useTheme();
 
   const iconContainerStyle = {
@@ -49,16 +50,12 @@ function TipoFuncionario({ atualizarFuncionario }) {
     height: '84px'
   };
 
-  const handleOpenPopup = (title, description, type) => {
-    setPopupTitle(title);
-    setPopupType(type);
-    setPopupDescription(description);
-    setOpenPopup(true);
-  };
-
-  const handleClosePopup = () => {
-    setOpenPopup(false);
-  };
+  useEffect(() => {
+    async function fetchData() {
+      await contagemFuncionarios(setAtivo, setInativo, setPendente, setTodos);
+    }
+    fetchData();
+  }, []);
 
   return (
     <Box
@@ -74,25 +71,25 @@ function TipoFuncionario({ atualizarFuncionario }) {
         <BotaoTipoFuncionario
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={10}
+          quantidade={todos}
           descricao="Todos"
         />
         <BotaoTipoFuncionario
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={8}
+          quantidade={ativo}
           descricao="Ativos"
         />
         <BotaoTipoFuncionario
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={1}
+          quantidade={pendente}
           descricao="Pendentes"
         />
         <BotaoTipoFuncionario
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={1}
+          quantidade={inativo}
           descricao="Inativos"
         />
       </Box>
