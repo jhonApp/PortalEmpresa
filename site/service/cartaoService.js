@@ -1,4 +1,4 @@
-import { obterCartao, incluirCartao, excluirCartao, updateCartao } from "../api/cartao";
+import { obterCartao, incluirCartao, excluirCartao, updateCartao, obterContagemCartao } from "../api/cartao";
 import { getData } from './storageService';
 
 export const inserirCartao = async (dados) => {
@@ -74,6 +74,18 @@ export const getCartao = async (setCartaoData, setLoading, setValid) => {
   } catch (error) {
     setLoading(false);
     setValid(false);
+  }
+};
+
+export const contagemCartao = async (setCartao) => {
+  try {
+      const storage = getData();
+      const contagem = await obterContagemCartao(storage.codigoEmpresa);
+      
+      setCartao(contagem);
+
+  } catch (error) {
+      throw error;
   }
 };
 

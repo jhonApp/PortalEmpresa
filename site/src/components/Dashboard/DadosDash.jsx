@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Paper, Button, useTheme } from '@mui/material';
 import { ListBullets } from 'phosphor-react';
 import Typography from '@mui/material/Typography';
+import {contagemTodosFuncionarios} from '../../../service/funcionarioService';
+import {contagemCartao} from '../../../service/cartaoService';
 
 function BotaoTipoFuncionario({ iconContainerStyle, buttonStyle, quantidade, descricao }) {
   return (
@@ -16,8 +18,8 @@ function BotaoTipoFuncionario({ iconContainerStyle, buttonStyle, quantidade, des
 }
 
 function DadosDash({ agendamento }) {
-  const [openPopup, setOpenPopup] = useState(false);
-  const [popupType, setPopupType] = useState('');
+  const [funcionarios, setFuncionarios] = useState(false);
+  const [cartoes, setCartao] = useState('');
   const [popupTitle, setPopupTitle] = useState('');
   const [popupDescription, setPopupDescription] = useState('');
   const theme = useTheme();
@@ -49,16 +51,14 @@ function DadosDash({ agendamento }) {
     height: '139px'
   };
 
-  const handleOpenPopup = (title, description, type) => {
-    setPopupTitle(title);
-    setPopupType(type);
-    setPopupDescription(description);
-    setOpenPopup(true);
-  };
+  useEffect(() => {
+    async function fetchData() {
+      await contagemTodosFuncionarios(setFuncionarios);
+      await contagemCartao(setCartao);
+    }
+    fetchData();
+  }, []);
 
-  const handleClosePopup = () => {
-    setOpenPopup(false);
-  };
   return (
     <Box
       gap={1}
@@ -79,13 +79,13 @@ function DadosDash({ agendamento }) {
         <BotaoTipoFuncionario
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={8}
+          quantidade={funcionarios}
           descricao="Funcionários"
         />
         <BotaoTipoFuncionario
           iconContainerStyle={iconContainerStyle}
           buttonStyle={buttonStyle}
-          quantidade={1}
+          quantidade={cartoes}
           descricao="Cartões"
         />
       </Box>

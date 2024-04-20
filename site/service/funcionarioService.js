@@ -30,6 +30,18 @@ export const contagemFuncionarios = async (setAtivo, setInativo, setPendente, se
   }
 };
 
+export const contagemTodosFuncionarios = async (setTodosFuncionarios) => {
+  try {
+      const storage = getData();
+      const contagem = await obterContagemFuncionario(storage.codigoEmpresa);
+      
+      setTodosFuncionarios(contagem.todos);
+
+  } catch (error) {
+      throw error;
+  }
+};
+
 const separarTelefone = (telefone) => {
   const partes = telefone?.replace(/[^\d]/g, '').match(/^(\d{2})(\d{4,5})(\d{4})$/);
   if (partes) {
