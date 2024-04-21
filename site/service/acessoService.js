@@ -1,10 +1,11 @@
 import { listarAcessos } from '../api/acesso';
 
-export const atualizarTabela = async (setAcessoData, setLoading, setValid, dtInicial, dtFinal) => {
+export const atualizarTabela = async (setAcessoData, setLoading, setValid, formData) => {
     try {
+      
       setLoading(true);
   
-      const data = await listarAcessos(dtInicial, dtFinal);
+      const data = await listarAcessos(formData.dataInicial, formData.dataFim);
       setAcessoData(data);
   
       setLoading(false);

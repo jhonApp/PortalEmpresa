@@ -9,20 +9,43 @@ function Acesso() {
   const [loading, setLoading] = useState(true);
   const [isValid, setValid] = useState(true);
   const [dataAtual, setDataAtual] = useState(new Date());
+  const [formData, setFormData] = useState({
+    bloco: '',
+    unidade: '',
+    empresa: '',
+    nome: '',
+    rg: '',
+    dataInicial: null,
+    dataFim: null,
+    tipo: ''
+  });
 
+  // useEffect(() => {
+  //   const timerID = setInterval(() => {
+  //     setDataAtual(new Date());
+  //   }, 86400000);
+  
+  //   return () => clearInterval(timerID);
+  // }, []);
+  
   useEffect(() => {
-    const timerID = setInterval(() => {
-      setDataAtual(new Date());
-    }, 86400000);
-
-    return () => clearInterval(timerID);
+    
+    const dataInicial = new Date();
+    setFormData(prevState => ({
+      ...prevState,
+      dataInicial
+    }));
+    
+    const dataFim = new Date(dataInicial.getTime() + 30 * 24 * 60 * 60 * 1000);
+    setFormData(prevState => ({
+      ...prevState,
+      dataFim
+    }));
   }, []);
-
-  const dataFutura = new Date(dataAtual.getTime() + 30 * 24 * 60 * 60 * 1000);
 
   const atualizarAcesso = async () => {
     try {
-      await atualizarTabela(setAcessoData, setLoading, setValid, dataAtual, dataFutura);
+      await atualizarTabela(setAcessoData, setLoading, setValid, formData);
     } catch (error) {
       console.error('Erro ao atualizar tabela de acessos:', error);
     }
@@ -30,19 +53,26 @@ function Acesso() {
 
   return (
     <div>
-      <TipoAcesso acessoData={acessoData} atualizarAcesso={atualizarAcesso} dataAtual={dataAtual} dataFutura={dataFutura}/>
-      <Acessos
-        acessoData={acessoData}
-        setAcessoData={setAcessoData}
-        loading={loading}
-        setLoading={setLoading}
-        isValid={isValid}
-        setValid={setValid}
-        atualizarAcesso={atualizarAcesso}
-        setStatus={setStatus}
-      />
+      {formData.dataInicial && formData.dataFim && (
+        <>
+          <TipoAcesso acessoData={acessoData} atualizarAcesso={atualizarAcesso} dataAtual={formData.dataInicial} dataFutura={formData.dataFim}/>
+          <Acessos
+            acessoData={acessoData}
+            setAcessoData={setAcessoData}
+            loading={loading}
+            setLoading={setLoading}
+            isValid={isValid}
+            setValid={setValid}
+            atualizarAcesso={atualizarAcesso}
+            setStatus={setStatus}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        </>
+      )}
     </div>
   );
+  
 }
 
 export default Acesso;

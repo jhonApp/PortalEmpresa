@@ -19,111 +19,48 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 dayjs.locale('pt-br');
 dayjs.extend(isSameOrAfter);
 
-export default function TemporaryDrawer({ open, handleClose, data, setData }) {
-    const [openFilter, setOpen] = React.useState(open);
-    const [locale, setLocale] = useState('pt-br');
-    const [formData, setFormData] = useState({
-      bloco: '',
-      unidade: '',
-      empresa: '',
-      nome: '',
-      rg: '',
-      dataInicial: null,
-      dataFim: null,
-      tipo: ''
-    });
-
-    React.useEffect(() => {
-      setOpen(open);
-    }, [open]);
-    
-    const toggleDrawer = (newOpen) => () => {
-        if (!newOpen) {
-          setOpen(newOpen);
-          handleClose();
-        }
-    };
-      
-
-  useEffect(() => {
-    if (!open) {
-      setFormData({
-        bloco: '',
-        unidade: '',
-        empresa: '',
-        nome: '',
-        rg: '',
-        dataInicial: null,
-        dataFim: null,
-        tipo: ''
-      });
-    }
+export default function TemporaryDrawer({ open, handleClose, atualizarAcesso, formData, setFormData }) {
+  const [openFilter, setOpen] = React.useState(open);
+  const [locale, setLocale] = useState('pt-br');
+  const [dataInicial, setDataInicial] = useState(null);
+  const [dataFim, setDataFim] = useState(null);
+  
+  React.useEffect(() => {
+    setOpen(open);
   }, [open]);
-
-  const handleSearch = () => {
-    debugger
-    let filteredData = [...data]; // Criar uma cópia dos dados originais
   
-    // Filtrar pelo tipo se estiver selecionado
-    if (formData.tipo && formData.tipo !== 'todos') {
-      filteredData = filteredData.filter(item => item.tipo === formData.tipo);
-    }
-  
-    // Aplicar filtros adicionais se o campo de nome estiver preenchido
-    if (formData.bloco) {
-      filteredData = filteredData.filter(item =>
-        item.bloco.toLowerCase().includes(formData.bloco.toLowerCase())
-      );
-    }
-
-    if (formData.unidade) {
-      filteredData = filteredData.filter(item =>
-        item.unidade.toLowerCase().includes(formData.unidade.toLowerCase())
-      );
-    }
-
-    if (formData.empresa) {
-      filteredData = filteredData.filter(item =>
-        item.empresa.toLowerCase().includes(formData.empresa.toLowerCase())
-      );
-    }
-
-    if (formData.nome) {
-      filteredData = filteredData.filter(item =>
-        item.nome.toLowerCase().includes(formData.nome.toLowerCase())
-      );
-    }
-
-    if (formData.rg) {
-      filteredData = filteredData.filter(item =>
-        item.rg.toLowerCase().includes(formData.rg.toLowerCase())
-      );
-    }
-  
-    // Aplicar filtros de datas se estiverem preenchidos
-    if (formData.dataInicial && formData.dataFim) {
-      filteredData = filteredData.filter(item =>
-        dayjs(item.dtValid).isSameOrAfter(dayjs(formData.dataInicial), 'day') &&
-        dayjs(item.dtEnd).isSameOrBefore(dayjs(formData.dataFim), 'day')
-      );
-    } else if (formData.dataInicial) {
-      filteredData = filteredData.filter(item =>
-        dayjs(item.dataInicial).isSameOrAfter(dayjs(formData.dataInicial), 'day')
-      );
-    } else if (formData.dataFim) {
-      filteredData = filteredData.filter(item =>
-        dayjs(item.dataFim).isSameOrBefore(dayjs(formData.dataFim), 'day')
-      );
-    }
-  
-    setData(filteredData);
-    handleClose();
+  const toggleDrawer = (newOpen) => () => {
+      if (!newOpen) {
+        setOpen(newOpen);
+        handleClose();
+      }
   };
-  
 
   const handleFormChange = (fieldName, value) => {
-    setFormData(prevFormData => ({ ...prevFormData, [fieldName]: value }));
+    // Atualizar os valores dos campos de data separadamente
+    if (fieldName === 'dataInicial' || fieldName === 'dataFim') {
+      // Converter a data para o formato de string desejado antes de atualizar o formData
+      const formattedDate = value ? new Date(value) : null;
+      
+      // Atualizar tanto a variável de estado quanto o formData com a data formatada
+      if (fieldName === 'dataInicial') {
+        setDataInicial(formattedDate);
+        setFormData(prevFormData => ({ ...prevFormData, dataInicial: formattedDate }));
+      } else {
+        setDataFim(formattedDate);
+        setFormData(prevFormData => ({ ...prevFormData, dataFim: formattedDate }));
+      }
+    } else {
+      setFormData(prevFormData => ({ ...prevFormData, [fieldName]: value }));
+    }
   };
+
+  const handleSearch =() => {
+    atualizarAcesso();
+    handleClose();
+    setDataInicial(null);
+    setDataFim(null);
+  }
 
   const DrawerList = (
     <Box sx={{p: 2, backgroundColor: '#FAFAFA' }} role="presentation" >
@@ -161,7 +98,6 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                             value={formData.unidade}
                             onChange={(e) => handleFormChange('unidade', e.target.value)}
                             onBlur={(e) => handleFormChange('unidade', e.target.value)}
-
                         />
                     </FormRow>
                     {/*empresa*/}
@@ -231,9 +167,8 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                                 margin="normal"
                                 type="date"
                                 name="dataInicial"
-                                value={formData.dataInicial || null}
+                                value={dataInicial}
                                 onChange={(newValue) => { handleFormChange('dataInicial', newValue); }}
-                                onBlur={() => handleValidation('dataInicial')}
                             />
                         </LocalizationProvider>
                     </FormRow>
@@ -250,10 +185,9 @@ export default function TemporaryDrawer({ open, handleClose, data, setData }) {
                                 fullWidth
                                 margin="normal"
                                 type="date"
-                                name="dataFinal"
-                                value={formData.dataFinal || null}
-                                onChange={(newValue) => { handleFormChange('dataFinal', newValue); }}
-                                onBlur={() => handleValidation('dataFinal')}
+                                name="dataFim"
+                                value={dataFim}
+                                onChange={(newValue) => { handleFormChange('dataFim', newValue); }}
                             />
                         </LocalizationProvider>
                     </FormRow>

@@ -6,12 +6,8 @@ import TemporaryDrawer from './drawerFilter';
 import Progress from '../../Utils/LoadingProgress';
 import { Link } from 'react-router-dom';
 
-function Acessos({ acessoData, setAcessoData, loading, setLoading, isValid, setValid, atualizarAcesso, setStatus }) {
-  const [digitado, setDigitado] = useState('');
-  const [status, setStatusLocal] = useState('ativo');
-  const [acessosFiltrados, setAcessosFiltrados] = useState([]);
+function Acessos({ acessoData, setAcessoData, loading, setLoading, isValid, setValid, atualizarAcesso, setStatus, formData, setFormData }) {
   const [openPopup, setOpenPopup] = useState(false);
-  const [acessos, setAcessos] = useState([]);
   const theme = useTheme();
 
   const columns = [
@@ -36,7 +32,7 @@ function Acessos({ acessoData, setAcessoData, loading, setLoading, isValid, setV
     width: '215px',
     height: '50px'
   };
-
+  
   const buttonStyleFiltro = {
     borderRadius: '50px',
     backgroundColor: 'transparent',
@@ -49,44 +45,19 @@ function Acessos({ acessoData, setAcessoData, loading, setLoading, isValid, setV
     height: theme.spacing(5)
   };
 
-  const labelStyle = {
-    fontSize: '13px',
-    fontWeight: 600,
-    color: '#000'
-  };
-
   const handleOpenPopup = () => {
     setOpenPopup(true);
-    atualizarAcesso(setAcessoData, setLoading, setValid);
   };
 
   const handleClosePopup = () => {
-    setOpenPopup(false); 
+    setOpenPopup(false);
   };
 
+  // useEffect para definir loading como false uma vez após a montagem do componente
   useEffect(() => {
-    async function fetchData() {
-      await atualizarAcesso(setAcessoData, setLoading, setValid, status);
-      setAcessos(acessoData);
-      setAcessosFiltrados(acessoData);
-    }
-    fetchData();
-  }, [status]);
+    setLoading(false);
+  }, []);
 
-  const handleSearch = (value) => {
-    setDigitado(value);
-    
-    const filteredAcessos = acessoData.filter(acesso => {
-      return Object.values(acesso).some(attrValue => {
-        if (typeof attrValue === 'string' || typeof attrValue === 'number') {
-          return String(attrValue).toLowerCase().includes(value.toLowerCase());
-        }
-        return false;
-      });
-    });
-    setAcessosFiltrados(filteredAcessos);
-  };
-  
   return (
     <Box
       gap={1}
@@ -115,9 +86,9 @@ function Acessos({ acessoData, setAcessoData, loading, setLoading, isValid, setV
         </div>
       </Box>
       <Box display="flex" gap={2} marginTop={2}>
-        <Table data={digitado ? acessosFiltrados : acessoData} window={"acesso"} columns={columns} loading={loading} isValid={isValid} />
+        <Table data={acessoData} window={"acesso"} columns={columns} loading={loading} isValid={isValid} setLoading={setLoading} />
       </Box>
-      <TemporaryDrawer open={openPopup} handleClose={handleClosePopup} data={acessoData} setData={setAcessoData} />
+      <TemporaryDrawer open={openPopup} handleClose={handleClosePopup} atualizarAcesso={atualizarAcesso} formData={formData} setFormData={setFormData} />
       <Progress isVisible={loading} />
     </Box>
   );
