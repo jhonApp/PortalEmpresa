@@ -6,6 +6,19 @@ import './Dashboard.css';
 import DadosDash from './DadosDash';
 import Table from '../Table';
 import { obeterUltimosAgendamentos } from '../../../service/agendamentoService';
+import { PieChart } from '@mui/x-charts/PieChart';
+
+const data = [
+  { value: 10, label: 'Funcionários', color: '#6366F1' },
+  { value: 10, label: 'Prestador de Serviço', color: '#F04235' },
+  { value: 10, label: 'Visitante Especial', color: '#10B981' },
+  { value: 10, label: 'Visitante Simples', color: '#F79009' },
+];
+
+const size = {
+  width: 400,
+  height: 200,
+};
 
 function Dashboard() {
   const [openPopups, setOpenPopups] = useState([]);
@@ -16,8 +29,8 @@ function Dashboard() {
 
   const columns = [
     { id: 'nome', label: 'Nome', width: 100, align: 'center' },
-    { id: 'rgCpf', label: 'RG', minWidth: 80, align: 'center' },
-    { id: 'status', label: 'Status', width: 150, align: 'center' }
+    { id: 'rgCpf', label: 'RG', minWidth: 100, align: 'center' },
+    { id: 'status', label: 'Status', width: 300, align: 'center' }
   ];
 
   useEffect(() => {
@@ -58,7 +71,7 @@ function Dashboard() {
           padding={2}
           width={"868px"}
           component={Paper}
-          style={{ borderRadius: '10px', position: 'relative', zIndex: '0' }}
+          style={{ borderRadius: '10px', position: 'relative', zIndex: '0', background: '#FAFAFA' }}
         >
           <Typography variant="h5" component="h1" style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '30px' }}>Últimos agendamentos</Typography>
           <Table data={agendamentoData} window={"agendamento"} columns={columns} loading={loading} isValid={isValid} hadleDelete={null} PopupManager={null} updateTable={null} />
@@ -72,9 +85,40 @@ function Dashboard() {
           width={"400px"}
           height={"700px"}
           component={Paper}
-          style={{ borderRadius: '10px', position: 'relative', zIndex: '0' }}
+          style={{ borderRadius: '10px', position: 'relative', zIndex: '0', background: '#FAFAFA' }}
         >
           <Typography variant="h5" component="h1" style={{ fontSize: '24px', fontWeight: 'bold' }}>Últimos Acessos</Typography>
+          <PieChart
+            series={[
+              {
+                data,
+                arcLabelMinAngle: 45,
+                innerRadius: 93,
+                outerRadius: 127,
+                paddingAngle: 0,
+                cornerRadius: 5,
+                startAngle: -180,
+                endAngle: 180,
+                cx: 150,
+                cy: 150,
+                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+              },
+            ]}
+            slotProps={{
+              legend: {
+                direction: 'column',
+                position: { vertical: 'bottom', horizontal: 'left' },
+                // padding: 55,
+                labelStyle: {
+                  fontSize: 16,
+                  fontWeight: 600,
+                  fill: 'black',
+                },
+              },
+            }}
+            margin={{ top: 30, bottom: 0, left: 40, right:100 }}
+            height={500}
+          />
         </Box>
       </div>
       {muralData.map((item, index) => (
