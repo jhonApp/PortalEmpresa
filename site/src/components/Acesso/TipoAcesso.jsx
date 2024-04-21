@@ -17,7 +17,7 @@ function InfoAcesso({ iconContainerStyle, buttonStyle, quantidade, descricao }) 
 
 function TipoAcesso({ acessoData, atualizarAcesso, dataAtual, dataFutura }) {
   const theme = useTheme();
-
+  
   const iconContainerStyle = {
     display: 'flex',
     alignItems: 'center',
