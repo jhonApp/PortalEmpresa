@@ -24,7 +24,6 @@ export const getNaoVisualizados = async (setMuralData, setLoading, setValid) => 
 
     const storage = getData();
     const data = await obterMural(storage.codigo);
-    console.log(data)
     const registrosFiltrados = data.filter(registro => registro.status === 'Não Visualizado');
 
     // Mapear os tipos de comunicado para os tipos de exibição correspondentes

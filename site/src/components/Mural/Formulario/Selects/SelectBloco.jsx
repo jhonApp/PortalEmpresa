@@ -38,7 +38,7 @@ function SelectBloco({ blocos, onDataChange }) {
     setValue(newValue);
     onDataChange('bloco', newValue.value);
   };
-console.log(blocos);
+
 const blocosOptions = blocos && blocos.length > 0 ? blocos.map((bloco) => ({ label: bloco.nome, value: bloco.codigo })) : [];
 
 return (

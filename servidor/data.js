@@ -8,8 +8,6 @@ async function getEmpresaURL() {
     const result = await pool
       .request()
       .query('SELECT nome, conexao FROM EMPRESAS WHERE status = \'A\'');
-
-    console.log(result.recordset[0]);
     return result.recordset;
   } catch (err) {
     console.error('Erro ao obter URL da empresa:', err);

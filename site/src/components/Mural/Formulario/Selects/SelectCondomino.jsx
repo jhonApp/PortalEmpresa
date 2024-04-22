@@ -57,7 +57,7 @@ function SelectCondomino({ setBlocos, setPisos, setUnidades, onDataChange }) {
     }
 
     const selectedCondomino = condominos.find(condomino => condomino.codigo === newValue.value);
-    debugger
+
     setValue(newValue);
     onDataChange('condomino', newValue.value);
 

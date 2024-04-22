@@ -111,7 +111,6 @@ const Formulario = ({ onDataChange, invalidFields, formData }) => {
     onDataChange({ ...formData, files: updatedFiles }); 
     showSuccessToast(`${newFiles.length} arquivo(s) anexado(s) com sucesso.`);
   };
-  console.log(formData)
 
   const buttonFileStyle = {
     padding: '10px',

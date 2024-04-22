@@ -121,7 +121,6 @@ export default function DateCalendarServerRequest({formData}) {
     const fetchData = async () => {
       const listaEventos = await listarEvento();
       setEventos(listaEventos);
-      console.log(listaEventos);
     };
     
     fetchData();

@@ -117,7 +117,6 @@ export const incluirRecebimento = async (codigoUsuario, codigoComunicado) => {
 
 export const inserirVotoEnquete = async (codigoUsuario, codigoComunicado, opcaoEnquete) => {
   try {
-    debugger
     const response = await axios.post(`${API_URL}/registrarVoto?codigoComunicado=${codigoComunicado}&codigoUsuario=${codigoUsuario}&opcaoVoto=${opcaoEnquete}`);
 
     if (response.status !== 200) {

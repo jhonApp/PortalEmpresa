@@ -183,7 +183,6 @@ const LoginForm = () => {
   };
 
   const handleOptionChange = (event, newValue) => {
-    console.log(newValue.conexao)
     handleChange('condominio', newValue.conexao);
   };
 

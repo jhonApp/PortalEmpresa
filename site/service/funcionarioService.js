@@ -131,7 +131,6 @@ export const cadastrarFuncionario = async (dados) => {
 
     return response;
   } catch (error) {
-    console.log(error.message)
     throw new Error('Erro ao inserir funcionário: ' + error.message);
   }
 };

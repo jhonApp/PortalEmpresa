@@ -50,7 +50,6 @@ function Pagina({ espacos, loading, setLoading }) {
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);
     setformData({ ...values, [fieldName]: value });
-    console.log(formData)
   };
 
   const handleSelectChange = (fieldName, newValue) => {
@@ -120,7 +119,7 @@ function Pagina({ espacos, loading, setLoading }) {
       showErrorToast(error.message);
     }
   };
-  console.log(formData)
+
   return (
     <Box
       gap={1}

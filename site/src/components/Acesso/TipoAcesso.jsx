@@ -44,7 +44,7 @@ function TipoAcesso({ acessoData, atualizarAcesso, dataAtual, dataFutura }) {
     width: '246px',
     height: '84px'
   };
-  console.log(acessoData)
+
   return (
     <Box
       gap={1}

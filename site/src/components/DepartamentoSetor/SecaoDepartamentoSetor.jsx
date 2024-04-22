@@ -27,12 +27,10 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
         )
       );
 
-      console.log(unassociatedSetores)
       setSelectedSetores([...unassociatedSetores]);
       
     }
   }, [selectedGroup, setorData]);  
-  // console.log(selectedSetores)
   
   const handleGroupChange = (group) => {
     setSelectedGroup(group);

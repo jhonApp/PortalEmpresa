@@ -37,8 +37,8 @@ function SelectBloco({ pisos, onDataChange }) {
     setValue(newValue);
     onDataChange('piso', newValue.value);
   };
-console.log(pisos);
-const pisosOptions = pisos && pisos.length > 0 ? pisos.map((piso) => ({ label: piso.nome, value: piso.codigo })) : [];
+
+  const pisosOptions = pisos && pisos.length > 0 ? pisos.map((piso) => ({ label: piso.nome, value: piso.codigo })) : [];
 
 return (
     <StyledSelectField

@@ -66,7 +66,6 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspacos, title, description }) 
       await deleteEspaco(codigoEspaco);
       
       const novaLista = espacosFiltrados.filter(espaco => espaco.codigoLocal !== codigoEspaco);
-      console.log(novaLista)
       setEspacoFiltrados(novaLista);
   
       showSuccessToast("Espaço excluído com sucesso!");

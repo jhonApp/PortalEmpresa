@@ -44,7 +44,6 @@ const FormularioAgendamento = ({ onDataChange, formData, invalidFields, screenVa
     setChegada(isChecked); // Atualiza o estado interno do Checkbox
     handleFormChange('chegada', isChecked); // Atualiza o estado do formulário
   };
-  console.log(values)
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
       <StyledPaper sx={{background:'#FAFAFA'}} elevation={1}>

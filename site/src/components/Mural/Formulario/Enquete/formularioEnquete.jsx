@@ -33,7 +33,6 @@ const FormularioEnquete = ({ onDataChange, invalidFields, setInvalidFields, form
     validateForm,
     'enquete'
   );
-  console.log(formData)
 
   const handleFormChange = (fieldName, value) => {
     handleChange(fieldName, value);

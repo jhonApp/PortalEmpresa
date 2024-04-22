@@ -58,7 +58,7 @@ export default function AccordionTransition({ invalidFields, onDataChange, formD
     handleChange(fieldName, value);
     onDataChange({ ...values, [fieldName]: value });
   };
-  console.log(formData)
+
   return (
     <div>
       <Accordion

@@ -37,7 +37,7 @@ function SelectUnidade({ unidades, onDataChange }) {
     setValue(newValue);
     onDataChange('unidade', newValue.value);
   };
-console.log(unidades);
+
 const unidadesOptions = unidades && unidades.length > 0 ? unidades.map((unidade) => ({ label: unidade.codigo.toString(), value: unidade.codigo })) : [];
 
 return (
