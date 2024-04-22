@@ -50,11 +50,12 @@ const SecaoCargo = ({ setorData, departamentoData, cargoData, atualizaCargo, atu
 
   useEffect(() => {
     if (selectedSubgroup) {
-      const associatedCargosCodes = selectedSubgroup.codigoSetorSecao;
-  
+      const associatedCargosCodes = selectedSubgroup.setorSecao;
+
       const associatedCargos = cargoData.filter((cargo) =>
         cargo.setorSecao.some((setorSecao) =>
-          setorSecao.status === "A" && associatedCargosCodes.includes(setorSecao.codigoSetorSecao)
+          setorSecao.status === "A" 
+          && associatedCargosCodes.some((item) => item.codigo === setorSecao.codigoSetorSecao)
         )
       );
       setSelectedCargos(associatedCargos);
@@ -83,8 +84,6 @@ const SecaoCargo = ({ setorData, departamentoData, cargoData, atualizaCargo, atu
       setLoading(false);
     }
   };
-
-  
 
   return (
     <Box
@@ -132,7 +131,11 @@ const SecaoCargo = ({ setorData, departamentoData, cargoData, atualizaCargo, atu
                 <List>
                   {setorData
                     .filter((setor) => (
-                      selectedGroup.codigoSetorSecao.some((codigo) => setor.codigoSetorSecao.includes(codigo))
+                      selectedGroup.codigoSetorSecao.some((codigo) => 
+                        setor.setorSecao.some((item) => 
+                          item.status === "A" && item.codigo === codigo
+                        )
+                      )
                     ))
                     .map((setor, index) => (
                       <ListItemButton

@@ -14,10 +14,10 @@ function Funcionarios({ funcionarioData, setFuncionarioData, loading, setLoading
   const theme = useTheme();
 
   const columns = [
-    { id: 'nome', label: 'Nome', width: 100, align: 'center' },
+    { id: 'nome', label: 'Nome', width: 250, align: 'center' },
     { id: 'rg', label: 'RG/CPF', minWidth: 100, align: 'center' },
     { id: 'cartao', label: 'Cartão', minWidth: 100, align: 'center', },
-    { id: 'email', label: 'Email', minWidth: 100, align: 'center', },
+    { id: 'email', label: 'Email', minWidth: 50, align: 'center', },
     { id: 'cargo', label: 'Cargo', minWidth: 100, align: 'center', },
     { id: 'status', label: 'Status', width: 'auto', align: 'center', }
   ];
