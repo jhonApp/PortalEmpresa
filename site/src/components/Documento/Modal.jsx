@@ -191,7 +191,7 @@ const ModalDocumento = ({ atualizaDocumento, documentoData }) => {
   const handleSubmitButtonLabel = formMode === 'incluir' ? 'Incluir' : 'Alterar';
 
   return (
-    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 450 }} elevation={1}>
+    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", minHeight: 350 }} elevation={1}>
       <FormContainer>
         <FormRow style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
             <div>

@@ -166,7 +166,7 @@ const ModalEspaco = ({ onClose, espacos, atualizaEspacos, title, description }) 
   const handleClosePopupDelete = () => { setOpenDelete(false); };
 
   return (
-    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 350 }} elevation={1}>
+    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", minHeight: 350 }} elevation={1}>
       <FormContainer>
         <FormRow style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
           <StyledButtonPrimary variant="contained" color="primary" onClick={handleOpenPopup} style={{ width: 145, height: 40, marginLeft: 0, gap: '10px', fontSize: '16px'}}>

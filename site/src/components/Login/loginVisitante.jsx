@@ -38,7 +38,7 @@ const StyledFormControl = styled(FormControl)({
 
 const StyledImageContainer = styled('div')({
   background: '#242c48',
-  borderRadius: '50px 50px 1000px 50px',
+  borderRadius: '50px 50px 1200px 50px',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
