@@ -18,7 +18,6 @@ const ExibiEnquete = ({ codigoComunicado, enquetes, sub, description, opcaoEnque
   const handleAttachmentClick = async () => {
     try {
       const anexo = await getAnexo(codigoComunicado);
-      console.log(anexo);
 
       if (anexo) {
         setAttachment(anexo);
@@ -43,7 +42,6 @@ const ExibiEnquete = ({ codigoComunicado, enquetes, sub, description, opcaoEnque
 
   useEffect(() => {
     const savedOption = enquetes.find(enquete => {
-      console.log(enquete);
       return enquete.opcaoVoto !== 0;
     });
     

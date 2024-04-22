@@ -78,7 +78,6 @@ function Header({ atualizaMural }) {
   };
 
   const handleFormChange = (data) => {
-    console.log(data)
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
   };
 

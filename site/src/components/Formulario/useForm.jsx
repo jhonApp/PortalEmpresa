@@ -74,7 +74,6 @@ const useForm = (initialState, validationCallback, currentScreen) => {
   };
 
   const clearMessage = () => {
-    console.log("entrei no clear")
     setMessage('');
     setMessageType('');
   };

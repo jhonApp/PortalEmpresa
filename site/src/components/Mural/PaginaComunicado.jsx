@@ -35,8 +35,6 @@ function PaginaComunicado({ muralData, setMuralData, loading, setLoading, atuali
     color: '#1B1A16'
   };
 
-  console.log(comunicadosFiltrados);
-
   const comunicadosPorLinha = 3;
   const comunicadosPorLinhaAtual = Math.min(comunicadosPorLinha, Math.ceil(comunicadosFiltrados.length / comunicadosPorLinha));
 

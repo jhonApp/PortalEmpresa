@@ -117,7 +117,6 @@ const ModalComunicado = ({ invalidFields, formData, onDataChange, screenValidati
     showSuccessToast(`${newFiles.length} arquivo(s) anexado(s) com sucesso.`);
   };  
   
-  console.log(formData)
   const buttonFileStyle = {
     padding: '10px',
     borderRadius: '5px',

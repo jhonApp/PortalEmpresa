@@ -22,7 +22,6 @@ const Formulario = ({ onDataChange, formData, invalidFields, screenValidation, a
   }, []);
 
   const handleFormChange = (fieldName, value) => {
-    console.log(formData)
     const updatedValues = { ...values, [fieldName]: value };
     setValues(updatedValues);
     handleChange(fieldName, value);

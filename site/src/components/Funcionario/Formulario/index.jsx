@@ -28,7 +28,6 @@ function FormFuncionario() {
 
   const handleFormChange = (data) => {
     setFormData((prevFormData) => ({ ...prevFormData, ...data }));
-    console.log(formData);
   };
 
   const handleFileChange = (event) => {

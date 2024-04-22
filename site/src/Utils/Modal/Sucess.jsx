@@ -11,7 +11,6 @@ import { StyledButtonSucess } from '../../Utils/StyledButton';
 export default function AlertDialogSucess({ dialogOpen, handleClose }) {
   
   const handleConfirmSucess = () => {
-    debugger
     handleClose();
   };
   

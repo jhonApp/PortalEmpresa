@@ -208,7 +208,7 @@ export const atualizarTabela = async (setAgendamentoData, setLoading, setValid) 
       // se as datas são iguais, compara os horários
       return new Date(b.dataInclusao) - new Date(a.dataInclusao);
     });
-    console.log(sortedData)
+    
     setAgendamentoData(sortedData);
     setLoading(false);
   } catch (error) {

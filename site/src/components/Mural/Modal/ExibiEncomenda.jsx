@@ -30,9 +30,8 @@ const ExibiEncomenda = ({ codigoComunicado, sub, description, onDataChange, onFi
 
   const handleAttachmentClick = async () => {
     try {
-      debugger
+
       const anexo = await getAnexo(codigoComunicado);
-      console.log(anexo);
 
       if (anexo) {
         setAttachment(anexo);
