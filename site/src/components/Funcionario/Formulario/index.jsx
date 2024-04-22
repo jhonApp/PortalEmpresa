@@ -10,14 +10,17 @@ import AccordionSobre from '../Formulario/Sobre';
 import AccordionAcesso from '../Formulario/Acesso';
 import AccordionEndereco from '../Formulario/Endereco';
 import AccordionAdicionais from '../Formulario/Adicionais';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import StyledLink from '../../../Utils/StyledLink';
+import Progress from '../../../Utils/LoadingProgress';
 import {StyledButtonPrimary} from '../../../Utils/StyledButton';
 import { cadastrarFuncionario } from '../../../../service/funcionarioService';
 
-function FormFuncionario({ updateTable }) {
+function FormFuncionario() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [invalidFields, setInvalidFields] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -69,6 +72,10 @@ function FormFuncionario({ updateTable }) {
             await cadastrarFuncionario(formData);
             showSuccessToast("Criado com sucesso!");
             setLoading(false);
+            setTimeout(() => {
+              navigate('/system/funcionarios');
+              setLoading(false);
+            }, 3000);
             // updateTable();
         } catch (e) {
           setLoading(false);
@@ -138,6 +145,7 @@ function FormFuncionario({ updateTable }) {
         <StyledButtonPrimary sx={{marginLeft: 0}} variant="contained" onClick={handleSave}>
           <Typography variant="h6" component="h1" style={{ fontSize: 14, textAlign: 'justify'}}>SALVAR </Typography>
         </StyledButtonPrimary>
+        <Progress isVisible={loading} />
       </Box>
     </div>
   );

@@ -20,9 +20,13 @@ const SecaoDepartamentoSetor = ({ atualizaSetor, atualizaDepartamento, setorData
     if (selectedGroup) {
 
       const associatedCodes = selectedGroup.codigoSetorSecao;
-      const unassociatedSetores = setorData.filter((setor) => (
-        associatedCodes.some(codigo => setor.codigoSetorSecao.includes(codigo))
-      ));
+
+      const unassociatedSetores = setorData.filter((setor) =>
+        setor.setorSecao.some((setorSecao) =>
+          setorSecao.status === "A" && associatedCodes.includes(setorSecao.codigo)
+        )
+      );
+
       console.log(unassociatedSetores)
       setSelectedSetores([...unassociatedSetores]);
       
