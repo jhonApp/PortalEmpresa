@@ -160,7 +160,7 @@ const ModalSetor = ({ updateSetor }) => {
   const handleSubmitButtonLabel = formMode === 'incluir' ? 'Incluir' : 'Alterar';
 
   return (
-    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 370 }} elevation={1}>
+    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden"}} elevation={1}>
       <FormContainer>
         <FormRow style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
           <div>

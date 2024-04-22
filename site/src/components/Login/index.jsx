@@ -13,7 +13,7 @@ const StyledGrid = styled(Box)({
   height: '100vh',
   margin: '0',
   padding: '0',
-  '@media (max-width: 1000px)': {
+  '@media (max-width: 1200px)': {
     gridTemplateColumns: '1fr',
     marginLeft: '0',
     gridTemplateRows: '150px 1fr',

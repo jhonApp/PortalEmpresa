@@ -158,7 +158,7 @@ const ModalDepartamento = ({ updateDepartamento }) => {
   const handleSubmitButtonLabel = formMode === 'incluir' ? 'Incluir' : 'Alterar';
 
   return (
-    <StyledPaper sx={{ background: '#FAFAFA', overflow: "hidden", height: 370 }} elevation={1}>
+    <StyledPaper sx={{ background: 'transparent', overflow: "hidden" }} elevation={1}>
       <FormContainer>
         <FormRow style={{ display: 'flex', alignItems: 'center' }}>
           <div>
@@ -194,7 +194,7 @@ const ModalDepartamento = ({ updateDepartamento }) => {
         <Typography variant="h7" component="h2" style={{ display: 'flex', fontWeight: '600', fontSize: 24, textAlign: 'end', alignItems: 'flex-start', marginTop: 6 }}>
           Departamentos Cadastrados
         </Typography>
-        <StyledBox sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+        <StyledBox sx={{ background: 'transparent', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
           {departamentos.map((departamento, index) => (
             <StyledCard key={index}>
               <StyledCardContent>

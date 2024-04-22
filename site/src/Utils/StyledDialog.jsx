@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { height, maxHeight, styled } from '@mui/system';
 import { Dialog, Stepper, Box, Card } from '@mui/material';
 
 const StyledCard = styled(Card)({
@@ -22,13 +22,14 @@ const StyledBox = styled(Box)({
   display: 'flex',
   flexWrap: 'wrap',
   justifyContent: 'space-between',
-  overflowY: 'scroll',
-  maxHeight: '200px',
+  overflowY: 'auto',
+  maxHeight: '270px',
   marginTop: '10px',
   scrollbarWidth: 'thin',
   scrollbarColor: '#999 #f4f4f4',
   '&::-webkit-scrollbar': {
     width: '8px',
+    height: '20px', // Altura fixa da barra de rolagem
   },
   '&::-webkit-scrollbar-track': {
     backgroundColor: '#f4f4f4',
@@ -37,10 +38,8 @@ const StyledBox = styled(Box)({
     backgroundColor: '#999',
     borderRadius: '4px',
   },
-  '& .css-3ekr5r': {
-    maxHeight: '250px',
-  },
 });
+
 
 const StyledBoxComunicado = styled(Box)({
   display: 'flex',
